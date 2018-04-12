@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{DDA07B9A-DA48-4D2F-8D50-415307A15738}</ProjectGuid>
-    <RootNamespace>TestDLL</RootNamespace>
+    <ProjectGuid>{07FF75C8-41E2-46AE-9971-C9D664389DA5}</ProjectGuid>
+    <RootNamespace>CppInterface</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -74,18 +74,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..\..\libTools\include;$(IncludePath);$(SolutionDir)Common;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;..\..\libTools\lib;</LibraryPath>
-    <OutDir>Z:\</OutDir>
+    <OutDir>..\LFConsole\DLL\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\LFConsole\DLL\</OutDir>
     <IncludePath>..\..\libTools\include;$(IncludePath);$(SolutionDir)Common;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;..\..\libTools\lib;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -103,12 +103,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,11 +123,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Object\AttributeObject.cpp" />
+    <ClCompile Include="Core\Object\BaseObject.cpp" />
+    <ClCompile Include="Core\Object\Item.cpp" />
+    <ClCompile Include="Core\Object\Monster.cpp" />
+    <ClCompile Include="Core\Object\Npc.cpp" />
+    <ClCompile Include="Core\Object\Player.cpp" />
+    <ClCompile Include="Core\Object\WorldItem.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Expr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Expr.h" />
+    <ClInclude Include="Core\Object\AttributeObject.h" />
+    <ClInclude Include="Core\Object\BaseObject.h" />
+    <ClInclude Include="Core\Object\Item.h" />
+    <ClInclude Include="Core\Object\Monster.h" />
+    <ClInclude Include="Core\Object\Npc.h" />
+    <ClInclude Include="Core\Object\Player.h" />
+    <ClInclude Include="Core\Object\WorldItem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

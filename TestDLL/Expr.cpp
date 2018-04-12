@@ -2,17 +2,14 @@
 #include <set>
 #include <queue>
 #include <LogLib/Log.h>
-#include <ProcessLib/Memory/Memory.h>
 #include <ExceptionLib/Exception.h>
 #include <CharacterLib/Character.h>
 #include <ProcessLib/Memory/SearchBinary.h>
 #include <GameStruct.h>
 #define _SELF L"Expr.cpp"
 
-#pragma comment(lib,"ProcessLib.lib")
 
-#define ReadDWORD(x) libTools::CMemory::ReadDWORD(x)
-#define ReadBYTE(x)  libTools::CMemory::ReadBYTE(x)
+
 std::function<VOID(CONST std::wstring&)> g_EchoExceptionMsgPtr = [] (CONST std::wstring& wsText)
 {
 	::MessageBoxW(NULL, wsText.c_str(), L"ExceptionError", NULL);
@@ -63,72 +60,64 @@ VOID CExpr::Help(CONST std::vector<std::wstring>&)
 
 VOID CExpr::PrintPlayerAttribute(CONST std::vector<std::wstring>&)
 {
-	libTools::CException::InvokeAction(__FUNCTIONW__, [] 
+	libTools::CException::InvokeAction(__FUNCTIONW__, []
 	{
 		DWORD dwArrayHead = ReadDWORD(人物基址 + 人物基址偏移1);
+		DWORD dwObjectPtr = ReadDWORD(dwArrayHead + 1 * 4);
 		DWORD dwCount = (ReadDWORD(人物基址 + 人物基址偏移1 + 0x4) - dwArrayHead) >> 2;
 		LOG_C_D(L"dwCount=%d", dwCount);
-		for (DWORD i = 0; i < dwCount; ++i)
+
+		LOG_C_D(L"dwObjectPtr=%X", dwObjectPtr);
+		DWORD dwNode = ReadDWORD(dwObjectPtr + 人物基址偏移2);
+		LOG_C_D(L"[dwObjectPtr + %X] = %X", 人物基址偏移2, dwNode);
+		if (dwNode == ReadDWORD(dwObjectPtr + 人物基址偏移2 - 4))
 		{
-			DWORD dwObjectPtr = ReadDWORD(dwArrayHead + i * 4);
-			if (ReadDWORD(dwObjectPtr + 0x8) != ReadDWORD(dwObjectPtr + 0xC))
+			LOG_C_D(L"dwNode == ReadDWORD(dwObjectPtr + 人物基址偏移2 - 4)");
+			return;
+		}
+
+		dwNode = ReadDWORD(ReadDWORD(ReadDWORD(dwNode - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5);
+		DWORD dwArrayNode = ReadDWORD(ReadDWORD(dwNode + 0) + 人物基址偏移6) + 人物基址偏移7 + 人物基址偏移8;
+		LOG_C_D(L"dwNode=%X,dwArrayNodeAddr=%X, dwArrayNodeAddr=%X", dwNode, dwArrayNode, ReadDWORD(dwArrayNode));
+
+
+		DWORD dwArrayCount = (ReadDWORD(dwArrayNode + 0x4) - ReadDWORD(dwArrayNode)) / 4;
+		LOG_C_D(L"dwArrayCount=%d", dwArrayCount);
+
+		std::set<DWORD> VecArray;
+		for (DWORD j = 0; j < dwArrayCount; ++j)
+		{
+			DWORD dwObject = ReadDWORD(ReadDWORD(dwArrayNode) + j * 4);
+			//LOG_C_D(L"dwObject=%X", dwObject);
+			if (dwObject == NULL || ReadDWORD(dwObject + 0x8) == NULL)
 				continue;
-			else if(ReadDWORD(dwObjectPtr + 0x14) != ReadDWORD(dwObjectPtr + 0x18))
-				continue;
 
-			LOG_C_D(L"dwObjectPtr=%X", dwObjectPtr);
-			DWORD dwNode = ReadDWORD(dwObjectPtr + 人物基址偏移2);
-			LOG_C_D(L"[dwObjectPtr + %X] = %X", 人物基址偏移2, dwNode);
-			if (dwNode == ReadDWORD(dwObjectPtr + 人物基址偏移2 - 4))
+			VecArray.insert(dwObject);
+		}
+
+		LOG_C_D(L"VecArray.size=%d", VecArray.size());
+		for (auto& itm : VecArray)
+		{
+			std::string wsName = reinterpret_cast<CONST CHAR*>(ReadDWORD(itm + 0x8));
+			LOG_C_D(L"Addr=%X, Name=%s", itm, libTools::CCharacter::ASCIIToUnicode(wsName).c_str());
+			if (wsName == "Life")
 			{
-				LOG_C_D(L"dwNode == ReadDWORD(dwObjectPtr + 人物基址偏移2 - 4)");
-				continue;
+				DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
+				LOG_C_D(L"HP=%d,MaxHP=%d,MP=%d,MAXMP=%d,Shield=%d,MaxShiled=%d",
+					ReadDWORD(dwObject + 人物HP偏移),
+					ReadDWORD(dwObject + 人物MAXHP偏移),
+					ReadDWORD(dwObject + 人物MP偏移),
+					ReadDWORD(dwObject + 人物MAXMP偏移),
+					ReadDWORD(dwObject + 人物护盾偏移),
+					ReadDWORD(dwObject + 人物MAX护盾偏移));
+
+				LOG_C_D(L"Player.Name=%s", 人物名字基址 + 人物名字偏移);
 			}
-
-			dwNode = ReadDWORD(ReadDWORD(ReadDWORD(dwNode - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5);
-			DWORD dwArrayNode = ReadDWORD(ReadDWORD(dwNode + 0) + 人物基址偏移6) + 人物基址偏移7 + 人物基址偏移8;
-			LOG_C_D(L"dwNode=%X,dwArrayNodeAddr=%X, dwArrayNodeAddr=%X", dwNode, dwArrayNode, ReadDWORD(dwArrayNode));
-
-
-			DWORD dwArrayCount = (ReadDWORD(dwArrayNode + 0x4) - ReadDWORD(dwArrayNode)) / 4;
-			LOG_C_D(L"dwArrayCount=%d", dwArrayCount);
-
-			std::set<DWORD> VecArray;
-			for (DWORD j = 0;j < dwArrayCount; ++j)
+			else if (wsName == "Player")
 			{
-				DWORD dwObject = ReadDWORD(ReadDWORD(dwArrayNode) + j * 4);
-				LOG_C_D(L"dwObject=%X", dwObject);
-				if(dwObject == NULL || ReadDWORD(dwObject + 0x8) == NULL)
-					continue;
-
-				VecArray.insert(dwObject);
+				DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
+				LOG_C_D(L"Level=%d", ReadDWORD(dwObject + 人物等级偏移));
 			}
-
-			LOG_C_D(L"VecArray.size=%d", VecArray.size());
-			for (auto& itm : VecArray)
-			{
-				std::string wsName = reinterpret_cast<CONST CHAR*>(ReadDWORD(itm + 0x8));
-				LOG_C_D(L"Addr=%X, Name=%s", itm, libTools::CCharacter::ASCIIToUnicode(wsName).c_str());
-				if (wsName == "Life")
-				{
-					DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
-					LOG_C_D(L"HP=%d,MaxHP=%d,MP=%d,MAXMP=%d,Shield=%d,MaxShiled=%d", 
-						ReadDWORD(dwObject + 人物HP偏移),
-						ReadDWORD(dwObject + 人物MAXHP偏移),
-						ReadDWORD(dwObject + 人物MP偏移),
-						ReadDWORD(dwObject + 人物MAXMP偏移),
-						ReadDWORD(dwObject + 人物护盾偏移),
-						ReadDWORD(dwObject + 人物MAX护盾偏移));
-
-					LOG_C_D(L"Player.Name=%s", 人物名字基址 + 人物名字偏移);
-				}
-				else if (wsName == "Player")
-				{
-					DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
-					LOG_C_D(L"Level=%d", ReadDWORD(dwObject + 人物等级偏移));
-				}
-			}
-			break;
 		}
 	});
 }
@@ -303,6 +292,11 @@ VOID PrintItem_By_Object(_In_ DWORD dwArrayHead)
 			{
 				DWORD dwItemObjectChargesPtr = ReadDWORD(ReadDWORD(dwItemAttributePtr + 0x4) + itm.dwIndex * 4);
 				LOG_C_D(L"当前药剂充能次数=%d, 上限=%d", ReadDWORD(dwItemObjectChargesPtr + 0xC), ReadDWORD(ReadDWORD(dwItemObjectChargesPtr + 0x8) + 0xC));
+			}
+			else if (itm.wsIndexName == "Quality")
+			{
+				DWORD dwItemObjectQualityPtr = ReadDWORD(ReadDWORD(dwItemAttributePtr + 0x4) + itm.dwIndex * 4);
+				LOG_C_D(L"当前品质=%d", ReadDWORD(dwItemObjectQualityPtr + 0xC) & 0xFF);
 			}
 			else if (itm.wsIndexName == "Mods")
 			{
@@ -737,7 +731,7 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 	dwBase = ScanBinary.FindBase("6A01E8????????E8????????83", 0x65D8FA - 0x65D8EE, 1, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 物品遍历偏移8 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("C70000000000C7400400000000C208008B", 0x93D90A - 0x93D8E3, 1, 0x0, L"PathOfExile.exe");
+	dwBase = ScanBinary.FindBase("C70000000000C7400400000000C208008B", 0x93D90A - 0x93D8E3, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 物品遍历偏移9 0x%X", dwBase);
 
 	dwBase = ScanBinary.FindBase("C7????000000008B????3B??7C", 0x865953 - 0x86594A, 2, 0x0, L"PathOfExile.exe", 0xFF);
