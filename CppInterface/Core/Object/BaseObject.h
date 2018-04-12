@@ -28,7 +28,7 @@ public:
 	// ...........
 	virtual VOID RefreshObjectAttribute() = NULL;
 
-	em_Object_Type GetType();
+	static em_Object_Type GetObjectType(_In_ DWORD dwNodeBase);
 protected:
 	DWORD			_dwNodeBase		= NULL;
 	DWORD			_dwPositionedObject = NULL;

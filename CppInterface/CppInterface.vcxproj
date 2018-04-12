@@ -72,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\libTools\include;$(IncludePath);$(SolutionDir)Common;</IncludePath>
+    <IncludePath>..\..\libTools\include;$(IncludePath);$(SolutionDir)Common;$(ProjectDir);</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;..\..\libTools\lib;</LibraryPath>
     <OutDir>..\LFConsole\DLL\</OutDir>
   </PropertyGroup>
@@ -123,6 +123,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp" />
+    <ClCompile Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.cpp" />
+    <ClCompile Include="Core\Feature\Searcher\ObjectSearcher.cpp" />
     <ClCompile Include="Core\Object\AttributeObject.cpp" />
     <ClCompile Include="Core\Object\BaseObject.cpp" />
     <ClCompile Include="Core\Object\Chest.cpp" />
@@ -135,6 +138,9 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h" />
+    <ClInclude Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.h" />
+    <ClInclude Include="Core\Feature\Searcher\ObjectSearcher.h" />
     <ClInclude Include="Core\Object\AttributeObject.h" />
     <ClInclude Include="Core\Object\BaseObject.h" />
     <ClInclude Include="Core\Object\Chest.h" />
