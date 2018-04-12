@@ -18,53 +18,32 @@ CMonster::~CMonster()
 
 VOID CMonster::RefreshObjectAttribute()
 {
-	CAttributeObject::FillObjectAttribute_ResName(this);
-	CAttributeObject::FillObjectAttribute_Positioned(this);
+	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 	CAttributeObject::FillObjectAttribute_Render(this);
 
 
-	// Set '_dwIsDeadPtr'
-	CAttributeObject::FillAttributeTable(GetNodeBase(), "Positioned", [&](DWORD dwIndex)
-	{
-		DWORD dwPositionedObject = ReadDWORD(ReadDWORD(this->GetNodeBase() + 0x4) + dwIndex * 4);
-		_dwIsDeadPtr = dwPositionedObject + 0x18;
-	});
-
-
-	// Set '_dwHpPtr'
-	CAttributeObject::FillAttributeTable(GetNodeBase(), "Life", [&](DWORD dwIndex)
-	{
-		DWORD dwLifeObject = ReadDWORD(ReadDWORD(this->GetNodeBase() + 0x4) + dwIndex * 4);
-		_dwHpPtr = dwLifeObject + 0x2C;
-	});
-
-
-	// Set '_dwAllowAttackPtr'
-	CAttributeObject::FillAttributeTable(GetNodeBase(), "Actor", [&](DWORD dwIndex)
-	{
-		DWORD dwActorObject = ReadDWORD(ReadDWORD(this->GetNodeBase() + 0x4) + dwIndex * 4);
-		_dwAllowAttackPtr = dwActorObject + 0x80;
-	});
+	CAttributeObject::FillObject_By_AttributeName(this, "Life", _dwLifeObject);
+	CAttributeObject::FillObject_By_AttributeName(this, "Actor", _dwActorObject);
 }
 
 BOOL CMonster::IsDead() CONST
 {
-	return ReadDWORD(_dwIsDeadPtr) == 0x7FFFFFFF;
+	return ReadDWORD(_dwPositionedObject + 0x18) == 0x7FFFFFFF;
 }
 
 DWORD CMonster::GetPercentHp() CONST
 {
-	DWORD dwMaxHp = ReadDWORD(_dwHpPtr + 0x4);
+	DWORD dwMaxHp = ReadDWORD(_dwLifeObject + 人物HP偏移 + 0x4);
 	if (dwMaxHp == NULL)
 	{
 		return 0;
 	}
 
 
-	return ReadDWORD(_dwHpPtr) * 100 / dwMaxHp;
+	return ReadDWORD(_dwLifeObject + 人物HP偏移) * 100 / dwMaxHp;
 }
 
 BOOL CMonster::IsAllowAttack()
 {
-	return ReadBYTE(_dwAllowAttackPtr) != NULL;
+	return ReadBYTE(_dwActorObject + 0x80) != NULL;
 }

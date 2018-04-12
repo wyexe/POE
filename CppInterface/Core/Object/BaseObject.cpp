@@ -38,13 +38,7 @@ VOID CBaseObject::SetResName(_In_ LPCWSTR pwszResName)
 
 Point CBaseObject::GetPoint() CONST
 {
-	return _Pos;
-}
-
-VOID CBaseObject::SetPoint(_In_ DWORD dwX, _In_ DWORD dwY)
-{
-	_Pos.X = dwX;
-	_Pos.Y = dwY;
+	return Point(ReadDWORD(_dwPositionedObject + 0x10), ReadDWORD(_dwPositionedObject + 0x14));
 }
 
 em_Object_Type CBaseObject::GetType()

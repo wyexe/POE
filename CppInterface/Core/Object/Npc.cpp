@@ -17,6 +17,6 @@ CNpc::~CNpc()
 
 VOID CNpc::RefreshObjectAttribute()
 {
-	CAttributeObject::FillObjectAttribute_Positioned(this);
+	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 	CAttributeObject::FillObjectAttribute_Render(this);
 }

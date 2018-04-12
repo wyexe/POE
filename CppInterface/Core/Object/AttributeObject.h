@@ -28,16 +28,6 @@ public:
 	}
 
 	template<typename T>
-	static BOOL FillObjectAttribute_Positioned(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
-	{
-		return FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Positioned", [&pObject](DWORD dwIndex)
-		{
-			DWORD dwPositionedObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetPoint(ReadDWORD(dwPositionedObject + 0x10), ReadDWORD(dwPositionedObject + 0x14));
-		});
-	}
-
-	template<typename T>
 	static BOOL FillObjectAttribute_Render(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
 	{
 		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Render", [&](DWORD dwIndex)
@@ -64,15 +54,6 @@ public:
 		});
 	}
 
-	template<typename T>
-	static BOOL FillObjectAttribute_IsBindAccount(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
-	{
-		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Base", [&](DWORD dwIndex)
-		{
-			DWORD dwBaseObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetIsBindAccount((ReadDWORD(dwBaseObject + 物品绑定偏移) & 0xFF) == 0 ? FALSE : TRUE);
-		});
-	}
 
 	template<typename T>
 	static BOOL FillObjectAttribute_Player(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
@@ -80,87 +61,27 @@ public:
 		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Player", [&](DWORD dwIndex)
 		{
 			DWORD dwPlayerObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetName(reinterpret_cast<WCHAR*>(ReadDWORD(dwPlayerObject + 0x10 + 0x14) > 7 ? ReadDWORD(dwPlayerObject + 0x10) : (dwPlayerObject + 0x10)););
-		});
-	}
-
-	template<typename T>
-	static BOOL FillObjectAttribute_Color(_In_ T* pObject, _In_ DWORD dwModsObject = NULL)
-	{
-		switch (ReadBYTE(dwModsObject != NULL ? dwModsObject : pObject->GetNodeBase() + 0x18 + 物品颜色偏移))
-		{
-		case 0:
-			pObject->_emEquiColor = em_Equi_Color::White;
-			return TRUE;
-		case 1:
-			pObject->_emEquiColor = em_Equi_Color::Magic;
-			return TRUE;
-		case 2:
-			pObject->_emEquiColor = em_Equi_Color::Rate;
-			return TRUE;
-		case 3:
-			pObject->_emEquiColor = em_Equi_Color::Legend;
-			return TRUE;
-		default:
-			pObject->_emEquiColor = em_Equi_Color::None;
-			break;
-		}
-
-		return FALSE;
-	}
-
-	template<typename T>
-	static void FillEquiObjectAttribute_Level(_In_ T* pObject, _In_ DWORD dwModObject = NULL)
-	{
-		pObject->SetEquiLevel(ReadDWORD(dwModsObject != NULL ? dwModsObject : pObject->GetNodeBase() + 物品需求等级偏移 - 0x4));
-	}
-
-	template<typename T>
-	static BOOL FillEquiObjectAttribute_Appraisal(_In_ T* pObject, _In_ DWORD dwModObject = NULL)
-	{
-		return CAttributeObject::FillAttributeTable(dwModObject != NULL ? dwModObject : pObject->GetNodeBase(), "Mods", [&](DWORD dwIndex)
-		{
-			DWORD dwModsObject = ReadDWORD(ReadDWORD(dwModObject != NULL ? dwModObject : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetIsNotAppraisal((ReadDWORD(dwModsObject + 物品鉴定偏移) & 0xFF) == 0 ? TRUE : FALSE);
-		});
-	}
-
-	template<typename T>
-	static BOOL FillEquiObjectAttribute_Quality(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
-	{
-		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Quality", [&](DWORD dwIndex)
-		{
-			DWORD dwQualityObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetQuality(ReadDWORD(dwQualityObject + 0xC) & 0xFF);
+			pObject->SetName(reinterpret_cast<WCHAR*>(ReadDWORD(dwPlayerObject + 0x10 + 0x14) > 7 ? ReadDWORD(dwPlayerObject + 0x10) : (dwPlayerObject + 0x10)));
 		});
 	}
 
 
 	template<typename T>
-	static BOOL FillEquiObjectAttribute_Stack(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
+	static BOOL FillObject_By_AttributeName(_In_ T* pObject, _In_ LPCSTR pszAttributeName, _Out_ DWORD& dwObjectAddr)
 	{
-		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Stack", [&](DWORD dwIndex)
+		return CAttributeObject::FillAttributeTable(pObject->GetNodeBase(), pszAttributeName, [&](DWORD dwIndex)
 		{
-			DWORD dwStackObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetStackAddr(dwStackObject);
+			dwObjectAddr = ReadDWORD(ReadDWORD(pObject->GetNodeBase() + 0x4) + dwIndex * 4);
 		});
 	}
 
-	template<typename T>
-	static BOOL FillFlasksObjectAttribute_Charges(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
-	{
-		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Charges", [&](DWORD dwIndex)
-		{
-			DWORD dwChargesObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetChargesAddr(dwChargesObject);
-		});
-	}
 
-	template<typename T>
-	static void FillItemObjectAttribute_Point(_In_ T* pObject, _In_ DWORD dwNodeBase = NULL)
+	static BOOL FillObject_By_AttributeName(_In_ DWORD dwNodeBase, _In_ LPCSTR pszAttributeName, _Out_ DWORD& dwObjectAddr)
 	{
-		DWORD dwItemObject = dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase();
-		pObject->SetItemLocation(ReadDWORD(dwItemObject + 物品左上角坐标), ReadDWORD(dwItemObject + 物品右上角坐标), ReadDWORD(dwItemObject + 物品左下角坐标), ReadDWORD(dwItemObject + 物品右下角坐标));
+		return CAttributeObject::FillAttributeTable(dwNodeBase, pszAttributeName, [&](DWORD dwIndex)
+		{
+			dwObjectAddr = ReadDWORD(ReadDWORD(dwNodeBase + 0x4) + dwIndex * 4);
+		});
 	}
 };
 

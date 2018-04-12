@@ -24,18 +24,17 @@ public:
 
 	Point GetPoint() CONST;
 
-	VOID SetPoint(_In_ DWORD dwX, _In_ DWORD dwY);
 
 	// ...........
 	virtual VOID RefreshObjectAttribute() = NULL;
 
 	em_Object_Type GetType();
 protected:
-	DWORD			_dwNodeBase	 = NULL;
+	DWORD			_dwNodeBase		= NULL;
+	DWORD			_dwPositionedObject = NULL;
 	std::wstring	_wsName;
 	std::wstring	_wsResName;
-	Point			_Pos;
-	em_Object_Type _emObjectType = em_Object_Type::Other;
+	em_Object_Type _emObjectType	= em_Object_Type::Other;
 };
 
 

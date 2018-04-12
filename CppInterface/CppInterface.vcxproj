@@ -125,9 +125,11 @@
   <ItemGroup>
     <ClCompile Include="Core\Object\AttributeObject.cpp" />
     <ClCompile Include="Core\Object\BaseObject.cpp" />
+    <ClCompile Include="Core\Object\Chest.cpp" />
     <ClCompile Include="Core\Object\Item.cpp" />
     <ClCompile Include="Core\Object\Monster.cpp" />
     <ClCompile Include="Core\Object\Npc.cpp" />
+    <ClCompile Include="Core\Object\Person.cpp" />
     <ClCompile Include="Core\Object\Player.cpp" />
     <ClCompile Include="Core\Object\WorldItem.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -135,9 +137,11 @@
   <ItemGroup>
     <ClInclude Include="Core\Object\AttributeObject.h" />
     <ClInclude Include="Core\Object\BaseObject.h" />
+    <ClInclude Include="Core\Object\Chest.h" />
     <ClInclude Include="Core\Object\Item.h" />
     <ClInclude Include="Core\Object\Monster.h" />
     <ClInclude Include="Core\Object\Npc.h" />
+    <ClInclude Include="Core\Object\Person.h" />
     <ClInclude Include="Core\Object\Player.h" />
     <ClInclude Include="Core\Object\WorldItem.h" />
   </ItemGroup>

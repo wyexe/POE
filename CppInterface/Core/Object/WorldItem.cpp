@@ -20,9 +20,8 @@ CWorldItem::~CWorldItem()
 
 VOID CWorldItem::RefreshObjectAttribute()
 {
-	CAttributeObject::FillObjectAttribute_ResName(this);
-	CAttributeObject::FillObjectAttribute_Positioned(this);
-	
+	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
+
 	CAttributeObject::FillAttributeTable(GetNodeBase(), "WorldItem", [&](DWORD dwIndex)
 	{
 		DWORD dwWorldItemObject = ReadDWORD(ReadDWORD(this->GetNodeBase() + 0x4) + dwIndex * 4);
@@ -34,34 +33,13 @@ VOID CWorldItem::RefreshObjectAttribute()
 				LOG_C_D(L"Empty WorldItem Name!");
 			}
 
-			// 用ResName来判断 是否装备?  强行设置ModsIndex = 2?
-			CAttributeObject::FillAttributeTable(dwWorldItemObjectPtr, "Mods", [&](DWORD dwModsIndex) 
+
+			if (CAttributeObject::FillObject_By_AttributeName(dwWorldItemObjectPtr, "Mods", _dwModObject))
 			{
-				this->_IsEqui = TRUE;
-				DWORD dwModsObject = ReadDWORD(ReadDWORD(dwWorldItemObjectPtr + 0x4) + dwModsIndex * 4);
-				CAttributeObject::FillObjectAttribute_Color(this, dwModsObject);
-				CAttributeObject::FillEquiObjectAttribute_Level(this, dwModsObject);
-			});
+				_IsEqui = TRUE;
+			}
 		}
 	});
 }
 
-em_Equi_Color CWorldItem::GetEquiColor() CONST
-{
-	return _emEquiColor;
-}
 
-DWORD CWorldItem::GetEquiLevel() CONST
-{
-	return _dwEquiLevel;
-}
-
-VOID CWorldItem::SetEquiLevel(_In_ DWORD dwLevel)
-{
-	_dwEquiLevel = dwLevel;
-}
-
-BOOL CWorldItem::IsEqui() CONST
-{
-	return _IsEqui;
-}

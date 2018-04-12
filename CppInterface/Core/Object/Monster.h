@@ -32,9 +32,8 @@ public:
 	// ÊÇ·ñÔÊÐí±»¹¥»÷
 	BOOL IsAllowAttack();
 private:
-	DWORD _dwHpPtr				= NULL;
-	DWORD _dwAllowAttackPtr		= NULL;
-	DWORD _dwIsDeadPtr			= NULL;
+	DWORD _dwLifeObject = NULL;
+	DWORD _dwActorObject = NULL;
 };
 
 

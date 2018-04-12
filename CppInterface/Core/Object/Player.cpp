@@ -19,5 +19,6 @@ CPlayer::~CPlayer()
 VOID CPlayer::RefreshObjectAttribute()
 {
 	CAttributeObject::FillObjectAttribute_Player(this);
-	CAttributeObject::FillObjectAttribute_Positioned(this);
+
+	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 }

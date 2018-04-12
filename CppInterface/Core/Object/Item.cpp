@@ -22,35 +22,28 @@ VOID CItem::RefreshObjectAttribute()
 	CAttributeObject::FillObjectAttribute_Base(this);
 
 	// 数量
-	CAttributeObject::FillEquiObjectAttribute_Stack(this);
+	CAttributeObject::FillObject_By_AttributeName(this, "Stack", _dwStackObject);
+
 	
 	// 药剂
 	if (GetType() == em_Object_Type::Flasks)
 	{
-		CAttributeObject::FillFlasksObjectAttribute_Charges(this);
+		CAttributeObject::FillObject_By_AttributeName(this, "Charges", _dwChargesObject);
 	}
 
 	// 品质
-	CAttributeObject::FillEquiObjectAttribute_Quality(this);
+	CAttributeObject::FillObject_By_AttributeName(this, "Quality", _dwQualityObject);
 
-	// 是否绑定
-	CAttributeObject::FillObjectAttribute_IsBindAccount(this);
+	// 
+	CAttributeObject::FillObject_By_AttributeName(this, "Base", _dwBaseObject);
 
-	// 是否未鉴定
-	CAttributeObject::FillEquiObjectAttribute_Appraisal(this);
+	// 
+	_IsEqui = CAttributeObject::FillObject_By_AttributeName(this, "Mods", _dwModObject);
 }
 
 CItem::ItemPoint CItem::GetItemLocation() CONST
 {
-	return _ItemPos;
-}
-
-VOID CItem::SetItemLocation(_In_ DWORD dwLeftTop, _In_ DWORD dwRightTop, _In_ DWORD dwLeftBottom, _In_ DWORD dwRightBottom)
-{
-	_ItemPos.dwLeftTopIndex = dwLeftTop;
-	_ItemPos.dwRightTopIndex = dwRightTop;
-	_ItemPos.dwLeftBottomIndex = dwLeftBottom;
-	_ItemPos.dwRightBottomIndex = dwRightBottom;
+	return ItemPoint{ ReadDWORD(GetNodeBase() + 物品左上角坐标),ReadDWORD(GetNodeBase() + 物品右上角坐标),ReadDWORD(GetNodeBase() + 物品左下角坐标),ReadDWORD(GetNodeBase() + 物品右下角坐标) };
 }
 
 DWORD CItem::GetPercentCharges() CONST
@@ -63,11 +56,6 @@ DWORD CItem::GetPercentCharges() CONST
 
 
 	return ReadDWORD(_dwChargesObject + 0xC) * 100 / dwMaxCharges;
-}
-
-VOID CItem::SetChargesAddr(_In_ DWORD dwChargesObject)
-{
-	_dwChargesObject = dwChargesObject;
 }
 
 DWORD CItem::GetCount() CONST
@@ -87,37 +75,47 @@ DWORD CItem::GetPercentCount() CONST
 	return GetCount() * 100 / dwMaxCount;
 }
 
-VOID CItem::SetStackAddr(_In_ DWORD dwStackObject)
-{
-	_dwStackObject = dwStackObject;
-}
-
 DWORD CItem::GetQuality() CONST
 {
-	return _dwQuality;
-}
-
-VOID CItem::SetQuality(_In_ DWORD dwQuality)
-{
-	_dwQuality = dwQuality;
+	return ReadBYTE(_dwQualityObject + 0xC);
 }
 
 BOOL CItem::IsBindAccount() CONST
 {
-	return _bIsBindAccount;
-}
-
-VOID CItem::SetIsBindAccount(_In_ BOOL bBindAccount)
-{
-	_bIsBindAccount = bBindAccount;
+	return ReadBYTE(_dwBaseObject + 物品绑定偏移) != 0;
 }
 
 BOOL CItem::IsNotAppraisal() CONST
 {
-	return _IsNotAppraisal;
+	return ReadBYTE(_dwModObject + 物品鉴定偏移) == 0;
 }
 
-VOID CItem::SetIsNotAppraisal(_In_ BOOL bValue)
+em_Equi_Color CItem::GetEquiColor() CONST
 {
-	_IsNotAppraisal = bValue;
+	switch (ReadBYTE(_dwModObject + 0x18 + 物品颜色偏移))
+	{
+	case 0:
+		return em_Equi_Color::White;
+	case 1:
+		return em_Equi_Color::Magic;
+	case 2:
+		return em_Equi_Color::Rate;
+	case 3:
+		return em_Equi_Color::Legend;
+	default:
+		break;
+	}
+
+	return em_Equi_Color::None;
+}
+
+DWORD CItem::GetEquiLevel() CONST
+{
+	return ReadBYTE(_dwModObject + 物品需求等级偏移 - 0x4);
+}
+
+
+BOOL CItem::IsEqui() CONST
+{
+	return _IsEqui;
 }

@@ -22,36 +22,39 @@ public:
 
 	// 位置
 	ItemPoint	GetItemLocation() CONST;
-	VOID		SetItemLocation(_In_ DWORD dwLeftTop, _In_ DWORD dwRightTop, _In_ DWORD dwLeftBottom, _In_ DWORD dwRightBottom);
 
 	// 药剂
 	DWORD		GetPercentCharges() CONST;
-	VOID		SetChargesAddr(_In_ DWORD dwChargesObject);
 
 	// 数量
 	DWORD		GetCount() CONST;
 	DWORD		GetPercentCount() CONST;
-	VOID		SetStackAddr(_In_ DWORD dwStackObject);
 
 	// 品质
 	DWORD		GetQuality() CONST;
-	VOID		SetQuality(_In_ DWORD dwQuality);
 
 	// 是否绑定账号的物品
 	BOOL		IsBindAccount() CONST;
-	VOID		SetIsBindAccount(_In_ BOOL bBindAccount);
 
-	// 是否未鉴定的物品
+	// 是否未鉴定的物品  未鉴定=TRUE
 	BOOL		IsNotAppraisal() CONST;
-	VOID		SetIsNotAppraisal(_In_ BOOL bValue);
 
-private:
+	// 颜色
+	em_Equi_Color GetEquiColor() CONST;
+
+	// 等级
+	DWORD GetEquiLevel() CONST;
+
+	// 是否装备
+	BOOL  IsEqui() CONST;
+protected:
 	ItemPoint	_ItemPos;
 	DWORD		_dwChargesObject = NULL;
 	DWORD		_dwStackObject   = NULL;
-	DWORD		_dwQuality       = NULL;
-	BOOL		_bIsBindAccount  = FALSE;
-	BOOL		_IsNotAppraisal  = FALSE;
+	DWORD		_dwQualityObject = NULL;
+	DWORD		_dwBaseObject    = NULL;
+	DWORD		_dwModObject	 = NULL;
+	BOOL		_IsEqui			 = FALSE;
 };
 
 

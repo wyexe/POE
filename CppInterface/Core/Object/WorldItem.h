@@ -1,9 +1,9 @@
 #ifndef __LFZL_CPPINTERFACE_CORE_OBJECT_WORLDITEM_H__
 #define __LFZL_CPPINTERFACE_CORE_OBJECT_WORLDITEM_H__
 
-#include "BaseObject.h"
+#include "Item.h"
 
-class CWorldItem : public CBaseObject
+class CWorldItem : public CItem
 {
 public:
 	CWorldItem();
@@ -11,18 +11,6 @@ public:
 	~CWorldItem();
 
 	virtual VOID RefreshObjectAttribute() override;
-
-	em_Equi_Color GetEquiColor() CONST;
-
-	DWORD GetEquiLevel() CONST;
-
-	VOID  SetEquiLevel(_In_ DWORD dwLevel);
-
-	BOOL  IsEqui() CONST;
-private:
-	em_Equi_Color	_emEquiColor = em_Equi_Color::None;
-	DWORD			_dwEquiLevel = NULL;
-	BOOL			_IsEqui = FALSE;
 };
 
 
