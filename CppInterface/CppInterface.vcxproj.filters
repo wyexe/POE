@@ -54,10 +54,7 @@
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.cpp">
+    <ClCompile Include="Core\Feature\GameMemory\GameMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Feature\GameMemory\GameMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

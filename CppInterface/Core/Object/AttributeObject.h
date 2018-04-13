@@ -4,6 +4,7 @@
 #include <GameStruct.h>
 #include <functional>
 #include <vector>
+#include <Core/Feature/GameMemory/GameMemory.h>
 
 class CAttributeObject
 {
@@ -16,17 +17,9 @@ public:
 	static BOOL FillAttributeTable(_In_ DWORD dwAttributeNodeBase, _In_ LPCSTR pwszAttributeName, _In_ std::function<VOID(DWORD)> Ptr);
 
 	template<typename T>
-	static BOOL FillObjectAttribute_ResName(_In_ T* pObject)
+	static VOID FillObjectAttribute_ResName(_In_ T* pObject)
 	{
-		DWORD dwNodeResPtr = ReadDWORD(pObject->GetNodeBase() + 0x0);
-		if (ReadDWORD(dwNodeResPtr + 0x10 + 0x10) != 0)
-		{
-			pObject->SetResName(reinterpret_cast<CONST WCHAR*>(ReadDWORD(dwNodeResPtr + 0x10 + 0x10 + 0x4) > 0x7 ? ReadDWORD(dwNodeResPtr + 0x10) : (dwNodeResPtr + 0x10)));
-			return TRUE;
-		}
-
-
-		return FALSE;
+		pObject->SetResName(ReadTextWithLength(ReadDWORD(pObject->GetNodeBase() + 0x0) + 0x10));
 	}
 
 	template<typename T>
@@ -35,10 +28,7 @@ public:
 		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Render", [&](DWORD dwIndex)
 		{
 			DWORD dwRenderObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			if (ReadDWORD(dwRenderObject + ¹ÖÎïÃû×ÖÆ«ÒÆ + 0x10) != 0)
-			{
-				pObject->SetName(reinterpret_cast<CONST WCHAR*>(ReadDWORD(dwRenderObject + ¹ÖÎïÃû×ÖÆ«ÒÆ + 0x10 + 0x4) > 0x7 ? ReadDWORD(dwRenderObject + ¹ÖÎïÃû×ÖÆ«ÒÆ) : (dwRenderObject + ¹ÖÎïÃû×ÖÆ«ÒÆ)));
-			}
+			pObject->SetName(CGameMemory::GetInstance().ReadProcTextWithLength(dwRenderObject + ¹ÖÎïÃû×ÖÆ«ÒÆ));
 		});
 	}
 
@@ -48,11 +38,7 @@ public:
 		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Base", [&](DWORD dwIndex)
 		{
 			DWORD dwBaseObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			DWORD dwNamePtr = ReadDWORD(dwBaseObject + 0x8);
-			if (ReadDWORD(dwNamePtr + 0x10 + 0x10) != 0)
-			{
-				pObject->SetName(reinterpret_cast<WCHAR*>(ReadDWORD(dwNamePtr + 0x10 + 0x14) > 7 ? ReadDWORD(dwNamePtr + 0x10) : (dwNamePtr + 0x10)));
-			}
+			pObject->SetName(CGameMemory::GetInstance().ReadProcTextWithLength(ReadDWORD(dwBaseObject + 0x8) + 0x10));
 		});
 	}
 
@@ -63,7 +49,7 @@ public:
 		return CAttributeObject::FillAttributeTable(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase(), "Player", [&](DWORD dwIndex)
 		{
 			DWORD dwPlayerObject = ReadDWORD(ReadDWORD(dwNodeBase != NULL ? dwNodeBase : pObject->GetNodeBase() + 0x4) + dwIndex * 4);
-			pObject->SetName(reinterpret_cast<WCHAR*>(ReadDWORD(dwPlayerObject + 0x10 + 0x14) > 7 ? ReadDWORD(dwPlayerObject + 0x10) : (dwPlayerObject + 0x10)));
+			pObject->SetName(CGameMemory::GetInstance().ReadProcTextWithLength(dwPlayerObject + 0x10));
 		});
 	}
 

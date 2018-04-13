@@ -125,8 +125,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.cpp" />
-    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.cpp" />
-    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.h" />
+    <ClCompile Include="Core\Feature\GameMemory\GameMemory.cpp" />
     <ClCompile Include="Core\Feature\Searcher\ObjectSearcher.cpp" />
     <ClCompile Include="Core\Object\AttributeObject.cpp" />
     <ClCompile Include="Core\Object\BaseObject.cpp" />
@@ -142,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.h" />
+    <ClInclude Include="Core\Feature\GameMemory\GameMemory.h" />
     <ClInclude Include="Core\Feature\Searcher\ObjectSearcher.h" />
     <ClInclude Include="Core\Object\AttributeObject.h" />
     <ClInclude Include="Core\Object\BaseObject.h" />

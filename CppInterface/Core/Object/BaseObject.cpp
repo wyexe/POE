@@ -11,10 +11,6 @@ DWORD CBaseObject::GetNodeBase() CONST
 VOID CBaseObject::SetNodeBase(_In_ DWORD dwNodeBase)
 {
 	_dwNodeBase = dwNodeBase;
-	/*if (_dwNodeBase != NULL)
-	{
-		CAttributeObject::FillObjectAttribute_ResName(this);
-	}*/
 }
 
 CONST std::wstring& CBaseObject::GetName() CONST
@@ -22,9 +18,9 @@ CONST std::wstring& CBaseObject::GetName() CONST
 	return _wsName;
 }
 
-VOID CBaseObject::SetName(_In_ LPCWSTR pwszName)
+VOID CBaseObject::SetName(_In_ CONST std::wstring& wsName)
 {
-	_wsName = pwszName;
+	_wsName = wsName;
 }
 
 CONST std::wstring& CBaseObject::GetResName() CONST
@@ -32,9 +28,9 @@ CONST std::wstring& CBaseObject::GetResName() CONST
 	return _wsResName;
 }
 
-VOID CBaseObject::SetResName(_In_ LPCWSTR pwszResName)
+VOID CBaseObject::SetResName(_In_ CONST std::wstring& wsResName)
 {
-	_wsResName = pwszResName;
+	_wsResName = wsResName;
 }
 
 Point CBaseObject::GetPoint() CONST

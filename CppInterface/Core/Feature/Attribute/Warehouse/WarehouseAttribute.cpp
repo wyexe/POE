@@ -1,6 +1,7 @@
 #include "WarehouseAttribute.h"
 #include <Core/Object/Item.h>
 #include <Core/Feature/Searcher/ObjectSearcher.h>
+#include <Core/Feature/GameMemory/GameMemory.h>
 
 BOOL CWarehouseAttribute::IsOpenedWarehouse()
 {

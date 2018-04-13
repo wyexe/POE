@@ -3,7 +3,7 @@
 #include <ProcessLib\Process\Process.h>
 #include <ProcessLib\KeyboardMsg\KeyboardMsg.h>
 #include <CharacterLib\Character.h>
-#include <Core\Feature\ReadMemory\ReadMemory.h>
+#include <Core\Feature\GameMemory\GameMemory.h>
 
 #pragma comment(lib,"ProcessLib.lib")
 #pragma comment(lib,"user32.lib")
@@ -77,7 +77,7 @@ extern "C" __declspec(dllexport) void WINAPIV ShowWeGame()
 // ¶ÁÈ¡ÄÚ´æ Initialize
 extern "C" __declspec(dllexport) int WINAPIV Initialize()
 {
-	return InitializeReadMemory();
+	return CGameMemory::GetInstance().InitializeReadMemory();
 }
 
 

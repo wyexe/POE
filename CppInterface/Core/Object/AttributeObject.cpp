@@ -18,12 +18,12 @@ BOOL CAttributeObject::FillAttributeTable(_In_ DWORD dwAttributeNodeBase, _In_ L
 			continue;
 
 
-		CHAR* pszItemAttributeTableObjectName = reinterpret_cast<CHAR*>(ReadDWORD(dwItemAttributeTableObject + 0x8));
-		if (strlen(pszItemAttributeTableObjectName) >= 16)
+		std::string szItemAttributeTableObjectName = CGameMemory::GetInstance().ReadProcASCIITextWithoutLength(ReadDWORD(dwItemAttributeTableObject + 0x8));
+		if (szItemAttributeTableObjectName.length() >= 16)
 			continue;
 
 
-		if (strcmp(pwszAttributeName, pszItemAttributeTableObjectName) == 0x0)
+		if (strcmp(pwszAttributeName, szItemAttributeTableObjectName.c_str()) == 0x0)
 		{
 			Ptr(dwIndex);
 			return TRUE;
@@ -75,8 +75,7 @@ em_Object_Type CAttributeObject::GetObjectType(_In_ DWORD dwNodeBase)
 		{ em_Object_Type::MiscellaneousObjects , L"Metadata/MiscellaneousObjects" },
 	};
 
-	CONST WCHAR* pwszResName = reinterpret_cast<CONST WCHAR*>(ReadDWORD(dwNodeResPtr + 0x10 + 0x10 + 0x4) > 0x7 ? ReadDWORD(dwNodeResPtr + 0x10) : (dwNodeResPtr + 0x10));
-
-	auto itr = std::find_if(Vec.begin(), Vec.end(), [pwszResName](CONST ObjectTypeContent& itm) { return wcsstr(pwszResName, itm.wsText.c_str()) != nullptr; });
+	std::wstring wsResName = CGameMemory::GetInstance().ReadProcTextWithLength(dwNodeResPtr + 0x10);
+	auto itr = std::find_if(Vec.begin(), Vec.end(), [wsResName](CONST ObjectTypeContent& itm) { return wsResName.find(itm.wsText) != std::wstring::npos; });
 	return itr != Vec.end() ? itr->emObjectType : em_Object_Type::Other;
 }

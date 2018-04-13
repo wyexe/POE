@@ -1,8 +1,8 @@
 #ifndef __LFZL_COMMON_GAMESTRUCT_H__
 #define __LFZL_COMMON_GAMESTRUCT_H__
 
-#include <ProcessLib/Memory/Memory.h>
-#pragma comment(lib,"ProcessLib.lib")
+#include <Windows.h>
+
 
 #define 人物基址 0x13FB540
 #define 人物基址偏移1 0x38
@@ -166,11 +166,9 @@ struct Point
 		return X == 0 || Y == 0;
 	}
 };
-//#define ReadDWORD(x) libTools::CMemory::ReadDWORD(x)
-//#define ReadBYTE(x)  libTools::CMemory::ReadBYTE(x)
 
-extern DWORD ReadDWORD(_In_ DWORD dwAddr);
-extern DWORD ReadBYTE(_In_ DWORD dwAddr);
+#define ReadDWORD(x) CGameMemory::GetInstance().ReadProcDWORD(x)
+#define ReadBYTE(x)  CGameMemory::GetInstance().ReadProcBYTE(x)
 
 
 

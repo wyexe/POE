@@ -1,8 +1,8 @@
 #ifndef __LFZL_CPPINTERFACE_CORE_OBJECT_BASEOBJECT_H__
 #define __LFZL_CPPINTERFACE_CORE_OBJECT_BASEOBJECT_H__
 
-
 #include <GameStruct.h>
+#include <string>
 
 class CBaseObject
 {
@@ -16,11 +16,11 @@ public:
 
 	CONST std::wstring& GetName() CONST;
 
-	VOID SetName(_In_ LPCWSTR pwszName);
+	VOID SetName(_In_ CONST std::wstring& wsName);
 
 	CONST std::wstring& GetResName() CONST;
 
-	VOID SetResName(_In_ LPCWSTR pwszResName);
+	VOID SetResName(_In_ CONST std::wstring& wsName);
 
 	Point GetPoint() CONST;
 
