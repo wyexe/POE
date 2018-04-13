@@ -114,29 +114,16 @@ T ReadMemory(_In_ UINT_PTR Addr)
 	return dwValue;
 }
 
-extern "C" __declspec(dllexport) DWORD WINAPIV ReadDWORD(_In_ DWORD dwAddr)
+DWORD ReadDWORD(_In_ DWORD dwAddr)
 {
-	if (hProcess == NULL)
-	{
-		::MessageBoxW(NULL, L"hProcess = NULL", L"", NULL);
-		return 0;
-	}
-
-
 	return ReadMemory<DWORD>(dwAddr);
 }
 
-extern "C" __declspec(dllexport) float WINAPIV ReadFloat(_In_ DWORD dwAddr)
+DWORD ReadBYTE(_In_ DWORD dwAddr)
 {
-	if (hProcess == NULL)
-	{
-		::MessageBoxW(NULL, L"hProcess = NULL", L"", NULL);
-		return 0;
-	}
-
-
-	return ReadMemory<float>(dwAddr);
+	return ReadDWORD(dwAddr) & 0xFF;
 }
+
 
 extern "C" __declspec(dllexport) void WINAPIV ReadText(_In_ DWORD dwAddr, _Out_ LPWSTR pwszText)
 {

@@ -47,6 +47,9 @@ public:
 
 	// ÊÇ·ñ×°±¸
 	BOOL  IsEqui() CONST;
+
+	// 
+	em_Object_Type GetType() CONST;
 protected:
 	ItemPoint	_ItemPos;
 	DWORD		_dwChargesObject = NULL;
@@ -55,6 +58,7 @@ protected:
 	DWORD		_dwBaseObject    = NULL;
 	DWORD		_dwModObject	 = NULL;
 	BOOL		_IsEqui			 = FALSE;
+	em_Object_Type  _emObjectType = em_Object_Type::Other;
 };
 
 

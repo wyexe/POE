@@ -1,6 +1,6 @@
 #include "ObjectSearcher.h"
 #include <set>
-
+#include <Core/Object/AttributeObject.h>
 
 CObjectSearcher::CObjectSearcher()
 {
@@ -51,7 +51,7 @@ UINT CObjectSearcher::GetVecChest(_Out_ std::vector<CChest>& Vec)
 {
 	return GetVecObject<CChest>(Vec, [](DWORD dwNodeBase)
 	{
-		return CBaseObject::GetObjectType(dwNodeBase) == em_Object_Type::Chests;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Chests;
 	});
 }
 
@@ -59,7 +59,7 @@ UINT CObjectSearcher::GetVecNpc(_Out_ std::vector<CNpc>& Vec)
 {
 	return GetVecObject<CNpc>(Vec, [](DWORD dwNodeBase)
 	{
-		return CBaseObject::GetObjectType(dwNodeBase) == em_Object_Type::Npc;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Npc;
 	});
 }
 
@@ -67,7 +67,7 @@ UINT CObjectSearcher::GetVecMonster(_Out_ std::vector<CMonster>& Vec)
 {
 	return GetVecObject<CMonster>(Vec, [](DWORD dwNodeBase)
 	{
-		return CBaseObject::GetObjectType(dwNodeBase) == em_Object_Type::Monster;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Monster;
 	});
 }
 
@@ -75,7 +75,7 @@ UINT CObjectSearcher::GetVecPlayer(_Out_ std::vector<CPlayer>& Vec)
 {
 	return GetVecObject<CPlayer>(Vec, [](DWORD dwNodeBase)
 	{
-		return CBaseObject::GetObjectType(dwNodeBase) == em_Object_Type::Player;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Player;
 	});
 }
 
@@ -83,6 +83,6 @@ UINT CObjectSearcher::GetVecWorlditem(_Out_ std::vector<CWorldItem>& Vec)
 {
 	return GetVecObject<CWorldItem>(Vec, [](DWORD dwNodeBase)
 	{
-		return CBaseObject::GetObjectType(dwNodeBase) == em_Object_Type::WorldItem;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::WorldItem;
 	});
 }

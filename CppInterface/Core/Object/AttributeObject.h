@@ -11,6 +11,8 @@ public:
 	CAttributeObject() = default;
 	~CAttributeObject() = default;
 
+	static em_Object_Type GetObjectType(_In_ DWORD dwNodeBase);
+
 	static BOOL FillAttributeTable(_In_ DWORD dwAttributeNodeBase, _In_ LPCSTR pwszAttributeName, _In_ std::function<VOID(DWORD)> Ptr);
 
 	template<typename T>

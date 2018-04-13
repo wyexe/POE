@@ -27,14 +27,12 @@ public:
 
 	// ...........
 	virtual VOID RefreshObjectAttribute() = NULL;
-
-	static em_Object_Type GetObjectType(_In_ DWORD dwNodeBase);
 protected:
 	DWORD			_dwNodeBase		= NULL;
 	DWORD			_dwPositionedObject = NULL;
 	std::wstring	_wsName;
 	std::wstring	_wsResName;
-	em_Object_Type _emObjectType	= em_Object_Type::Other;
+	
 };
 
 

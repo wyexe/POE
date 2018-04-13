@@ -9,6 +9,7 @@ CItem::CItem()
 CItem::CItem(_In_ DWORD dwNodeBase)
 {
 	SetNodeBase(dwNodeBase);
+	_emObjectType = CAttributeObject::GetObjectType(dwNodeBase);
 }
 
 CItem::~CItem()
@@ -118,4 +119,9 @@ DWORD CItem::GetEquiLevel() CONST
 BOOL CItem::IsEqui() CONST
 {
 	return _IsEqui;
+}
+
+em_Object_Type CItem::GetType() CONST
+{
+	return _emObjectType;
 }

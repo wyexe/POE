@@ -61,8 +61,7 @@
 
 
 
-#define ReadDWORD(x) libTools::CMemory::ReadDWORD(x)
-#define ReadBYTE(x)  libTools::CMemory::ReadBYTE(x)
+
 
 
 enum class em_Equi_Color
@@ -167,10 +166,11 @@ struct Point
 		return X == 0 || Y == 0;
 	}
 };
+//#define ReadDWORD(x) libTools::CMemory::ReadDWORD(x)
+//#define ReadBYTE(x)  libTools::CMemory::ReadBYTE(x)
 
-
-
-
+extern DWORD ReadDWORD(_In_ DWORD dwAddr);
+extern DWORD ReadBYTE(_In_ DWORD dwAddr);
 
 
 
