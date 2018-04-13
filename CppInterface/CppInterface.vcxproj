@@ -125,6 +125,8 @@
   <ItemGroup>
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.cpp" />
+    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.cpp" />
+    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.h" />
     <ClCompile Include="Core\Feature\Searcher\ObjectSearcher.cpp" />
     <ClCompile Include="Core\Object\AttributeObject.cpp" />
     <ClCompile Include="Core\Object\BaseObject.cpp" />

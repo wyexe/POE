@@ -2,12 +2,12 @@
 #include <string>
 #include <ProcessLib\Process\Process.h>
 #include <ProcessLib\KeyboardMsg\KeyboardMsg.h>
-#include <InjectorLib\DllInjector\DllInjector.h>
 #include <CharacterLib\Character.h>
+#include <Core\Feature\ReadMemory\ReadMemory.h>
 
 #pragma comment(lib,"ProcessLib.lib")
 #pragma comment(lib,"user32.lib")
-#pragma comment(lib,"InjectorLib.lib")
+
 #pragma comment(lib,"CharacterLib.lib")
 
 BOOL WINAPI DllMain(_In_ HINSTANCE , _In_ DWORD dwReason, _In_ LPVOID)
@@ -73,56 +73,15 @@ extern "C" __declspec(dllexport) void WINAPIV ShowWeGame()
 	}
 }
 
-HANDLE hProcess = NULL;
+
+// 读取内存 Initialize
 extern "C" __declspec(dllexport) int WINAPIV Initialize()
 {
-	DWORD dwPid = libTools::CProcess::FindPidByProcName(L"PathOfExile.exe");
-	if (dwPid == NULL)
-	{
-		::MessageBoxW(NULL, L"UnExist Game Process!", L"", NULL);
-		return FALSE;
-	}
-
-
-	if (!libTools::CDllInjector::PromotionAuthority())
-	{
-		::MessageBoxW(NULL, L"提升权限失败!", L"", NULL);
-		return FALSE;
-	}
-
-
-	hProcess = ::OpenProcess(PROCESS_VM_READ, FALSE, dwPid);
-	if (hProcess == NULL)
-	{
-		::MessageBoxW(NULL, L"OpenProcess失败!", L"", NULL);
-		return FALSE;
-	}
-
-	return TRUE;
+	return InitializeReadMemory();
 }
 
-template<typename T>
-T ReadMemory(_In_ UINT_PTR Addr)
-{
-	T dwValue = 0;
-	if (!::ReadProcessMemory(hProcess, reinterpret_cast<LPCVOID>(Addr), &dwValue, sizeof(dwValue), 0))
-	{
-		return 0;
-	}
 
-
-	return dwValue;
-}
-
-DWORD ReadDWORD(_In_ DWORD dwAddr)
-{
-	return ReadMemory<DWORD>(dwAddr);
-}
-
-DWORD ReadBYTE(_In_ DWORD dwAddr)
-{
-	return ReadDWORD(dwAddr) & 0xFF;
-}
+/*
 
 
 extern "C" __declspec(dllexport) void WINAPIV ReadText(_In_ DWORD dwAddr, _Out_ LPWSTR pwszText)
@@ -154,3 +113,4 @@ extern "C" __declspec(dllexport) void WINAPIV ReadASCIIText(_In_ DWORD dwAddr, _
 	libTools::CCharacter::strcpy_my(pwszText, libTools::CCharacter::ASCIIToUnicode(std::string(szText)).c_str(), _countof(szText));
 }
 
+*/

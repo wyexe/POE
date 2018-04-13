@@ -54,6 +54,12 @@
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Feature\ReadMemory\ReadMemory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Object\BaseObject.h">
