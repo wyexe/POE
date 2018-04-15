@@ -5,10 +5,16 @@
 #include <ExceptionLib/Exception.h>
 #include <CharacterLib/Character.h>
 #include <ProcessLib/Memory/SearchBinary.h>
+#include <ProcessLib/Memory/Memory.h>
+#include <ProcessLib/Memory/SearchBinary.h>
 #include <GameStruct.h>
 #define _SELF L"Expr.cpp"
 
-
+#pragma comment(lib,"ProcessLib.lib")
+#undef ReadDWORD
+#undef ReadBYTE
+#define ReadDWORD(x) libTools::CMemory::ReadDWORD(x)
+#define ReadBYTE(x)  libTools::CMemory::ReadBYTE(x)
 
 std::function<VOID(CONST std::wstring&)> g_EchoExceptionMsgPtr = [] (CONST std::wstring& wsText)
 {

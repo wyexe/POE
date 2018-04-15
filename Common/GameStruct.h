@@ -4,7 +4,7 @@
 #include <Windows.h>
 
 
-#define 人物基址 0x13FB540
+#define 人物基址 0x13F9760
 #define 人物基址偏移1 0x38
 #define 人物基址偏移2 0x14
 #define 人物基址偏移3 0x8
@@ -12,7 +12,7 @@
 #define 人物基址偏移5 0x1DC
 #define 人物基址偏移6 0x2C
 #define 人物基址偏移7 0x14
-#define 人物名字基址 0x153F1F8
+#define 人物名字基址 0x153D430
 #define 人物等级偏移 0x40
 #define 物品遍历偏移1 0x1C4
 #define 物品遍历偏移2 0x4B30

@@ -43,7 +43,7 @@ DWORD CMonster::GetPercentHp() CONST
 	return ReadDWORD(_dwLifeObject + ÈËÎïHPÆ«ÒÆ) * 100 / dwMaxHp;
 }
 
-BOOL CMonster::IsAllowAttack()
+BOOL CMonster::IsAllowAttack() CONST
 {
 	return ReadBYTE(_dwActorObject + 0x80) != NULL;
 }

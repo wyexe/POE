@@ -23,19 +23,35 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Game\Searcher.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Game\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Launcher\GameLauncher.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Launcher\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LFConsole.py" />
-    <Compile Include="MouseAction.py">
+    <Compile Include="Launcher\MouseAction.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PicMatch.py">
+    <Compile Include="Launcher\PicMatch.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WeGame.py">
+    <Compile Include="Launcher\WeGameAttribute.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|2.7-32" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Launcher\" />
+    <Folder Include="Game\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

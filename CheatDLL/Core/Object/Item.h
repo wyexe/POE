@@ -42,6 +42,8 @@ public:
 	// ÑÕÉ«
 	em_Equi_Color GetEquiColor() CONST;
 
+	std::wstring GetEquiColorText() CONST;
+
 	// µÈ¼¶
 	DWORD GetEquiLevel() CONST;
 

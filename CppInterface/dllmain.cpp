@@ -3,18 +3,20 @@
 #include <ProcessLib\Process\Process.h>
 #include <ProcessLib\KeyboardMsg\KeyboardMsg.h>
 #include <CharacterLib\Character.h>
-#include <Core\Feature\GameMemory\GameMemory.h>
+
+#include <LogLib\Log.h>
 
 #pragma comment(lib,"ProcessLib.lib")
 #pragma comment(lib,"user32.lib")
-
 #pragma comment(lib,"CharacterLib.lib")
+#pragma comment(lib,"LogLib.lib")
 
+#define _SELF L"dllmain.cpp"
 BOOL WINAPI DllMain(_In_ HINSTANCE , _In_ DWORD dwReason, _In_ LPVOID)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-
+		// Set Capacity = 100
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
@@ -73,44 +75,11 @@ extern "C" __declspec(dllexport) void WINAPIV ShowWeGame()
 	}
 }
 
-
 // ¶ÁÈ¡ÄÚ´æ Initialize
 extern "C" __declspec(dllexport) int WINAPIV Initialize()
 {
-	return CGameMemory::GetInstance().InitializeReadMemory();
+	//return CGameMemory::GetInstance().InitializeReadMemory();
 }
 
 
-/*
 
-
-extern "C" __declspec(dllexport) void WINAPIV ReadText(_In_ DWORD dwAddr, _Out_ LPWSTR pwszText)
-{
-	DWORD dwTextLen = ReadDWORD(dwAddr + 0x10);
-	if (dwTextLen >= 32)
-	{
-		::MessageBoxW(NULL, L"Text.Length >= 32.... Really?", L"", NULL);
-		return;
-	}
-
-
-	::ReadProcessMemory(hProcess, reinterpret_cast<LPCVOID>(ReadDWORD(dwAddr + 0x14) >= 0xF ? ReadDWORD(dwAddr) : dwAddr), pwszText, dwTextLen, 0);
-}
-
-extern "C" __declspec(dllexport) void WINAPIV ReadOnlyText(_In_ DWORD dwAddr, _Out_ LPWSTR pwszText)
-{
-	::ReadProcessMemory(hProcess, reinterpret_cast<LPCVOID>(dwAddr), pwszText, 32, 0);
-	pwszText[30] = '\0';
-	pwszText[31] = '\0';
-}
-
-extern "C" __declspec(dllexport) void WINAPIV ReadASCIIText(_In_ DWORD dwAddr, _Out_ LPWSTR pwszText)
-{
-	CHAR szText[32] = { 0 };
-	::ReadProcessMemory(hProcess, reinterpret_cast<LPCVOID>(dwAddr), szText, _countof(szText), 0);
-	szText[_countof(szText) - 1] = '\0';
-
-	libTools::CCharacter::strcpy_my(pwszText, libTools::CCharacter::ASCIIToUnicode(std::string(szText)).c_str(), _countof(szText));
-}
-
-*/

@@ -49,6 +49,10 @@ CItem::ItemPoint CItem::GetItemLocation() CONST
 
 DWORD CItem::GetPercentCharges() CONST
 {
+	if (_dwChargesObject == NULL)
+		return 0;
+
+
 	DWORD dwMaxCharges = ReadDWORD(ReadDWORD(_dwChargesObject + 0x8) + 0xC);
 	if (dwMaxCharges == NULL)
 	{
@@ -78,7 +82,7 @@ DWORD CItem::GetPercentCount() CONST
 
 DWORD CItem::GetQuality() CONST
 {
-	return ReadBYTE(_dwQualityObject + 0xC);
+	return _dwQualityObject == 0 ? 0 : ReadBYTE(_dwQualityObject + 0xC);
 }
 
 BOOL CItem::IsBindAccount() CONST
@@ -108,6 +112,25 @@ em_Equi_Color CItem::GetEquiColor() CONST
 	}
 
 	return em_Equi_Color::None;
+}
+
+std::wstring CItem::GetEquiColorText() CONST
+{
+	switch (GetEquiColor())
+	{
+	case em_Equi_Color::White:
+		return L"白色";
+	case em_Equi_Color::Magic:
+		return L"魔法";
+	case em_Equi_Color::Rate:
+		return L"稀有";
+	case em_Equi_Color::Legend:
+		return L"传奇";
+	default:
+		break;
+	}
+
+	return L"无效颜色";
 }
 
 DWORD CItem::GetEquiLevel() CONST

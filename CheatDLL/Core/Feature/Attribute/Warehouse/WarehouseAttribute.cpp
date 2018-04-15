@@ -33,7 +33,13 @@ DWORD CWarehouseAttribute::GetCurrentPageObject()
 
 UINT CWarehouseAttribute::GetCurrentPageItem(_Out_ std::vector<CItem>& Vec)
 {
-	DWORD dwAttributeIndex = ReadDWORD(ReadDWORD(ReadDWORD(GetWarehouseObject() + 仓库页索引偏移1) + 0x0) + 仓库页索引偏移2);
+	DWORD dwWarehousePageObject = GetWarehouseObject();
+	if (ReadDWORD(dwWarehousePageObject + 仓库页索引偏移1) == NULL)
+	{
+		return 0;
+	}
+
+	DWORD dwAttributeIndex = ReadDWORD(ReadDWORD(ReadDWORD(dwWarehousePageObject + 仓库页索引偏移1) + 0x0) + 仓库页索引偏移2);
 
 	DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 物品遍历偏移1);
 	dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移2 + 物品遍历偏移3) + 1 * 4) + 0x4) - 4 + 物品遍历偏移4 + 物品遍历偏移5) + 0x4) + 物品遍历偏移6);

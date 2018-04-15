@@ -30,7 +30,7 @@ public:
 
 
 	// ÊÇ·ñÔÊÐí±»¹¥»÷
-	BOOL IsAllowAttack();
+	BOOL IsAllowAttack() CONST;
 private:
 	DWORD _dwLifeObject = NULL;
 	DWORD _dwActorObject = NULL;
