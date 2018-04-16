@@ -15,15 +15,9 @@
 #define 人物名字基址 0x153D430
 #define 人物等级偏移 0x40
 #define 物品遍历偏移1 0x1C4
-#define 物品遍历偏移2 0x4B30
-#define 物品遍历偏移3 0xC
-#define 物品遍历偏移4 0x4D70
-#define 物品遍历偏移5 0x88
-#define 物品遍历偏移6 0x44
-#define 物品遍历偏移7 0x84
-#define 物品遍历偏移8 0x4D70
-#define 物品遍历偏移9 0x88
-#define 物品遍历偏移10 0x30
+#define 物品遍历偏移2 0x4D70
+#define 物品遍历偏移3 0x88
+#define 物品遍历偏移4 0x30
 #define 物品绑定偏移 0x84
 #define 物品鉴定偏移 0x54
 #define 物品需求等级偏移 0x1E0
@@ -58,7 +52,6 @@
 #define 物品右下角坐标 0x10
 #define 物品属性表偏移 0x0
 #define 周围对象遍历偏移5		0x230
-
 
 
 
@@ -120,6 +113,12 @@ enum class em_Object_Type
 	AreaTransition,
 	// 杂物
 	MiscellaneousObjects,
+	// 地图
+	Maps,
+	// 地图碎片
+	MapFragment,
+	// 珠宝(天赋宝石)
+	Jewels,
 	//
 	Other
 };

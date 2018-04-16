@@ -57,6 +57,9 @@
     <ClCompile Include="Core\Object\WorldItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Expr\CmdExpr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Object\WorldItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Expr\CmdExpr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

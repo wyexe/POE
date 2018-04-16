@@ -1,5 +1,5 @@
-#ifndef __LFZL_CPPINTERFACE_CORE_OBJECT_NPC_H__
-#define __LFZL_CPPINTERFACE_CORE_OBJECT_NPC_H__
+#ifndef __LFZL_CHEATDLL_CORE_OBJECT_NPC_H__
+#define __LFZL_CHEATDLL_CORE_OBJECT_NPC_H__
 
 #include "BaseObject.h"
 
@@ -16,4 +16,4 @@ private:
 };
 
 
-#endif // !__LFZL_CPPINTERFACE_CORE_OBJECT_NPC_H__
+#endif // !__LFZL_CHEATDLL_CORE_OBJECT_NPC_H__

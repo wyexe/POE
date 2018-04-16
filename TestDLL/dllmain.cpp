@@ -4,7 +4,6 @@
 #include "Expr.h"
 
 #pragma comment(lib,"LogLib.lib")
-
 BOOL WINAPI DllMain(_In_ HINSTANCE ,_In_ DWORD fdwReason,_In_ LPVOID )
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
@@ -17,6 +16,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE ,_In_ DWORD fdwReason,_In_ LPVOID )
 	else if (fdwReason == DLL_PROCESS_DETACH)
 	{
 		//::MessageBoxW(NULL, L"Detah ...", L"", NULL);
+		LOG_C_D(L"");
 		libTools::CLog::GetInstance().Release();
 		libTools::CCmdLog::GetInstance().Stop();
 		CExpr::GetInstance().Release();

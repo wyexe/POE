@@ -1,6 +1,8 @@
 #include "Item.h"
 #include "AttributeObject.h"
+#include <LogLib/Log.h>
 
+#define _SELF L"Item.cpp"
 CItem::CItem()
 {
 	
@@ -9,7 +11,7 @@ CItem::CItem()
 CItem::CItem(_In_ DWORD dwNodeBase)
 {
 	SetNodeBase(dwNodeBase);
-	_emObjectType = CAttributeObject::GetObjectType(dwNodeBase);
+	_emObjectType = CAttributeObject::GetObjectType(GetAttributeTablePtr());
 }
 
 CItem::~CItem()
@@ -24,7 +26,6 @@ VOID CItem::RefreshObjectAttribute()
 
 	// ÊýÁ¿
 	CAttributeObject::FillObject_By_AttributeName(this, "Stack", _dwStackObject);
-
 	
 	// Ò©¼Á
 	if (GetType() == em_Object_Type::Flasks)
@@ -68,9 +69,14 @@ DWORD CItem::GetCount() CONST
 	return ReadDWORD(_dwStackObject + 0xC) & 0xFF;
 }
 
+DWORD CItem::GetMaxCount() CONST
+{
+	return ReadDWORD(ReadDWORD(_dwStackObject + 0x8) + 0x18) & 0xFF;;
+}
+
 DWORD CItem::GetPercentCount() CONST
 {
-	DWORD dwMaxCount = ReadDWORD(ReadDWORD(_dwStackObject + 0x8) + 0x18) & 0xFF;
+	DWORD dwMaxCount = GetMaxCount();
 	if (dwMaxCount == 0)
 	{
 		return 0;

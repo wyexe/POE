@@ -1,12 +1,13 @@
 #include "GameMemory.h"
 #include <ProcessLib\Process\Process.h>
 #include <InjectorLib\DllInjector\DllInjector.h>
+#include <LogLib\Log.h>
 #include <memory>
 
 #pragma comment(lib,"InjectorLib.lib")
 #pragma comment(lib,"ProcessLib.lib")
 
-
+#define _SELF L"GameMemory.cpp"
 CGameMemory& CGameMemory::GetInstance()
 {
 	static CGameMemory Instance;
@@ -52,25 +53,32 @@ DWORD CGameMemory::ReadProcBYTE(_In_ DWORD dwAddr)
 
 std::wstring CGameMemory::ReadProcTextWithLength(_In_ DWORD dwAddr)
 {
-	WCHAR wszText[64] = { 0 };
-	::ReadProcessMemory(_hProcess, reinterpret_cast<LPCVOID>(dwAddr), wszText, sizeof(wszText), NULL);
-	return std::wstring(wszText);
+	DWORD dwTextLength = ReadProcDWORD(dwAddr + 0x10);
+	if (dwTextLength < 128)
+	{
+		WCHAR wszText[128] = { 0 };
+		::ReadProcessMemory(_hProcess, reinterpret_cast<LPCVOID>(ReadProcDWORD(dwAddr + 0x14) > 0x7 ? ReadProcDWORD(dwAddr) : dwAddr), wszText, dwTextLength * sizeof(WCHAR), NULL);
+		//LOG_C_D(L"dwAddr=[%X], dwTextLength=[%d]", dwAddr, dwTextLength);
+		return std::wstring(wszText);
+	}
+	else
+	{
+		LOG_C_E(L"dwAddr=[%X], dwTextLength=[%d]", dwAddr, dwTextLength);
+	}
+	return L"";
+	
 }
 
 std::wstring CGameMemory::ReadProcTextWithoutLength(_In_ DWORD dwAddr)
 {
-	DWORD dwTextLength = ReadProcDWORD(dwAddr + 0x10);
-
-	std::shared_ptr<WCHAR> pwszText(new WCHAR[dwTextLength + 1], [](WCHAR* p) { delete[] p; });
-	ZeroMemory(pwszText.get(), dwTextLength + 1);
-
-	::ReadProcessMemory(_hProcess, reinterpret_cast<LPCVOID>(ReadProcDWORD(dwAddr + 0x14) >= 0x7 ? ReadProcDWORD(dwAddr) : dwAddr), pwszText.get(), dwTextLength * sizeof(WCHAR), NULL);
-	return std::wstring(pwszText.get());
+	WCHAR wszText[128] = { 0 };
+	::ReadProcessMemory(_hProcess, reinterpret_cast<LPCVOID>(dwAddr), wszText, sizeof(wszText), NULL);
+	return std::wstring(wszText);
 }
 
 std::string CGameMemory::ReadProcASCIITextWithoutLength(_In_ DWORD dwAddr)
 {
-	CHAR szText[64] = { 0 };
+	CHAR szText[128] = { 0 };
 	::ReadProcessMemory(_hProcess, reinterpret_cast<LPCVOID>(dwAddr), szText, sizeof(szText), NULL);
 	return std::string(szText);
 }

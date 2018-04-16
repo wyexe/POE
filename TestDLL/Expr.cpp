@@ -417,14 +417,11 @@ VOID CExpr::PrintItem(CONST std::vector<std::wstring>&)
 	{
 		// dd [[[[[[[[[[[[[[[[0x013F24F0+38]+1*4]+14]-8]+1C4]+4AAC+0C]+1*4]+4]-4+4CE8+88]+4]+44]+0*4]+84]+4CE8+88]+0*10+4]+30] = 背包数组
 		// dd [[[[[[[[[[[[[[[[0x013F24F0+38]+1*4]+14]-8]+1C4]+4AAC+0C]+1*4]+4]-4+4CE8+88]+4]+44]+0*4]+84]+4CE8+88]+0*10+4]+30] = 背包数组
-		DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 物品遍历偏移1);
+		DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3);
 		LOG_C_D(L"dwAddr=%X", dwAddr);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移2 + 物品遍历偏移3) + 1 * 4) + 0x4) - 4 + 物品遍历偏移4 + 物品遍历偏移5) + 0x4) + 物品遍历偏移6);
+		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移1) + 物品遍历偏移2 + 物品遍历偏移3) + 0 * 0x10 + 0x4) + 物品遍历偏移4;
 		LOG_C_D(L"dwAddr=%X", dwAddr);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 0 * 4) + 物品遍历偏移7) + 物品遍历偏移8 + 物品遍历偏移9) + 0 * 0x10 + 4);
-		LOG_C_D(L"dwAddr=%X", dwAddr);
-		DWORD dwArrayHead = dwAddr + 物品遍历偏移10;
-		PrintItem_By_Object(dwArrayHead);
+		PrintItem_By_Object(dwAddr);
 	});
 	
 }
@@ -494,14 +491,11 @@ VOID CExpr::PrintWarehouse(CONST std::vector<std::wstring>&)
 
 		DWORD dwAttributeIndex = ReadDWORD(ReadDWORD(ReadDWORD(dwWarehousePageObject + 仓库页索引偏移1) + 0x0) + 仓库页索引偏移2);
 		LOG_C_D(L"dwAttributeIndex=%X", dwAttributeIndex);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 物品遍历偏移1);
+		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3);
 		LOG_C_D(L"dwAddr=%X", dwAddr);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移2 + 物品遍历偏移3) + 1 * 4) + 0x4) - 4 + 物品遍历偏移4 + 物品遍历偏移5) + 0x4) + 物品遍历偏移6);
+		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移1) + 物品遍历偏移2 + 物品遍历偏移3) + (dwAttributeIndex - 0x1) * 0x10 + 0x4) + 物品遍历偏移4;
 		LOG_C_D(L"dwAddr=%X", dwAddr);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 0 * 4) + 物品遍历偏移7) + 物品遍历偏移8 + 物品遍历偏移9) + (dwAttributeIndex - 1) * 0x10 + 4);
-		LOG_C_D(L"dwAddr=%X", dwAddr);
-		DWORD dwArrayHead = dwAddr + 物品遍历偏移10;
-		PrintItem_By_Object(dwArrayHead);
+		PrintItem_By_Object(dwAddr);
 	});
 }
 
@@ -713,35 +707,17 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 	dwBase = ScanBinary.FindBase("83??14E8????????39??24??74??8B????E8", 0x66C1E8 - 0x66C1FE, 3, 0x0, L"PathOfExile.exe", 0xFF);
 	LOG_C_D(L"#define 人物等级偏移 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("750484??????8B??????????8D", 0x7DA0B7 - 0x7DA0E1, 2, 0x0, L"PathOfExile.exe");
+	dwBase = ScanBinary.FindBase("80????0075??80??????00000075??6A", 0x7E798E - 0x7E797F, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 物品遍历偏移1 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("8D??????0000E8????????83??????000003", 0xA2C3CE - 0xA2C3CE, 2, 0x0, L"PathOfExile.exe");
+	dwBase = ScanBinary.FindBase("80????0075??80??????00000075??6A", 0x7E798E - 0x7E79A3, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 物品遍历偏移2 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("FF??84??0F??????????8B????83??04", 0xC00B0E - 0xC00AFC, 2, 0x0, L"PathOfExile.exe", 0xFF);
+	dwBase = ScanBinary.FindBase("C70000000000C7400400000000C208008B", 0x09447BA - 0x944793, 2, 0x0, L"PathOfExile.exe", 0xFF);
 	LOG_C_D(L"#define 物品遍历偏移3 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("C204008D??????????83C4??C204008D??????C7", 0xA3A19B - 0xA3A19E, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 物品遍历偏移4 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("E9????????8D??????C7????????????????8D", 0x93D6AB - 0x93D67A, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 物品遍历偏移5 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("74??33??8B????8B????8B????8B??8B??83??04", 0x865882 - 0x865886, 2, 0x0, L"PathOfExile.exe", 0xFF);
-	LOG_C_D(L"#define 物品遍历偏移6 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("6A01E8????????E8????????83", 0x65D8FA - 0x65D8DA, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 物品遍历偏移7 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("6A01E8????????E8????????83", 0x65D8FA - 0x65D8EE, 1, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 物品遍历偏移8 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("C70000000000C7400400000000C208008B", 0x93D90A - 0x93D8E3, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 物品遍历偏移9 0x%X", dwBase);
-
 	dwBase = ScanBinary.FindBase("C7????000000008B????3B??7C", 0x865953 - 0x86594A, 2, 0x0, L"PathOfExile.exe", 0xFF);
-	LOG_C_D(L"#define 物品遍历偏移10 0x%X", dwBase);
+	LOG_C_D(L"#define 物品遍历偏移4 0x%X", dwBase);
 
 	dwBase = ScanBinary.FindBase("83??????????000F??????????8B??????????E8????????8B", 0x67BAB8 - 0x67BAD6, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 物品绑定偏移 0x%X", dwBase);

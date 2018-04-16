@@ -1,5 +1,5 @@
-#ifndef __LFZL_CPPINTERFACE_CORE_OBJECT_ITEM_H__
-#define __LFZL_CPPINTERFACE_CORE_OBJECT_ITEM_H__
+#ifndef __LFZL_CHEATDLL_CORE_OBJECT_ITEM_H__
+#define __LFZL_CHEATDLL_CORE_OBJECT_ITEM_H__
 
 #include "BaseObject.h"
 
@@ -28,6 +28,7 @@ public:
 
 	// 数量
 	DWORD		GetCount() CONST;
+	DWORD		GetMaxCount() CONST;
 	DWORD		GetPercentCount() CONST;
 
 	// 品质
@@ -64,4 +65,4 @@ protected:
 };
 
 
-#endif // !__LFZL_CPPINTERFACE_CORE_OBJECT_ITEM_H__
+#endif // !__LFZL_CHEATDLL_CORE_OBJECT_ITEM_H__

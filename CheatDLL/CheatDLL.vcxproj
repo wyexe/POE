@@ -91,6 +91,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)$(Configuration)\$(TargetFileName)"  "\\192.168.0.107\Share\DLL\" /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -137,6 +140,7 @@
     <ClCompile Include="Core\Object\Player.cpp" />
     <ClCompile Include="Core\Object\WorldItem.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Expr\CmdExpr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h" />
@@ -152,6 +156,7 @@
     <ClInclude Include="Core\Object\Person.h" />
     <ClInclude Include="Core\Object\Player.h" />
     <ClInclude Include="Core\Object\WorldItem.h" />
+    <ClInclude Include="Expr\CmdExpr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

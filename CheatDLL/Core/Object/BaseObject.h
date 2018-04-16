@@ -1,5 +1,5 @@
-#ifndef __LFZL_CPPINTERFACE_CORE_OBJECT_BASEOBJECT_H__
-#define __LFZL_CPPINTERFACE_CORE_OBJECT_BASEOBJECT_H__
+#ifndef __LFZL_CHEATDLL_CORE_OBJECT_BASEOBJECT_H__
+#define __LFZL_CHEATDLL_CORE_OBJECT_BASEOBJECT_H__
 
 #include <GameStruct.h>
 #include <string>
@@ -27,6 +27,9 @@ public:
 
 	// ...........
 	virtual VOID RefreshObjectAttribute() = NULL;
+
+	//
+	DWORD GetAttributeTablePtr() CONST;
 protected:
 	DWORD			_dwNodeBase		= NULL;
 	DWORD			_dwPositionedObject = NULL;
@@ -36,4 +39,4 @@ protected:
 };
 
 
-#endif // !__LFZL_CPPINTERFACE_CORE_OBJECT_BASEOBJECT_H__
+#endif // !__LFZL_CHEATDLL_CORE_OBJECT_BASEOBJECT_H__

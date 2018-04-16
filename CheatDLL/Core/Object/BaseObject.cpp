@@ -37,3 +37,8 @@ Point CBaseObject::GetPoint() CONST
 {
 	return Point(ReadDWORD(_dwPositionedObject + 0x10), ReadDWORD(_dwPositionedObject + 0x14));
 }
+
+DWORD CBaseObject::GetAttributeTablePtr() CONST
+{
+	return ReadDWORD(GetNodeBase() + 0x0);
+}
