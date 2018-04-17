@@ -6,7 +6,7 @@
 #include <Core\Feature\Attribute\Bag\BagAttribute.h>
 #include <Core\Feature\Attribute\Warehouse\WarehouseAttribute.h>
 #include <Core\Object\AttributeObject.h>
-
+#include <Core\Feature\EchoAction\GameMouse.h>
 
 #define _SELF L"CmdExpr.cpp"
 CCmdExpr::CCmdExpr()
@@ -36,6 +36,7 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::PrintMonster, this, std::placeholders::_1), L"PrintMonster" },
 		{ std::bind(&CCmdExpr::PrintPlayer, this, std::placeholders::_1), L"PrintPlayer" },
 		{ std::bind(&CCmdExpr::PrintWorldItem, this, std::placeholders::_1), L"PrintWorldItem" },
+		{ std::bind(&CCmdExpr::MouseMove, this, std::placeholders::_1), L"MouseMove" },
 	};
 
 	return Vec;
@@ -224,4 +225,9 @@ VOID CCmdExpr::PrintWorldItem(CONST std::vector<std::wstring>&)
 			LOG_C_D(L"Count=[%d]-[%d]", itm.GetCount(), itm.GetPercentCount());
 		}
 	}
+}
+
+VOID CCmdExpr::MouseMove(CONST std::vector<std::wstring>&)
+{
+	CGameMouse::GetInstance().MoveTo(Point(100, 100));
 }

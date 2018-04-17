@@ -20,6 +20,7 @@ public:
 	DWORD GetPercentShield() CONST;
 
 	DWORD GetLevel() CONST;
+
 private:
 	DWORD GetPercentValue(_In_ DWORD dwOffset) CONST;
 private:

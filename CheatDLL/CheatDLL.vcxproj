@@ -128,8 +128,11 @@
   <ItemGroup>
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.cpp" />
+    <ClCompile Include="Core\Feature\EchoAction\PersonAction.cpp" />
     <ClCompile Include="Core\Feature\GameMemory\GameMemory.cpp" />
+    <ClCompile Include="Core\Feature\EchoAction\GameMouse.cpp" />
     <ClCompile Include="Core\Feature\Searcher\ObjectSearcher.cpp" />
+    <ClCompile Include="Core\Login\GameLogin.cpp" />
     <ClCompile Include="Core\Object\AttributeObject.cpp" />
     <ClCompile Include="Core\Object\BaseObject.cpp" />
     <ClCompile Include="Core\Object\Chest.cpp" />
@@ -145,8 +148,11 @@
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.h" />
+    <ClInclude Include="Core\Feature\EchoAction\PersonAction.h" />
     <ClInclude Include="Core\Feature\GameMemory\GameMemory.h" />
+    <ClInclude Include="Core\Feature\EchoAction\GameMouse.h" />
     <ClInclude Include="Core\Feature\Searcher\ObjectSearcher.h" />
+    <ClInclude Include="Core\Login\GameLogin.h" />
     <ClInclude Include="Core\Object\AttributeObject.h" />
     <ClInclude Include="Core\Object\BaseObject.h" />
     <ClInclude Include="Core\Object\Chest.h" />

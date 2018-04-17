@@ -43,16 +43,12 @@ UINT CWarehouseAttribute::GetCurrentPageItem(_Out_ std::vector<CItem>& Vec)
 	}
 
 	DWORD dwAttributeIndex = ReadDWORD(ReadDWORD(ReadDWORD(GetCurrentPageObject() + 仓库页索引偏移1) + 0x0) + 仓库页索引偏移2);
-
-
-	DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3);
-	dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移1) + 物品遍历偏移2 + 物品遍历偏移3) + (dwAttributeIndex - 0x1) * 0x10 + 0x4) + 物品遍历偏移4;
-	return CObjectSearcher::GetVecItem(dwAddr, Vec);
+	return CObjectSearcher::GetVecItem(ReadDWORD(ReadDWORD(GetWarehouseNodeBase() + 物品遍历偏移2 + 物品遍历偏移3) + (dwAttributeIndex - 0x1) * 0x10 + 0x4) + 物品遍历偏移4, Vec);
 }
 
 DWORD CWarehouseAttribute::GetWarehouseNodeBase()
 {
-	return ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 物品遍历偏移1);
+	return ReadDWORD(CObjectSearcher::GetGameEnv() + 物品遍历偏移1);
 }
 
 DWORD CWarehouseAttribute::GetWarehouseObject()

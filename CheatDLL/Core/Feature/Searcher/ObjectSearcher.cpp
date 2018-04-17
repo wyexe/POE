@@ -10,6 +10,11 @@ CObjectSearcher::~CObjectSearcher()
 {
 }
 
+DWORD CObjectSearcher::GetGameEnv()
+{
+	return ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3);
+}
+
 UINT CObjectSearcher::GetVecItem(_In_ DWORD dwAddr, _Out_ std::vector<CItem>& Vec)
 {
 	DWORD dwCount = (ReadDWORD(dwAddr + 0x4) - ReadDWORD(dwAddr)) / 4;

@@ -18,6 +18,9 @@ public:
 	CObjectSearcher();
 	~CObjectSearcher();
 
+	// 游戏环境
+	static DWORD GetGameEnv();
+
 	// 物品
 	static UINT GetVecItem(_In_ DWORD dwAddr, _Out_ std::vector<CItem>& Vec);
 
