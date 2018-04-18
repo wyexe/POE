@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <GameStruct.h>
+#include <Core/Object/Item.h>
 
 
-class CItem;
 class CBagAttribute
 {
 public:
@@ -13,6 +13,14 @@ public:
 	~CBagAttribute();
 
 	static UINT GetVecBagItem(_Out_ std::vector<CItem>& Vec);
+
+
+	static BOOL ExistItem_By_Location(_In_ CONST CItem::ItemPoint& Loc);
+
+
+	static BOOL FindItem_By_Name(_In_ CONST std::wstring& wsItemName, _Out_ CItem& Item);
+
+	static em_Equi_Color GetItemColor_By_Name(_In_ CONST std::wstring& wsItemName);
 private:
 
 };

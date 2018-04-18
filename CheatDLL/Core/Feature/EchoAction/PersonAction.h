@@ -30,6 +30,12 @@ public:
 	VOID MouseClick();
 
 	VOID MouseMove(_In_ CONST Point& Pos);
+
+	VOID MouseMoveAndClick(_In_ CONST Point& Pos);
+
+	VOID MouseCtrlClick();
+
+	VOID MouseRightClick();
 private:
 
 };

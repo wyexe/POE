@@ -44,9 +44,7 @@ VOID CPersonAction::UseMouseSkill(_In_ em_Skill_Id emSkillId)
 		MouseClick();
 		break;
 	case CPersonAction::em_Skill_Id::RightClick:
-		mouse_event(MOUSEEVENTF_RIGHTDOWN, NULL, NULL, NULL, NULL);
-		::Sleep(libTools::CTimeRand::GetRand(100, 300));
-		mouse_event(MOUSEEVENTF_RIGHTUP, NULL, NULL, NULL, NULL);
+		MouseRightClick();
 		break;
 	case CPersonAction::em_Skill_Id::MiddleClick:
 		mouse_event(MOUSEEVENTF_MIDDLEDOWN, NULL, NULL, NULL, NULL);
@@ -69,4 +67,24 @@ VOID CPersonAction::MouseClick()
 VOID CPersonAction::MouseMove(_In_ CONST Point& Pos)
 {
 	CGameMouse::GetInstance().MoveTo(Pos);
+}
+
+VOID CPersonAction::MouseMoveAndClick(_In_ CONST Point& Pos)
+{
+	MouseMove(Pos);
+	MouseClick();
+}
+
+VOID CPersonAction::MouseCtrlClick()
+{
+	libTools::CKeyboardMsg::SendKey(VK_CONTROL, TRUE);
+	MouseClick();
+	libTools::CKeyboardMsg::SendKey(VK_CONTROL, FALSE);
+}
+
+VOID CPersonAction::MouseRightClick()
+{
+	mouse_event(MOUSEEVENTF_RIGHTDOWN, NULL, NULL, NULL, NULL);
+	::Sleep(libTools::CTimeRand::GetRand(100, 300));
+	mouse_event(MOUSEEVENTF_RIGHTUP, NULL, NULL, NULL, NULL);
 }

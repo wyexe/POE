@@ -24,6 +24,9 @@ public:
 
 	// 获取当前仓库页的物品
 	static UINT GetCurrentPageItem(_Out_ std::vector<CItem>& Vec);
+
+	// 获取当前仓库页最大物品数量
+	static DWORD GetCurrentWarehousePageMaxItemCount();
 private:
 	static DWORD GetWarehouseNodeBase();
 

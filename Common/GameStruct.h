@@ -3,7 +3,6 @@
 
 #include <Windows.h>
 
-
 #define 人物基址 0x13F9760
 #define 人物基址偏移1 0x38
 #define 人物基址偏移2 0x14
@@ -54,10 +53,13 @@
 #define 周围对象遍历偏移5		0x230
 
 
+#define ReadDWORD(x) CGameMemory::GetInstance().ReadProcDWORD(x)
+#define ReadBYTE(x)  CGameMemory::GetInstance().ReadProcBYTE(x)
+#define GameRun      TRUE
+#define StopGame	 ::Sleep(1)
 
 
-
-enum class em_Equi_Color
+enum em_Equi_Color
 {
 	None,
 	White,
@@ -166,8 +168,10 @@ struct Point
 	}
 };
 
-#define ReadDWORD(x) CGameMemory::GetInstance().ReadProcDWORD(x)
-#define ReadBYTE(x)  CGameMemory::GetInstance().ReadProcBYTE(x)
+
+
+
+
 
 
 

@@ -12,6 +12,28 @@ public:
 		DWORD dwRightTopIndex;
 		DWORD dwLeftBottomIndex;
 		DWORD dwRightBottomIndex;
+
+		bool operator == (CONST ItemPoint& Pos)
+		{
+			return this->dwLeftTopIndex == Pos.dwLeftTopIndex &&
+				this->dwLeftBottomIndex == Pos.dwLeftBottomIndex &&
+				this->dwRightBottomIndex == Pos.dwRightBottomIndex &&
+				this->dwRightTopIndex == Pos.dwRightTopIndex;
+		}
+	};
+
+	enum class em_EchoItem_Type
+	{
+		Item,
+		Equi,
+		Drop,
+		Keep
+	};
+
+	enum class em_ItemLocation_Type
+	{
+		Warehouse,
+		Bag
 	};
 public:
 	CItem();
@@ -53,6 +75,21 @@ public:
 
 	// 
 	em_Object_Type GetType() CONST;
+
+	//
+	em_EchoItem_Type GetEchoItemType() CONST;
+
+	//
+	VOID Select(_In_ em_ItemLocation_Type emLocType) CONST;
+
+	//
+	VOID Click(_In_ em_ItemLocation_Type emLocType) CONST;
+
+	//
+	VOID CtrlClick(_In_ em_ItemLocation_Type emLocType) CONST;
+
+	//
+	VOID RightClick(_In_ em_ItemLocation_Type emLocType) CONST;
 protected:
 	ItemPoint	_ItemPos;
 	DWORD		_dwChargesObject = NULL;

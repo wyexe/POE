@@ -46,6 +46,12 @@ UINT CWarehouseAttribute::GetCurrentPageItem(_Out_ std::vector<CItem>& Vec)
 	return CObjectSearcher::GetVecItem(ReadDWORD(ReadDWORD(GetWarehouseNodeBase() + 物品遍历偏移2 + 物品遍历偏移3) + (dwAttributeIndex - 0x1) * 0x10 + 0x4) + 物品遍历偏移4, Vec);
 }
 
+
+DWORD CWarehouseAttribute::GetCurrentWarehousePageMaxItemCount()
+{
+	return 12 * 12;
+}
+
 DWORD CWarehouseAttribute::GetWarehouseNodeBase()
 {
 	return ReadDWORD(CObjectSearcher::GetGameEnv() + 物品遍历偏移1);

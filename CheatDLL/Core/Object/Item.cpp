@@ -1,6 +1,7 @@
 #include "Item.h"
 #include "AttributeObject.h"
 #include <LogLib/Log.h>
+#include <Core/Feature/EchoAction/PersonAction.h>
 
 #define _SELF L"Item.cpp"
 CItem::CItem()
@@ -154,3 +155,36 @@ em_Object_Type CItem::GetType() CONST
 {
 	return _emObjectType;
 }
+
+
+CItem::em_EchoItem_Type CItem::GetEchoItemType() CONST
+{
+	return em_EchoItem_Type::Keep;
+}
+
+VOID CItem::Select(_In_ em_ItemLocation_Type emLocType) CONST
+{
+
+}
+
+VOID CItem::Click(_In_ em_ItemLocation_Type emLocType) CONST
+{
+	Select(emLocType);
+	CPersonAction::GetInstance().MouseClick();
+	::Sleep(1000);
+}
+
+VOID CItem::CtrlClick(_In_ em_ItemLocation_Type emLocType) CONST
+{
+	Select(emLocType);
+	CPersonAction::GetInstance().MouseCtrlClick();
+	::Sleep(1000);
+}
+
+VOID CItem::RightClick(_In_ em_ItemLocation_Type emLocType) CONST
+{
+	Select(emLocType);
+	CPersonAction::GetInstance().MouseRightClick();
+	::Sleep(1000);
+}
+

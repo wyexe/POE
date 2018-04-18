@@ -6,6 +6,7 @@
 #include <LogLib\Log.h>
 #include <Expr\CmdExpr.h>
 #include <Core\Feature\GameMemory\GameMemory.h>
+#include <Core\Feature\Config\FileConfig.h>
 
 #pragma comment(lib,"ProcessLib.lib")
 #pragma comment(lib,"user32.lib")
@@ -23,10 +24,15 @@ BOOL WINAPI DllMain(_In_ HINSTANCE, _In_ DWORD dwReason, _In_ LPVOID)
 		libTools::CLog::GetInstance().SetSyncSendLog();
 		if (!CGameMemory::GetInstance().InitializeReadMemory())
 		{
-			::MessageBoxW(NULL, L"InitializeReadMemory Faild!", L"", NULL);
+			LOG_MSG_CF(L"InitializeReadMemory Faild!");
 			return FALSE;
 		}
 
+		if (!CFileConfig::GetInstance().Initialize())
+		{
+			LOG_MSG_CF(L"CFileConfig.Initialize = FALSE");
+			return FALSE;
+		}
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
