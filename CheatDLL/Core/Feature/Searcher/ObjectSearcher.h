@@ -21,6 +21,9 @@ public:
 	// 游戏环境
 	static DWORD GetGameEnv();
 
+	// UI环境
+	static DWORD GetUiEnv();
+
 	// 物品
 	static UINT GetVecItem(_In_ DWORD dwAddr, _Out_ std::vector<CItem>& Vec);
 

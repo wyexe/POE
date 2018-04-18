@@ -34,6 +34,10 @@ private:
 	virtual VOID PrintWorldItem(CONST std::vector<std::wstring>&);
 
 	virtual VOID MouseMove(CONST std::vector<std::wstring>&);
+
+	virtual VOID PrintUi(CONST std::vector<std::wstring>&);
+
+	virtual VOID FindUi(CONST std::vector<std::wstring>&);
 };
 
 

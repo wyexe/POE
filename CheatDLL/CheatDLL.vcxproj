@@ -127,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp" />
+    <ClCompile Include="Core\Feature\Attribute\Ui\UiAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.cpp" />
     <ClCompile Include="Core\Feature\Clean\ItemClean.cpp" />
     <ClCompile Include="Core\Feature\Config\FileConfig.cpp" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h" />
+    <ClInclude Include="Core\Feature\Attribute\Ui\UiAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.h" />
     <ClInclude Include="Core\Feature\Clean\ItemClean.h" />
     <ClInclude Include="Core\Feature\Config\FileConfig.h" />

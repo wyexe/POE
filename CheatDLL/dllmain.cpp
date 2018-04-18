@@ -28,11 +28,11 @@ BOOL WINAPI DllMain(_In_ HINSTANCE, _In_ DWORD dwReason, _In_ LPVOID)
 			return FALSE;
 		}
 
-		if (!CFileConfig::GetInstance().Initialize())
+		/*if (!CFileConfig::GetInstance().Initialize())
 		{
 			LOG_MSG_CF(L"CFileConfig.Initialize = FALSE");
 			return FALSE;
-		}
+		}*/
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{

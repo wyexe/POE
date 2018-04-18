@@ -7,6 +7,8 @@
 #include <Core\Feature\Attribute\Warehouse\WarehouseAttribute.h>
 #include <Core\Object\AttributeObject.h>
 #include <Core\Feature\EchoAction\GameMouse.h>
+#include <stack>
+#include <queue>
 
 #define _SELF L"CmdExpr.cpp"
 CCmdExpr::CCmdExpr()
@@ -37,6 +39,8 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::PrintPlayer, this, std::placeholders::_1), L"PrintPlayer" },
 		{ std::bind(&CCmdExpr::PrintWorldItem, this, std::placeholders::_1), L"PrintWorldItem" },
 		{ std::bind(&CCmdExpr::MouseMove, this, std::placeholders::_1), L"MouseMove" },
+		{ std::bind(&CCmdExpr::PrintUi, this, std::placeholders::_1), L"PrintUi" },
+		{ std::bind(&CCmdExpr::FindUi, this, std::placeholders::_1), L"FindUi" },
 	};
 
 	return Vec;
@@ -231,3 +235,68 @@ VOID CCmdExpr::MouseMove(CONST std::vector<std::wstring>&)
 {
 	CGameMouse::GetInstance().MoveTo(Point(100, 100));
 }
+
+
+VOID CCmdExpr::PrintUi(CONST std::vector<std::wstring>&)
+{
+	DWORD dwAddr = CObjectSearcher::GetGameEnv() + UIÆ«ÒÆ1;
+	LOG_C_D(L"GetUiEnv=%X", dwAddr);
+
+	struct UiNode
+	{
+		DWORD dwNode;
+		UINT  uIndex;
+		std::wstring wsText;
+	};
+
+	dwAddr = ReadDWORD(dwAddr + UIÆ«ÒÆ2);
+
+	std::queue<UiNode> VecUiAddr;
+	auto PushPtr = [&VecUiAddr](DWORD dwArrayHeadPtr, UINT uIndex, _In_ CONST std::wstring& wsText)
+	{
+		DWORD dwCount = (ReadDWORD(dwArrayHeadPtr + 0x4) - ReadDWORD(dwArrayHeadPtr)) / 4;
+		//LOG_C_D(L"dwCount=%d", dwCount);
+		if (dwCount >= 1000)
+		{
+			LOG_C_E(L"Exception dwCount=%d", dwCount);
+			return;
+		}
+
+		for (DWORD i = 0;i < dwCount; ++i)
+		{
+			VecUiAddr.push(UiNode{ ReadDWORD(ReadDWORD(dwArrayHeadPtr) + i * 4) , uIndex + 1, wsText });
+		}
+	};
+	
+	 
+	PushPtr(dwAddr + UI±éÀúÆ«ÒÆ1, 0, L"root->");
+	while (!VecUiAddr.empty())
+	{
+		auto dwNode = VecUiAddr.front();
+		VecUiAddr.pop();
+		
+		if (ReadDWORD(dwNode.dwNode + UIÃû×ÖÆ«ÒÆ) != NULL && ReadDWORD(dwNode.dwNode + UIÃû×ÖÆ«ÒÆ + 0x10) != 0)
+		{
+			std::wstring wsUiFormName = CGameMemory::GetInstance().ReadProcTextWithLength(dwNode.dwNode + UIÃû×ÖÆ«ÒÆ);
+			dwNode.wsText += wsUiFormName;
+			LOG_C_D(L"Node=[%d, %X], UI=[%s] [%s]", dwNode.uIndex, dwNode.dwNode, wsUiFormName.c_str(), dwNode.wsText.c_str());
+		}
+		dwNode.wsText += L"->";
+		//LOG_C_D(L"Node=[%d, %X], IsShow=%d", dwNode.uIndex, dwNode.dwNode, ReadBYTE(dwNode.dwNode + 0x754));
+		if (dwNode.uIndex < 4 && ReadDWORD(dwNode.dwNode + UI±éÀúÆ«ÒÆ1) != NULL && ReadDWORD(dwNode.dwNode + UI±éÀúÆ«ÒÆ1) != ReadDWORD(dwNode.dwNode + UI±éÀúÆ«ÒÆ1 + 0x4))
+		{
+			PushPtr(dwNode.dwNode + UI±éÀúÆ«ÒÆ1, dwNode.uIndex, dwNode.wsText);
+		}
+	}
+
+	LOG_C_D(L"Done!");
+}
+
+
+
+VOID CCmdExpr::FindUi(CONST std::vector<std::wstring>&)
+{
+	
+	
+}
+ 

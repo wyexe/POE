@@ -33,6 +33,10 @@
 #define 周围对象遍历偏移2 0x1D8
 #define 周围对象遍历偏移3 0x8E0
 #define 周围对象遍历偏移4 0x4B18
+#define UI偏移1		0x1E4
+#define UI偏移2		0xAA4
+#define UI遍历偏移1 0x708
+#define Ui显示偏移	0x754
 
 
 ////一些固定的偏移//////////////////////////////////////////////////////////////////////
@@ -51,7 +55,7 @@
 #define 物品右下角坐标 0x10
 #define 物品属性表偏移 0x0
 #define 周围对象遍历偏移5		0x230
-
+#define UI名字偏移	Ui显示偏移 - 0x20
 
 #define ReadDWORD(x) CGameMemory::GetInstance().ReadProcDWORD(x)
 #define ReadBYTE(x)  CGameMemory::GetInstance().ReadProcBYTE(x)
