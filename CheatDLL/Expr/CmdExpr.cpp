@@ -40,7 +40,7 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::PrintWorldItem, this, std::placeholders::_1), L"PrintWorldItem" },
 		{ std::bind(&CCmdExpr::MouseMove, this, std::placeholders::_1), L"MouseMove" },
 		{ std::bind(&CCmdExpr::PrintUi, this, std::placeholders::_1), L"PrintUi" },
-		{ std::bind(&CCmdExpr::FindUi, this, std::placeholders::_1), L"FindUi" },
+		{ std::bind(&CCmdExpr::WatchUi, this, std::placeholders::_1), L"WatchUi" },
 	};
 
 	return Vec;
@@ -294,9 +294,85 @@ VOID CCmdExpr::PrintUi(CONST std::vector<std::wstring>&)
 
 
 
-VOID CCmdExpr::FindUi(CONST std::vector<std::wstring>&)
+VOID CCmdExpr::WatchUi(CONST std::vector<std::wstring>& Vec)
 {
+	struct Node
+	{
+		DWORD dwNode;
+		BOOL  IsShow;
+		UINT  uIndex;
+		std::wstring wsText;
+	};
+	static std::vector<Node> VecNode;
+
+
+	if (Vec.size() == 0)
+	{
+		LOG_C_D(L"WatchUi(0[StopWatch] | 1[StartWatch])");
+		return;
+	}
+
+
+	if (Vec.at(0) == L"0")
+	{
+		for (auto& itm : VecNode)
+		{
+			BOOL IsShow = ReadBYTE(itm.dwNode + UiÏÔÊ¾Æ«ÒÆ) != 0;
+			if (itm.IsShow != IsShow)
+			{
+				LOG_C_D(L"Node[%X, %s]  [%d]->[%d]", itm.dwNode, itm.wsText.c_str(), itm.IsShow, ReadBYTE(itm.dwNode + UiÏÔÊ¾Æ«ÒÆ));
+			}
+		}
+		return;
+	}
 	
-	
+
+	DWORD dwAddr = ReadDWORD(CObjectSearcher::GetGameEnv() + UIÆ«ÒÆ1 + UIÆ«ÒÆ2);
+	std::queue<Node> VecUiAddr;
+	auto PushPtr = [&VecUiAddr](DWORD dwArrayHeadPtr, UINT uIndex, _In_ CONST std::wstring& wsText)
+	{
+		DWORD dwCount = (ReadDWORD(dwArrayHeadPtr + 0x4) - ReadDWORD(dwArrayHeadPtr)) / 4;
+		//LOG_C_D(L"dwCount=%d", dwCount);
+		if (dwCount >= 1000)
+		{
+			LOG_C_E(L"Exception dwCount=%d", dwCount);
+			return;
+		}
+
+		for (DWORD i = 0; i < dwCount; ++i)
+		{
+			Node Nd;
+			Nd.dwNode = ReadDWORD(ReadDWORD(dwArrayHeadPtr) + i * 4);
+			Nd.IsShow = ReadBYTE(Nd.dwNode + UiÏÔÊ¾Æ«ÒÆ);
+			Nd.uIndex = uIndex + 1;
+			Nd.wsText = wsText;
+			VecUiAddr.push(Nd);
+			VecNode.push_back(Nd);
+		}
+	};
+
+
+	VecNode.clear();
+	PushPtr(dwAddr + UI±éÀúÆ«ÒÆ1, 0, L"root->");
+	while (!VecUiAddr.empty())
+	{
+		auto dwNode = VecUiAddr.front();
+		VecUiAddr.pop();
+
+		if (ReadDWORD(dwNode.dwNode + UIÃû×ÖÆ«ÒÆ) != NULL && ReadDWORD(dwNode.dwNode + UIÃû×ÖÆ«ÒÆ + 0x10) != 0)
+		{
+			std::wstring wsUiFormName = CGameMemory::GetInstance().ReadProcTextWithLength(dwNode.dwNode + UIÃû×ÖÆ«ÒÆ);
+			dwNode.wsText += wsUiFormName;
+			LOG_C_D(L"Node=[%d, %X], UI=[%s] [%s]", dwNode.uIndex, dwNode.dwNode, wsUiFormName.c_str(), dwNode.wsText.c_str());
+		}
+		dwNode.wsText += L"->";
+
+		if (dwNode.uIndex < 4 && ReadDWORD(dwNode.dwNode + UI±éÀúÆ«ÒÆ1) != NULL && ReadDWORD(dwNode.dwNode + UI±éÀúÆ«ÒÆ1) != ReadDWORD(dwNode.dwNode + UI±éÀúÆ«ÒÆ1 + 0x4))
+		{
+			PushPtr(dwNode.dwNode + UI±éÀúÆ«ÒÆ1, dwNode.uIndex, dwNode.wsText);
+		}
+	}
+
+	LOG_C_D(L"VecUiAddr.size=%d", VecUiAddr.size());
 }
  

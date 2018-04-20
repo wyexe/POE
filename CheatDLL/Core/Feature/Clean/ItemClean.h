@@ -3,6 +3,7 @@
 
 #include <GameStruct.h>
 #include <Core/Object/Item.h>
+#include <Core/Feature/Attribute/Ui/UiAttribute.h>
 #include <vector>
 
 #define WAREHOUSE_MAX_ITEMPAGE_COUNT 3
@@ -139,6 +140,9 @@ private:
 
 	// 在仓库搜索物品
 	BOOL FindItem_In_Warehouse_By_ItemName(_In_ CONST std::wstring& wsItemName, _Out_ CItem& Item) CONST;
+
+	// 打开背包
+	BOOL OpenBag() CONST;
 private:
 	WarehouseContent _WarehouseContent;
 	UINT			 _uMaxPageCount = 0;

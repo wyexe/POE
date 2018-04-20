@@ -68,8 +68,11 @@ BOOL CItemClean::BagItemCleanToWarehouse()
 
 VOID CItemClean::DropBagItem() CONST
 {
-	// #
-	// 判断背包是否打开了
+	if (!OpenBag())
+	{
+		LOG_C_E(L"OpenBag = FALSE");
+		return;
+	}
 
 	std::vector<CItem> VecBagItem;
 	CBagAttribute::GetVecBagItem(VecBagItem);
@@ -88,7 +91,7 @@ VOID CItemClean::DropBagItem() CONST
 			::Sleep(1000);
 
 
-			CPersonAction::GetInstance().MouseMoveAndClick(DropPoint);
+			CPersonAction::MouseMoveAndClick(DropPoint);
 
 			// 判断是否出现丢弃确认窗口
 			if (IsShowDestoryConform())
@@ -225,7 +228,7 @@ BOOL CItemClean::ClickWarehousePage(_In_ DWORD Index) CONST
 			return FALSE;
 		}
 
-		CPersonAction::GetInstance().MouseMoveAndClick(Point(PageOffset.X + Index * dwPageIndexOffset, PageOffset.Y));
+		CPersonAction::MouseMoveAndClick(Point(PageOffset.X + Index * dwPageIndexOffset, PageOffset.Y));
 	}
 
 	LOG_C_E(L"ClickWarehousePage Timeout");
@@ -290,18 +293,18 @@ BOOL CItemClean::SaveEquiToWarehouse(_In_ CONST CItem& equi)
 
 VOID CItemClean::ChoiceDestory() CONST
 {
-	// #
+
 	do 
 	{
-		//CPersonAction::GetInstance().MouseMoveAndClick(Point(545, 424));
-		//::Sleep(1000);
+		LOG_C_D(L"正在选择丢弃...");
+		CPersonAction::MouseMoveAndClick(Point(545, 424));
+		::Sleep(1000);
 	} while (IsShowDestoryConform());
 }
 
 BOOL CItemClean::IsShowDestoryConform() CONST
 {
-	// #
-	return FALSE;
+	return CUiAttribute::IsShow(CUiAttribute::em_Ui_Type::DestoryItemConfirm);
 }
 
 BOOL CItemClean::TakeTheMap_For_Warehouse() CONST
@@ -423,5 +426,24 @@ BOOL CItemClean::FindItem_In_Warehouse_By_ItemName(_In_ CONST std::wstring& wsIt
 		}
 	}
 
+	return FALSE;
+}
+
+BOOL CItemClean::OpenBag() CONST
+{
+	libTools::CTimeTick TimeTick;
+	while (TimeTick.GetSpentTime( libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 60)
+	{
+		if (CUiAttribute::IsShow(CUiAttribute::em_Ui_Type::BagDialog))
+		{
+			return TRUE;
+		}
+
+
+		CPersonAction::OpenBag();
+		::Sleep(1000);
+	}
+
+	LOG_C_E(L"打开背包超时!");
 	return FALSE;
 }

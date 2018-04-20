@@ -170,21 +170,21 @@ VOID CItem::Select(_In_ em_ItemLocation_Type emLocType) CONST
 VOID CItem::Click(_In_ em_ItemLocation_Type emLocType) CONST
 {
 	Select(emLocType);
-	CPersonAction::GetInstance().MouseClick();
+	CPersonAction::MouseClick();
 	::Sleep(1000);
 }
 
 VOID CItem::CtrlClick(_In_ em_ItemLocation_Type emLocType) CONST
 {
 	Select(emLocType);
-	CPersonAction::GetInstance().MouseCtrlClick();
+	CPersonAction::MouseCtrlClick();
 	::Sleep(1000);
 }
 
 VOID CItem::RightClick(_In_ em_ItemLocation_Type emLocType) CONST
 {
 	Select(emLocType);
-	CPersonAction::GetInstance().MouseRightClick();
+	CPersonAction::MouseRightClick();
 	::Sleep(1000);
 }
 

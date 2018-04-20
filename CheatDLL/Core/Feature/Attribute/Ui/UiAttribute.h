@@ -18,13 +18,30 @@ public:
 	enum class em_Ui_Type
 	{
 		DestoryItemConfirm,
+		EscapeState,
+		UseMapDialog,
+		NpcSellDialog,
+		NpcTalkDialog,
+		BagDialog
+	};
+
+	struct UiObjectAttribute
+	{
+		DWORD dwNode;
+
+		BOOL IsShow() CONST;
 	};
 public:
 	CUiAttribute() = default;
 	~CUiAttribute() = default;
 
-	BOOL IsShow(_In_ em_Ui_Type emUiType);
+	static BOOL IsShow(_In_ em_Ui_Type emUiType);
 private:
+	static BOOL IsShow_By_Offset(_In_ DWORD dwOffset);
+
+	// abandon
+	BOOL FindUiObject(_In_ em_Ui_Type emUiType, _Out_ UiObjectAttribute& UiObject);
+
 	GameUiNode * FindUiNode_By_Text(_In_ GameUiNode* pPreviousNode, _In_ CONST std::vector<std::wstring>& VecText);
 
 	GameUiNode * AllocGameUiNode();

@@ -37,6 +37,12 @@
 #define UI偏移2		0xAA4
 #define UI遍历偏移1 0x708
 #define Ui显示偏移	0x754
+#define 人物UI偏移 0x1978
+#define 异界地图宝鉴偏移 0xB20
+#define Npc出售窗口偏移 0xB18
+#define Npc对话窗口偏移 0xB08
+#define 丢弃物品确认窗口偏移 0xAE0
+#define 背包UI偏移 0xA88
 
 
 ////一些固定的偏移//////////////////////////////////////////////////////////////////////

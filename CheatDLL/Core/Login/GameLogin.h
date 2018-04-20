@@ -32,8 +32,6 @@ private:
 	BOOL IsAreaLoadingState() CONST;
 
 	em_Login_RetCode ChoicPlyaerToGame() CONST;
-
-	std::wstring GetGameScheduleText() CONST;
 };
 
 

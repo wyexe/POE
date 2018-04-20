@@ -10,6 +10,12 @@ CObjectSearcher::~CObjectSearcher()
 {
 }
 
+std::wstring CObjectSearcher::GetCurrentStateText()
+{
+	DWORD dwGameEnv = CObjectSearcher::GetGameEnv();
+	return dwGameEnv == 0 ? L"" : CGameMemory::GetInstance().ReadProcTextWithLength(dwGameEnv + 0x8);
+}
+
 DWORD CObjectSearcher::GetGameEnv()
 {
 	return ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 1 * 人物基址偏移3);

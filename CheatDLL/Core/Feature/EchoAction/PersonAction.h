@@ -21,23 +21,25 @@ public:
 	CPersonAction() = default;
 	~CPersonAction() = default;
 
-	static CPersonAction& GetInstance();
-public:
-	VOID UseSkill(_In_ em_Skill_Id emSkillId);
+	static VOID UseSkill(_In_ em_Skill_Id emSkillId);
 
-	VOID UseMouseSkill(_In_ em_Skill_Id emSkillId);
+	static VOID UseMouseSkill(_In_ em_Skill_Id emSkillId);
 
-	VOID MouseClick();
+	static VOID MouseClick();
 
-	VOID MouseMove(_In_ CONST Point& Pos);
+	static VOID MouseMove(_In_ CONST Point& Pos);
 
-	VOID MouseMoveAndClick(_In_ CONST Point& Pos);
+	static VOID MouseMoveAndClick(_In_ CONST Point& Pos);
 
-	VOID MouseCtrlClick();
+	static VOID MouseCtrlClick();
 
-	VOID MouseRightClick();
-private:
+	static VOID MouseRightClick();
 
+	// 打开背包
+	static VOID OpenBag();
+
+	// 关闭所有窗口
+	static VOID CloseAllWindows();
 };
 
 

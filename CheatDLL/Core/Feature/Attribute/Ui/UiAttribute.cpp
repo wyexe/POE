@@ -7,6 +7,37 @@
 #define _SELF L"UiAttribute.cpp"
 BOOL CUiAttribute::IsShow(_In_ em_Ui_Type emUiType)
 {
+	switch (emUiType)
+	{
+	case CUiAttribute::em_Ui_Type::DestoryItemConfirm:
+		return IsShow_By_Offset(丢弃物品确认窗口偏移);
+	case CUiAttribute::em_Ui_Type::EscapeState:
+		return CObjectSearcher::GetCurrentStateText() == L"EscapeState";
+	case em_Ui_Type::UseMapDialog:
+		return IsShow_By_Offset(异界地图宝鉴偏移);
+	case em_Ui_Type::NpcSellDialog:
+		return IsShow_By_Offset(Npc出售窗口偏移);
+	case em_Ui_Type::NpcTalkDialog:
+		return IsShow_By_Offset(Npc对话窗口偏移);
+	case em_Ui_Type::BagDialog:
+		return IsShow_By_Offset(背包UI偏移);
+	default:
+		break;
+	}
+
+	LOG_MSG_CF(L"Invalid emUiType");
+	return FALSE;
+}
+
+
+BOOL CUiAttribute::IsShow_By_Offset(_In_ DWORD dwOffset)
+{
+	return ReadBYTE(ReadDWORD(ReadDWORD(CObjectSearcher::GetGameEnv() + 人物UI偏移) + dwOffset) + Ui显示偏移) != 0;
+}
+
+
+BOOL CUiAttribute::FindUiObject(_In_ em_Ui_Type emUiType, _Out_ UiObjectAttribute& UiObject)
+{
 	CONST auto& VecText = GetVecText_By_UiType(emUiType);
 
 	auto pRootNode = AllocGameUiNode();
@@ -17,9 +48,9 @@ BOOL CUiAttribute::IsShow(_In_ em_Ui_Type emUiType)
 	auto pResultNode = FindUiNode_By_Text(pRootNode, VecText);
 	if (pRootNode != nullptr)
 	{
-		BOOL bShow = ReadBYTE(pResultNode->pPreviousNode->pPreviousNode->dwNode + Ui显示偏移);
+		UiObject.dwNode = pResultNode->pPreviousNode->pPreviousNode->dwNode;
 		CleanGameUiNode();
-		return bShow;
+		return TRUE;
 	}
 
 	CleanGameUiNode();
@@ -71,6 +102,7 @@ CUiAttribute::GameUiNode * CUiAttribute::FindUiNode_By_Text(_In_ GameUiNode* pPr
 			return pNode;
 		}
 
+		// 递归搜索...
 		auto pNextNode = FindUiNode_By_Text(pNode, VecText);
 		if (pNextNode != nullptr)
 		{
@@ -113,4 +145,9 @@ CONST std::vector<std::wstring>& CUiAttribute::GetVecText_By_UiType(_In_ em_Ui_T
 	CONST static std::vector<std::wstring> VecEmpty;
 	LOG_MSG_CF(L"Invalid emUiType!!!");
 	return VecEmpty;
+}
+
+BOOL CUiAttribute::UiObjectAttribute::IsShow() CONST
+{
+	return ReadBYTE(this->dwNode + Ui显示偏移) != 0 ? TRUE : FALSE;
 }

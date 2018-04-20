@@ -18,6 +18,9 @@ public:
 	CObjectSearcher();
 	~CObjectSearcher();
 
+	//
+	static std::wstring GetCurrentStateText();
+
 	// ”Œœ∑ª∑æ≥
 	static DWORD GetGameEnv();
 

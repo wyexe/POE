@@ -37,7 +37,7 @@ private:
 
 	virtual VOID PrintUi(CONST std::vector<std::wstring>&);
 
-	virtual VOID FindUi(CONST std::vector<std::wstring>&);
+	virtual VOID WatchUi(CONST std::vector<std::wstring>&);
 };
 
 

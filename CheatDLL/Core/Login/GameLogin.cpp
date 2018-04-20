@@ -66,17 +66,17 @@ BOOL CGameLogin::IsExistGameWindows() CONST
 
 BOOL CGameLogin::IsAlreadyInChoicPlayer() CONST
 {
-	return GetGameScheduleText() == L"SelectCharacterState";
+	return CObjectSearcher::GetCurrentStateText() == L"SelectCharacterState";
 }
 
 BOOL CGameLogin::IsAlreadyInGameState() CONST
 {
-	return GetGameScheduleText() == L"InGameState";
+	return CObjectSearcher::GetCurrentStateText() == L"InGameState";
 }
 
 BOOL CGameLogin::IsAreaLoadingState() CONST
 {
-	return GetGameScheduleText() == L"AreaLoadingState";
+	return CObjectSearcher::GetCurrentStateText() == L"AreaLoadingState";
 }
 
 CGameLogin::em_Login_RetCode CGameLogin::ChoicPlyaerToGame() CONST
@@ -108,10 +108,4 @@ CGameLogin::em_Login_RetCode CGameLogin::ChoicPlyaerToGame() CONST
 
 
 	return em_Login_RetCode::Faild;
-}
-
-std::wstring CGameLogin::GetGameScheduleText() CONST
-{
-	DWORD dwGameEnv = CObjectSearcher::GetGameEnv();
-	return dwGameEnv == 0 ? L"" : CGameMemory::GetInstance().ReadProcTextWithLength(dwGameEnv + 0x8);
 }

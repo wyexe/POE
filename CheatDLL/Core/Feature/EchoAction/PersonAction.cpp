@@ -2,14 +2,12 @@
 #include "GameMouse.h"
 #include <ProcessLib/KeyboardMsg/KeyboardMsg.h>
 #include <TimeLib/TimeRand.h>
+#include <TimeLib/TimeTick.h>
 #include <LogLib/Log.h>
+#include <Core/Feature/Attribute/Ui/UiAttribute.h>
 
 #define _SELF L"PersonAction.cpp"
-CPersonAction& CPersonAction::GetInstance()
-{
-	static CPersonAction Instance;
-	return Instance;
-}
+
 
 VOID CPersonAction::UseSkill(_In_ em_Skill_Id emSkillId)
 {
@@ -87,4 +85,39 @@ VOID CPersonAction::MouseRightClick()
 	mouse_event(MOUSEEVENTF_RIGHTDOWN, NULL, NULL, NULL, NULL);
 	::Sleep(libTools::CTimeRand::GetRand(100, 300));
 	mouse_event(MOUSEEVENTF_RIGHTUP, NULL, NULL, NULL, NULL);
+}
+
+VOID CPersonAction::OpenBag()
+{
+	libTools::CKeyboardMsg::SendKey('I');
+}
+
+VOID CPersonAction::CloseAllWindows()
+{
+	libTools::CTimeTick TimeTick;
+	while (TimeTick.GetSpentTime(libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 30)
+	{
+		if (CUiAttribute::IsShow(CUiAttribute::em_Ui_Type::EscapeState))
+		{
+			break;
+		}
+
+
+		libTools::CKeyboardMsg::SendKey(VK_ESCAPE);
+		::Sleep(1000);
+	}
+
+
+	TimeTick.Reset();
+	while (TimeTick.GetSpentTime(libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 30)
+	{
+		if (!CUiAttribute::IsShow(CUiAttribute::em_Ui_Type::EscapeState))
+		{
+			break;
+		}
+
+
+		libTools::CKeyboardMsg::SendKey(VK_ESCAPE);
+		::Sleep(1000);
+	}
 }
