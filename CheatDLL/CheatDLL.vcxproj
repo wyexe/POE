@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Feature\Attribute\Bag\BagAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Buff\BuffAttribute.cpp" />
+    <ClCompile Include="Core\Feature\Attribute\Effect\EffectAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\State\StateAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Ui\UiAttribute.cpp" />
     <ClCompile Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.cpp" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\Buff\BuffAttribute.h" />
+    <ClInclude Include="Core\Feature\Attribute\Effect\EffectAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\State\StateAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\Ui\UiAttribute.h" />
     <ClInclude Include="Core\Feature\Attribute\Warehouse\WarehouseAttribute.h" />

@@ -11,6 +11,7 @@
 #include <Core\Feature\EchoAction\GameMouse.h>
 #include <Core\Feature\Attribute\Buff\BuffAttribute.h>
 #include <Core\Object\Person.h>
+#include <Core\Feature\Attribute\Effect\EffectAttribute.h>
 
 #define _SELF L"CmdExpr.cpp"
 CCmdExpr::CCmdExpr()
@@ -46,6 +47,7 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::Test, this, std::placeholders::_1), L"Test" },
 		{ std::bind(&CCmdExpr::PrintAroundObject, this, std::placeholders::_1), L"PrintAroundObject" },
 		{ std::bind(&CCmdExpr::PrintBuff, this, std::placeholders::_1), L"PrintBuff" },
+		{ std::bind(&CCmdExpr::PrintEffect, this, std::placeholders::_1), L"PrintEffect" },
 	};
 
 	return Vec;
@@ -490,6 +492,18 @@ VOID CCmdExpr::PrintBuff(CONST std::vector<std::wstring>&)
 	for (CONST auto& itm : Vec)
 	{
 		LOG_C_D(L"Buff.Name=[%s], Text=[%s]", itm.wsBuffName.c_str(), itm.wsBuffText.c_str());
+	}
+}
+
+VOID CCmdExpr::PrintEffect(CONST std::vector<std::wstring>&)
+{
+	std::vector<CEffectAttribute::EffectIconObject> Vec;
+	CEffectAttribute::GetVecEffect(Vec);
+	LOG_C_D(L"vec.size=%d", Vec.size());
+
+	for (auto& itm : Vec)
+	{
+		LOG_C_D(L"Effect.Index=[%d], Object=[%X], ID=[%X], Count=%d", itm.Index, itm.dwObject, itm.dwId, itm.GetCount());
 	}
 }
 

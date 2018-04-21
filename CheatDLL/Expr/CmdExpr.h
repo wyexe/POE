@@ -45,6 +45,8 @@ private:
 
 	virtual VOID PrintBuff(CONST std::vector<std::wstring>&);
 
+	virtual VOID PrintEffect(CONST std::vector<std::wstring>&);
+
 	virtual VOID Test(CONST std::vector<std::wstring>&);
 };
 
