@@ -18,5 +18,8 @@
     <ClInclude Include="GameStruct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CommonTempalte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

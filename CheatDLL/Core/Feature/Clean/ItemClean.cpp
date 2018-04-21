@@ -396,10 +396,20 @@ BOOL CItemClean::RightClickItem_In_Warehouse(_In_ CONST std::wstring& wsItemName
 	}
 
 
-	Item.RightClick(CItem::em_ItemLocation_Type::Warehouse);
-	// #
 	// 检查鼠标是否变成 点击物品状态了……
-	return TRUE;
+	libTools::CTimeTick TimeTick;
+	while (TimeTick.GetSpentTime(libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 30)
+	{
+		if (CUiAttribute::IsShow(CUiAttribute::em_Ui_Type::MouseUseItemFlag))
+		{
+			return TRUE;
+		}
+		Item.RightClick(CItem::em_ItemLocation_Type::Warehouse);
+	}
+
+
+	LOG_C_E(L"Right Warehouse Item Timeout!");
+	return FALSE;
 }
 
 BOOL CItemClean::FindItem_In_Warehouse_By_ItemName(_In_ CONST std::wstring& wsItemName, _Out_ CItem& Item) CONST

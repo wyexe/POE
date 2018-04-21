@@ -1,19 +1,35 @@
 #include "Person.h"
 #include "AttributeObject.h"
+#include <Core/Feature/Attribute/State/StateAttribute.h>
+#include <LogLib/Log.h>
+
+#define _SELF L"Person.cpp"
+
+CPerson::CPerson(_In_ DWORD dwNodeBase)
+{
+	SetNodeBase(dwNodeBase);
+}
 
 CPerson& CPerson::GetInstance()
 {
 	static CPerson Instance;
-	Instance.SetNodeBase(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5));
 	return Instance;
 }
 
 VOID CPerson::RefreshObjectAttribute()
 {
+	SetNodeBase(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5));
+
 	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 	CAttributeObject::FillObjectAttribute_Base(this);
 	CAttributeObject::FillObject_By_AttributeName(this, "Life", _dwLifeAttributeAddr);
 	CAttributeObject::FillObject_By_AttributeName(this, "Player", _dwPlayerAttributeAddr);
+
+	_dwAreaLoadingStateAddr = CStateAttribute::FindState(CStateAttribute::em_State_Type::AreaLoadingState);
+	if (_dwAreaLoadingStateAddr == NULL)
+	{
+		LOG_MSG_CF(L"FindState AreaLoadingState = NULL!");
+	}
 }
 
 DWORD CPerson::GetPercentHP() CONST
@@ -34,6 +50,11 @@ DWORD CPerson::GetPercentShield() CONST
 DWORD CPerson::GetLevel() CONST
 {
 	return ReadBYTE(_dwPlayerAttributeAddr + 人物等级偏移);
+}
+
+std::wstring CPerson::GetMapName()
+{
+	return CGameMemory::GetInstance().ReadProcTextWithLength(_dwAreaLoadingStateAddr + 当前地图偏移);
 }
 
 DWORD CPerson::GetPercentValue(_In_ DWORD dwOffset) CONST

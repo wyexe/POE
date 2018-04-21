@@ -23,6 +23,8 @@ private:
 
 	virtual VOID PrintWarehouse(CONST std::vector<std::wstring>&);
 
+	virtual VOID PrintAroundObject(CONST std::vector<std::wstring>&);
+
 	virtual VOID PrintChest(CONST std::vector<std::wstring>&);
 
 	virtual VOID PrintNpc(CONST std::vector<std::wstring>&);
@@ -38,6 +40,12 @@ private:
 	virtual VOID PrintUi(CONST std::vector<std::wstring>&);
 
 	virtual VOID WatchUi(CONST std::vector<std::wstring>&);
+
+	virtual VOID PrintItem(CONST std::vector<std::wstring>&);
+
+	
+
+	virtual VOID Test(CONST std::vector<std::wstring>&);
 };
 
 

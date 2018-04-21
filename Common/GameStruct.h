@@ -29,10 +29,8 @@
 #define 仓库页索引偏移2 0x8E4
 #define 当前仓库页偏移 0xB08
 #define 怪物名字偏移 0x58
-#define 周围对象遍历偏移1 0x28
-#define 周围对象遍历偏移2 0x1D8
-#define 周围对象遍历偏移3 0x8E0
-#define 周围对象遍历偏移4 0x4B18
+#define 周围对象遍历偏移1 0x4B18
+#define 周围对象遍历偏移2 0x234
 #define UI偏移1		0x1E4
 #define UI偏移2		0xAA4
 #define UI遍历偏移1 0x708
@@ -43,7 +41,11 @@
 #define Npc对话窗口偏移 0xB08
 #define 丢弃物品确认窗口偏移 0xAE0
 #define 背包UI偏移 0xA88
-
+#define 鼠标右键使用物品UI偏移 0x9C4
+#define 鼠标是否使用物品偏移 0x964
+#define State偏移1 0x24
+#define StateObject偏移 0x28
+#define 当前地图偏移 0xB6C
 
 ////一些固定的偏移//////////////////////////////////////////////////////////////////////
 #define 人物基址偏移8		0xC
@@ -60,8 +62,8 @@
 #define 物品左下角坐标 0xC
 #define 物品右下角坐标 0x10
 #define 物品属性表偏移 0x0
-#define 周围对象遍历偏移5		0x230
 #define UI名字偏移	Ui显示偏移 - 0x20
+#define 周围对象遍历偏移3 0xC
 
 #define ReadDWORD(x) CGameMemory::GetInstance().ReadProcDWORD(x)
 #define ReadBYTE(x)  CGameMemory::GetInstance().ReadProcBYTE(x)
@@ -133,6 +135,24 @@ enum class em_Object_Type
 	Jewels,
 	//
 	Other
+};
+
+enum em_ItemPtrArrayIndex : DWORD
+{
+	em_ItemPtrArrayIndex_Bag				= 0x0,
+	em_ItemPtrArrayIndex_Equi_BodyArmours	= 0x1,
+	em_ItemPtrArrayIndex_Equi_Weaspon		= 0x2,
+	em_ItemPtrArrayIndex_Equi_Shields		= 0x3,
+	em_ItemPtrArrayIndex_Helmets			= 0x4,
+	em_ItemPtrArrayIndex_Amulets			= 0x5,
+	em_ItemPtrArrayIndex_Ring1				= 0x6,
+	em_ItemPtrArrayIndex_Ring2				= 0x7,
+	em_ItemPtrArrayIndex_Gloves				= 0x8,
+	em_ItemPtrArrayIndex_Boots				= 0x9,
+	em_ItemPtrArrayIndex_Belts				= 0xA,
+	em_ItemPtrArrayIndex_Flasks				= 0xB,
+	em_ItemPtrArrayIndex_Cursor				= 0xC, // 鼠标点击后的物品
+	em_ItemPtrArrayIndex_Jweels				= 0x17, // 天赋页上的珠宝
 };
 
 struct Point

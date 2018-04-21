@@ -2,6 +2,8 @@
 #include "AttributeObject.h"
 #include <LogLib/Log.h>
 #include <Core/Feature/EchoAction/PersonAction.h>
+#include <TimeLib/TimeTick.h>
+#include <Core/Feature/Attribute/Bag/BagAttribute.h>
 
 #define _SELF L"Item.cpp"
 CItem::CItem()
@@ -169,9 +171,14 @@ VOID CItem::Select(_In_ em_ItemLocation_Type emLocType) CONST
 
 VOID CItem::Click(_In_ em_ItemLocation_Type emLocType) CONST
 {
-	Select(emLocType);
-	CPersonAction::MouseClick();
-	::Sleep(1000);
+	libTools::CTimeTick TimeTick;
+	while (!CBagAttribute::IsExistCursorItem(nullptr) && TimeTick.GetSpentTime(libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 30)
+	{
+		Select(emLocType);
+		CPersonAction::MouseClick();
+		::Sleep(1000);
+	}
+	
 }
 
 VOID CItem::CtrlClick(_In_ em_ItemLocation_Type emLocType) CONST

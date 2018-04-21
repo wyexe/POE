@@ -71,11 +71,13 @@ em_Object_Type CAttributeObject::GetObjectType(_In_ DWORD dwAttributeTablePtr)
 		{ em_Object_Type::Currency , L"Metadata/Items/Currency" },
 		{ em_Object_Type::Player , L"Metadata/Characters" },
 		{ em_Object_Type::Npc , L"Metadata/NPC" },
+		{ em_Object_Type::Npc , L"Metadata/MiscellaneousObjects/Stash" }, // 把仓库当成Npc分类好了……
+		{ em_Object_Type::Npc , L"Metadata/MiscellaneousObjects/Waypoint" }, // 传送点也当成Npc好了...
 		{ em_Object_Type::QuestObjects , L"Metadata/QuestObjects" },
 		{ em_Object_Type::Monster , L"Metadata/Monsters" },
 		{ em_Object_Type::WorldItem , L"MiscellaneousObjects/WorldItem" },
 		{ em_Object_Type::Chests , L"Metadata/Chests" },
-		{ em_Object_Type::Waypoint , L"MiscellaneousObjects/Waypoint" },
+		//{ em_Object_Type::Waypoint , L"MiscellaneousObjects/Waypoint" },
 		{ em_Object_Type::AreaTransition , L"MiscellaneousObjects/AreaTransition" },
 		{ em_Object_Type::MiscellaneousObjects , L"Metadata/MiscellaneousObjects" },
 		{ em_Object_Type::Maps , L"Metadata/Items/Maps/" },
@@ -83,7 +85,16 @@ em_Object_Type CAttributeObject::GetObjectType(_In_ DWORD dwAttributeTablePtr)
 		{ em_Object_Type::Jewels , L"Metadata/Items/Jewels/" },
 	};
 
+
 	std::wstring wsResName = CGameMemory::GetInstance().ReadProcTextWithLength(dwNodeResPtr + 0x10);
+
+
+	CONST static std::set<std::wstring> VecFilter = { L"Metadata/NPC/Blocker" };
+	if (VecFilter.find(wsResName) != VecFilter.end())
+	{
+		return em_Object_Type::Other;
+	}
+
 	//LOG_C_D(L"wsResName=%s", wsResName.c_str());
 	auto itr = std::find_if(Vec.begin(), Vec.end(), [wsResName](CONST ObjectTypeContent& itm) { return wsResName.find(itm.wsText) != std::wstring::npos; });
 	return itr != Vec.end() ? itr->emObjectType : em_Object_Type::Other;

@@ -21,7 +21,7 @@ public:
 	template<typename T>
 	static VOID FillObjectAttribute_ResName(_In_ T* pObject)
 	{
-		pObject->SetResName(ReadTextWithLength(ReadDWORD(pObject->GetNodeBase() + 0x0) + 0x10));
+		pObject->SetResName(CGameMemory::GetInstance().ReadProcTextWithLength(ReadDWORD(pObject->GetNodeBase() + 0x0) + 0x10));
 	}
 
 	template<typename T>

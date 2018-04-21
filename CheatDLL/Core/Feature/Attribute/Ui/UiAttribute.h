@@ -22,7 +22,8 @@ public:
 		UseMapDialog,
 		NpcSellDialog,
 		NpcTalkDialog,
-		BagDialog
+		BagDialog,
+		MouseUseItemFlag, // 使用物品
 	};
 
 	struct UiObjectAttribute

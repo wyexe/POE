@@ -1,7 +1,9 @@
 #include "ObjectSearcher.h"
 #include <set>
 #include <Core/Object/AttributeObject.h>
+#include <LogLib/Log.h>
 
+#define _SELF L"ObjectSearcher.cpp"
 CObjectSearcher::CObjectSearcher()
 {
 }
@@ -16,15 +18,20 @@ std::wstring CObjectSearcher::GetCurrentStateText()
 	return dwGameEnv == 0 ? L"" : CGameMemory::GetInstance().ReadProcTextWithLength(dwGameEnv + 0x8);
 }
 
+DWORD CObjectSearcher::GetBaseEnv()
+{
+	return ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4);
+}
+
 DWORD CObjectSearcher::GetGameEnv()
 {
-	return ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 1 * 人物基址偏移3);
+	return ReadDWORD(ReadDWORD(GetBaseEnv() + 人物基址偏移2) - 1 * 人物基址偏移3);
 }
 
 
 DWORD CObjectSearcher::GetUiEnv()
 {
-	return ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 2 * 人物基址偏移3);
+	return ReadDWORD(ReadDWORD(GetBaseEnv() + 人物基址偏移2) - 2 * 人物基址偏移3);
 }
 
 UINT CObjectSearcher::GetVecItem(_In_ DWORD dwAddr, _Out_ std::vector<CItem>& Vec)
@@ -68,7 +75,7 @@ UINT CObjectSearcher::GetVecChest(_Out_ std::vector<CChest>& Vec)
 {
 	return GetVecObject<CChest>(Vec, [](DWORD dwNodeBase)
 	{
-		return CAttributeObject::GetObjectType(ReadDWORD(dwNodeBase)) == em_Object_Type::Chests;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Chests;
 	});
 }
 
@@ -76,7 +83,7 @@ UINT CObjectSearcher::GetVecNpc(_Out_ std::vector<CNpc>& Vec)
 {
 	return GetVecObject<CNpc>(Vec, [](DWORD dwNodeBase)
 	{
-		return CAttributeObject::GetObjectType(ReadDWORD(dwNodeBase)) == em_Object_Type::Npc;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Npc;
 	});
 }
 
@@ -92,7 +99,7 @@ UINT CObjectSearcher::GetVecPlayer(_Out_ std::vector<CPlayer>& Vec)
 {
 	return GetVecObject<CPlayer>(Vec, [](DWORD dwNodeBase)
 	{
-		return CAttributeObject::GetObjectType(ReadDWORD(dwNodeBase)) == em_Object_Type::Player;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Player;
 	});
 }
 
@@ -100,6 +107,6 @@ UINT CObjectSearcher::GetVecWorlditem(_Out_ std::vector<CWorldItem>& Vec)
 {
 	return GetVecObject<CWorldItem>(Vec, [](DWORD dwNodeBase)
 	{
-		return CAttributeObject::GetObjectType(ReadDWORD(dwNodeBase)) == em_Object_Type::WorldItem;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::WorldItem;
 	});
 }

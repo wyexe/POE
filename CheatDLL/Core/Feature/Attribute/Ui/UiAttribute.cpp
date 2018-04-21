@@ -21,6 +21,8 @@ BOOL CUiAttribute::IsShow(_In_ em_Ui_Type emUiType)
 		return IsShow_By_Offset(Npc对话窗口偏移);
 	case em_Ui_Type::BagDialog:
 		return IsShow_By_Offset(背包UI偏移);
+	case em_Ui_Type::MouseUseItemFlag:
+		return ReadBYTE(ReadDWORD(ReadDWORD(CObjectSearcher::GetGameEnv() + 人物UI偏移) + 鼠标右键使用物品UI偏移) + 鼠标是否使用物品偏移) != 0;
 	default:
 		break;
 	}

@@ -41,6 +41,8 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::MouseMove, this, std::placeholders::_1), L"MouseMove" },
 		{ std::bind(&CCmdExpr::PrintUi, this, std::placeholders::_1), L"PrintUi" },
 		{ std::bind(&CCmdExpr::WatchUi, this, std::placeholders::_1), L"WatchUi" },
+		{ std::bind(&CCmdExpr::Test, this, std::placeholders::_1), L"Test" },
+		{ std::bind(&CCmdExpr::PrintAroundObject, this, std::placeholders::_1), L"PrintAroundObject" },
 	};
 
 	return Vec;
@@ -156,6 +158,47 @@ VOID CCmdExpr::PrintWarehouse(CONST std::vector<std::wstring>&)
 	}
 }
 
+VOID CCmdExpr::PrintAroundObject(CONST std::vector<std::wstring>&)
+{
+	DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(CObjectSearcher::GetGameEnv() + 物品遍历偏移1) + 周围对象遍历偏移1) + 周围对象遍历偏移2 + 周围对象遍历偏移3) + 0x4/*RootNode*/);
+
+
+	std::queue<DWORD> VecStack;
+	VecStack.push(dwAddr);
+
+
+	while (!VecStack.empty())
+	{
+		DWORD dwNode = VecStack.front();
+		VecStack.pop();
+
+
+		if (ReadBYTE(dwNode + 0xD) != 0)
+			continue;
+
+
+		DWORD dwNodeBase = ReadDWORD(dwNode + 0x14);
+		DWORD dwAttributeTablePtr = ReadDWORD(dwNodeBase + 0x0);
+		std::wstring wsResName = CGameMemory::GetInstance().ReadProcTextWithLength(dwAttributeTablePtr + 0x10);
+		LOG_C_D(L"dwNode=[%X],wsResName=[%s]", dwNodeBase, wsResName.c_str());
+
+		CAttributeObject::FillAttributeTable(dwNodeBase, "Render", [=](DWORD Index)
+		{
+			DWORD dwRenderObject = ReadDWORD(ReadDWORD(dwNodeBase + 0x4) + Index * 4);
+			LOG_C_D(L"Render.Name=%s", CGameMemory::GetInstance().ReadProcTextWithLength(dwRenderObject + 怪物名字偏移).c_str());
+		});
+
+		CAttributeObject::FillAttributeTable(dwNodeBase, "Base", [=](DWORD Index)
+		{
+			DWORD dwBaseObject = ReadDWORD(ReadDWORD(dwNodeBase + 0x4) + Index * 4);
+			LOG_C_D(L"Base.Name=%s", CGameMemory::GetInstance().ReadProcTextWithLength(ReadDWORD(dwBaseObject + 0x8) + 0x10).c_str());
+		});
+
+		VecStack.push(ReadDWORD(dwNode + 0x0));
+		VecStack.push(ReadDWORD(dwNode + 0x8));
+	}
+}
+
 VOID CCmdExpr::PrintChest(CONST std::vector<std::wstring>&)
 {
 	std::vector<CChest> VecChest;
@@ -171,13 +214,19 @@ VOID CCmdExpr::PrintChest(CONST std::vector<std::wstring>&)
 
 VOID CCmdExpr::PrintNpc(CONST std::vector<std::wstring>&)
 {
-	std::vector<CNpc> VecNpc;
-	CObjectSearcher::GetVecNpc(VecNpc);
+	std::vector<CNpc> VecNpc; 
+	CObjectSearcher::GetVecNpc(VecNpc); 
 	for (auto& itm : VecNpc)
-	{
+	{ 
 		itm.RefreshObjectAttribute();
-		LOG_C_D(L"Npc.Name=[%s]", itm.GetName().c_str());
+		LOG_C_D(L"Npc.Name=[%s] NodeBase=[%X]", itm.GetName().c_str(), itm.GetNodeBase());
 		LOG_C_D(L"Pos=[%d,%d]", itm.GetPoint().X, itm.GetPoint().Y);
+
+		/*POINT Pos = { itm.GetPoint().X, itm.GetPoint().Y };
+		if (::ClientToScreen(CGameMemory::GetInstance().GetGameWnd(), &Pos))
+		{ 
+			LOG_C_D(L"Pos[%d,%d]", Pos.x, Pos.y);
+		}*/
 	}
 }
 
@@ -375,4 +424,102 @@ VOID CCmdExpr::WatchUi(CONST std::vector<std::wstring>& Vec)
 
 	LOG_C_D(L"VecUiAddr.size=%d", VecUiAddr.size());
 }
- 
+
+
+VOID CCmdExpr::PrintItem(CONST std::vector<std::wstring>&)
+{
+	DWORD dwAddr = CObjectSearcher::GetGameEnv();
+	dwAddr = ReadDWORD(dwAddr + 物品遍历偏移1) + 物品遍历偏移2 + 物品遍历偏移3;
+	DWORD dwCount = (ReadDWORD(dwAddr + 4) - ReadDWORD(dwAddr)) / 0x10;
+	LOG_C_D(L"dwCount=%X,%d", dwCount, dwCount);
+	for (DWORD i = 0; i < dwCount; ++i)
+	{
+		LOG_C_D(L"------------------------------------------------------------");
+		LOG_C_D(L"Index=%d", i);
+		DWORD dwItemAddr = ReadDWORD(ReadDWORD(dwAddr) + i * 0x10 + 0x4) + 物品遍历偏移4;
+
+		std::vector<CItem> VecBagItem;
+		CObjectSearcher::GetVecItem(dwItemAddr, VecBagItem);
+		LOG_C_D(L"VecBagItem.size=%d", VecBagItem.size());
+		for (auto& itm : VecBagItem)
+		{
+			itm.RefreshObjectAttribute();
+			LOG_C_D(L"Item.Name=[%s], Type=[%s] Node=[%X]", itm.GetName().c_str(), CAttributeObject::GetObjectTypeText(itm.GetType()).c_str(), itm.GetNodeBase());
+
+			auto Loc = itm.GetItemLocation();
+			LOG_C_D(L"Location=[%d,%d,%d,%d]", Loc.dwLeftTopIndex, Loc.dwRightTopIndex, Loc.dwLeftBottomIndex, Loc.dwRightBottomIndex);
+			if (itm.GetQuality() != 0)
+			{
+				LOG_C_D(L"Quality=[%d]", itm.GetQuality());
+			}
+			if (itm.IsBindAccount())
+			{
+				LOG_C_D(L"物品是绑定的");
+			}
+			if (itm.IsEqui())
+			{
+				if (itm.IsNotAppraisal())
+				{
+					LOG_C_D(L"物品是未鉴定的");
+				}
+				LOG_C_D(L"Color=[%s]", itm.GetEquiColorText().c_str());
+				LOG_C_D(L"EquiLevel=[%d]", itm.GetEquiLevel());
+			}
+			else if (itm.GetType() == em_Object_Type::Flasks)
+			{
+				LOG_C_D(L"PercentCharges=[%d]", itm.GetPercentCharges());
+			}
+			if (itm.GetCount() != 0)
+			{
+				LOG_C_D(L"Count=[%d]/[%d]", itm.GetCount(), itm.GetMaxCount());
+			}
+		}
+	}
+}
+
+VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
+{
+	DWORD dwTreeHead = ReadDWORD(ReadDWORD(CObjectSearcher::GetBaseEnv() + 0x24) + 0x4);
+
+	std::queue<DWORD> QueTree;
+	QueTree.push(dwTreeHead);
+	while (!QueTree.empty())
+	{
+		DWORD dwNode = QueTree.front();
+		QueTree.pop();
+
+		if (ReadBYTE(dwNode + 0xD) == 0x0)
+		{
+			std::wstring wsText = CGameMemory::GetInstance().ReadProcTextWithLength(dwNode + 0x10);
+			LOG_C_D(L"dwNode=[%X], Text=[%s]", dwNode, wsText.c_str());
+
+
+			QueTree.push(ReadDWORD(dwNode + 0x0));
+			QueTree.push(ReadDWORD(dwNode + 0x8));
+		}
+	}
+	//LOG_C_D(L"VecArray.size=%d", VecArray.size());
+	/*for (auto& itm : VecArray)
+	{
+		std::string wsName = reinterpret_cast<CONST CHAR*>(ReadDWORD(itm + 0x8));
+		LOG_C_D(L"Addr=%X, Name=%s", itm, libTools::CCharacter::ASCIIToUnicode(wsName).c_str());
+		if (wsName == "Life")
+		{
+			DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
+			LOG_C_D(L"HP=%d,MaxHP=%d,MP=%d,MAXMP=%d,Shield=%d,MaxShiled=%d",
+				ReadDWORD(dwObject + 人物HP偏移),
+				ReadDWORD(dwObject + 人物MAXHP偏移),
+				ReadDWORD(dwObject + 人物MP偏移),
+				ReadDWORD(dwObject + 人物MAXMP偏移),
+				ReadDWORD(dwObject + 人物护盾偏移),
+				ReadDWORD(dwObject + 人物MAX护盾偏移));
+
+			LOG_C_D(L"Player.Name=%s", 人物名字基址 + 人物名字偏移);
+		}
+		else if (wsName == "Player")
+		{
+			DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
+			LOG_C_D(L"Level=%d", ReadDWORD(dwObject + 人物等级偏移));
+		}
+	}*/
+}

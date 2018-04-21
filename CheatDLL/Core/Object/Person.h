@@ -7,6 +7,7 @@ class CPerson : public CBaseObject
 {
 public:
 	CPerson() = default;
+	CPerson(_In_ DWORD dwNodeBase);
 	~CPerson() = default;
 
 	static CPerson& GetInstance();
@@ -14,18 +15,26 @@ public:
 	virtual VOID RefreshObjectAttribute() override;
 
 
-	// 
+	//  Person Attribute
 	DWORD GetPercentHP() CONST;
+
+	//
 	DWORD GetPercentMP() CONST;
+
+	//
 	DWORD GetPercentShield() CONST;
 
+	//
 	DWORD GetLevel() CONST;
 
+	// Current Map
+	std::wstring GetMapName();
 private:
 	DWORD GetPercentValue(_In_ DWORD dwOffset) CONST;
 private:
 	DWORD _dwLifeAttributeAddr = NULL;
 	DWORD _dwPlayerAttributeAddr = NULL;
+	DWORD _dwAreaLoadingStateAddr = NULL;
 };
 
 

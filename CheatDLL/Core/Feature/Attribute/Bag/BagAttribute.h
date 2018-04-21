@@ -12,7 +12,11 @@ public:
 	CBagAttribute();
 	~CBagAttribute();
 
+	// 获取背包的物品
 	static UINT GetVecBagItem(_Out_ std::vector<CItem>& Vec);
+
+	// 判断鼠标上是否有物品(点击后选中)
+	static BOOL IsExistCursorItem(_Out_opt_ CItem* pItem);
 
 
 	static BOOL ExistItem_By_Location(_In_ CONST CItem::ItemPoint& Loc);

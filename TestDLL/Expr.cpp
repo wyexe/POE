@@ -422,6 +422,8 @@ VOID CExpr::PrintItem(CONST std::vector<std::wstring>&)
 		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移1) + 物品遍历偏移2 + 物品遍历偏移3) + 0 * 0x10 + 0x4) + 物品遍历偏移4;
 		LOG_C_D(L"dwAddr=%X", dwAddr);
 		PrintItem_By_Object(dwAddr);
+	
+		
 	});
 	
 }
@@ -505,8 +507,7 @@ VOID CExpr::PrintAroundObject(CONST std::vector<std::wstring>&)
 	{
 		DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 物品遍历偏移1);
 		LOG_C_D(L"dwAddr=%X", dwAddr);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移2 + 物品遍历偏移3) + 0 * 4) + 0x8 + 周围对象遍历偏移1);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 4 * 4) - 周围对象遍历偏移2) + 周围对象遍历偏移3) + 周围对象遍历偏移4) + 周围对象遍历偏移5 + 0xC) + 0x4/*RootNode*/);
+		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 周围对象遍历偏移1) + 周围对象遍历偏移2 + 周围对象遍历偏移3) + 0x4/*RootNode*/);
 		LOG_C_D(L"Root=%X", dwAddr);
 
 		std::queue<DWORD> VecStack;
@@ -797,5 +798,24 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 	dwBase = ScanBinary.FindBase("8B??????????6A006A00E8????????8B??????????85", 0x786109 - 0x786132, 00, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 丢弃物品确认窗口偏移 0x%X", dwBase);
 
-	
+	dwBase = ScanBinary.FindBase("6A02E8????????C7????02000000", 0x671CDE - 0x671CBE, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 鼠标右键使用物品UI偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("75??39??????????75??39??????????750F", 0x660719 - 0x66070D, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 鼠标是否使用物品偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("3B??741168????????8D????E8", 0x7BA33E - 0x7BA31E, 2, 0x0, L"PathOfExile.exe", 0xFF);
+	LOG_C_D(L"#define State偏移1 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("3B??741168????????8D????E8", 0x7BA33E - 0x7BA359, 2, 0x0, L"PathOfExile.exe", 0xFF);
+	LOG_C_D(L"#define StateObject偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("6A??68????????81??????000089", 0x7C4600 - 0x7C4648, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 当前地图偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("E8????????83????????00030F??????????80", 0xA332F4 - 0xA3330F, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 周围对象遍历偏移1 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("83????FF75??8B??????00008D", 0xA23158 - 0xA23181, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 周围对象遍历偏移2 0x%X", dwBase);
 }

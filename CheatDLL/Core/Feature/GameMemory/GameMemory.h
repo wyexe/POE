@@ -29,6 +29,9 @@ public:
 
 	//
 	std::string  ReadProcASCIITextWithoutLength(_In_ DWORD dwAddr);
+
+	//
+	HWND GetGameWnd() CONST;
 private:
 	template<typename T>
 	T ReadMemory(_In_ UINT_PTR Addr)
@@ -44,6 +47,7 @@ private:
 	}
 private:
 	HANDLE _hProcess = NULL;
+	HWND   _hWnd = NULL;
 };
 
 

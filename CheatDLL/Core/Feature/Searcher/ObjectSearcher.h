@@ -21,6 +21,9 @@ public:
 	//
 	static std::wstring GetCurrentStateText();
 
+	//
+	static DWORD GetBaseEnv();
+
 	// 游戏环境
 	static DWORD GetGameEnv();
 
@@ -54,9 +57,8 @@ private:
 	template<typename T>
 	static UINT GetVecObject(_Out_ std::vector<T>& Vec, _In_ std::function<BOOL(DWORD)> Matcher)
 	{
-		DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 物品遍历偏移1);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 物品遍历偏移2 + 物品遍历偏移3) + 0 * 4) + 0x8 + 周围对象遍历偏移1);
-		dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(dwAddr + 4 * 4) - 周围对象遍历偏移2) + 周围对象遍历偏移3) + 周围对象遍历偏移4) + 周围对象遍历偏移5 + 0xC) + 0x4/*RootNode*/);
+		DWORD dwAddr = ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(GetGameEnv() + 物品遍历偏移1) + 周围对象遍历偏移1) + 周围对象遍历偏移2 + 周围对象遍历偏移3) + 0x4/*RootNode*/);
+
 
 		std::queue<DWORD> VecStack;
 		VecStack.push(dwAddr);
@@ -67,22 +69,18 @@ private:
 			DWORD dwNode = VecStack.front();
 			VecStack.pop();
 
-			DWORD dwLeftNode = ReadDWORD(dwNode + 0x0);
-			DWORD dwRightNode = ReadDWORD(dwNode + 0x8);
-			if (ReadBYTE(dwLeftNode + 0xD) == 0)
-			{
-				VecStack.push(dwLeftNode);
-			}
-			if (ReadBYTE(dwRightNode + 0xD) == 0x0)
-			{
-				VecStack.push(dwRightNode);
-			}
+
+			if (ReadBYTE(dwNode + 0xD) != 0)
+				continue;
 
 
 			if (Matcher(ReadDWORD(dwNode + 0x14)))
 			{
-				Vec.emplace_back(ReadDWORD(dwNode + 0x14));
+				Vec.emplace_back(dwNode + 0x14);
 			}
+
+			VecStack.push(ReadDWORD(dwNode + 0x0));
+			VecStack.push(ReadDWORD(dwNode + 0x8));
 		}
 
 		return Vec.size();
