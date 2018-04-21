@@ -1,4 +1,6 @@
 #include "CmdExpr.h"
+#include <stack>
+#include <queue>
 #include <LogLib\Log.h>
 #include <CharacterLib\Character.h>
 #include <Core\Feature\GameMemory\GameMemory.h>
@@ -7,8 +9,8 @@
 #include <Core\Feature\Attribute\Warehouse\WarehouseAttribute.h>
 #include <Core\Object\AttributeObject.h>
 #include <Core\Feature\EchoAction\GameMouse.h>
-#include <stack>
-#include <queue>
+#include <Core\Feature\Attribute\Buff\BuffAttribute.h>
+#include <Core\Object\Person.h>
 
 #define _SELF L"CmdExpr.cpp"
 CCmdExpr::CCmdExpr()
@@ -43,6 +45,7 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::WatchUi, this, std::placeholders::_1), L"WatchUi" },
 		{ std::bind(&CCmdExpr::Test, this, std::placeholders::_1), L"Test" },
 		{ std::bind(&CCmdExpr::PrintAroundObject, this, std::placeholders::_1), L"PrintAroundObject" },
+		{ std::bind(&CCmdExpr::PrintBuff, this, std::placeholders::_1), L"PrintBuff" },
 	};
 
 	return Vec;
@@ -477,49 +480,20 @@ VOID CCmdExpr::PrintItem(CONST std::vector<std::wstring>&)
 	}
 }
 
+VOID CCmdExpr::PrintBuff(CONST std::vector<std::wstring>&)
+{
+	CPerson::GetInstance().RefreshObjectAttribute();
+	std::vector<CBuffAttribute::BuffObject> Vec;
+	CBuffAttribute::GetVecBuff(Vec);
+	LOG_C_D(L"vec.size=%d", Vec.size()); 
+
+	for (CONST auto& itm : Vec)
+	{
+		LOG_C_D(L"Buff.Name=[%s], Text=[%s]", itm.wsBuffName.c_str(), itm.wsBuffText.c_str());
+	}
+}
+
 VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 {
-	DWORD dwTreeHead = ReadDWORD(ReadDWORD(CObjectSearcher::GetBaseEnv() + 0x24) + 0x4);
-
-	std::queue<DWORD> QueTree;
-	QueTree.push(dwTreeHead);
-	while (!QueTree.empty())
-	{
-		DWORD dwNode = QueTree.front();
-		QueTree.pop();
-
-		if (ReadBYTE(dwNode + 0xD) == 0x0)
-		{
-			std::wstring wsText = CGameMemory::GetInstance().ReadProcTextWithLength(dwNode + 0x10);
-			LOG_C_D(L"dwNode=[%X], Text=[%s]", dwNode, wsText.c_str());
-
-
-			QueTree.push(ReadDWORD(dwNode + 0x0));
-			QueTree.push(ReadDWORD(dwNode + 0x8));
-		}
-	}
-	//LOG_C_D(L"VecArray.size=%d", VecArray.size());
-	/*for (auto& itm : VecArray)
-	{
-		std::string wsName = reinterpret_cast<CONST CHAR*>(ReadDWORD(itm + 0x8));
-		LOG_C_D(L"Addr=%X, Name=%s", itm, libTools::CCharacter::ASCIIToUnicode(wsName).c_str());
-		if (wsName == "Life")
-		{
-			DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
-			LOG_C_D(L"HP=%d,MaxHP=%d,MP=%d,MAXMP=%d,Shield=%d,MaxShiled=%d",
-				ReadDWORD(dwObject + 人物HP偏移),
-				ReadDWORD(dwObject + 人物MAXHP偏移),
-				ReadDWORD(dwObject + 人物MP偏移),
-				ReadDWORD(dwObject + 人物MAXMP偏移),
-				ReadDWORD(dwObject + 人物护盾偏移),
-				ReadDWORD(dwObject + 人物MAX护盾偏移));
-
-			LOG_C_D(L"Player.Name=%s", 人物名字基址 + 人物名字偏移);
-		}
-		else if (wsName == "Player")
-		{
-			DWORD dwObject = ReadDWORD(ReadDWORD(dwNode + 0x4) + 4 * (ReadDWORD(itm + 0xC)));
-			LOG_C_D(L"Level=%d", ReadDWORD(dwObject + 人物等级偏移));
-		}
-	}*/
+	
 }

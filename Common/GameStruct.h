@@ -46,6 +46,11 @@
 #define State偏移1 0x24
 #define StateObject偏移 0x28
 #define 当前地图偏移 0xB6C
+#define Buff遍历偏移 0x98
+#define EffectUI偏移 0xB68
+#define Effect数组偏移 0x8E8
+#define EffectID数组偏移 0x8F4
+
 
 ////一些固定的偏移//////////////////////////////////////////////////////////////////////
 #define 人物基址偏移8		0xC

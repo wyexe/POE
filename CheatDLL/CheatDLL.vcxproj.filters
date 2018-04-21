@@ -81,6 +81,9 @@
     <ClCompile Include="Core\Feature\Attribute\State\StateAttribute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Feature\Attribute\Buff\BuffAttribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h">
@@ -144,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Feature\Attribute\State\StateAttribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Feature\Attribute\Buff\BuffAttribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

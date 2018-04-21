@@ -444,7 +444,7 @@ PVOID WINAPI NewRtlAllocateHeap(_In_ PVOID  HeapHandle, _In_opt_ ULONG  Flags, _
 
 VOID CExpr::SwapAlloc(CONST std::vector<std::wstring>&)
 {
-	DWORD dwAddr = 0x10F719C;
+	DWORD dwAddr = 0x10FF190;
 	OldRtlAllocateHeapPtr = (RtlAllocateHeapPtr)ReadDWORD(dwAddr);
 	LOG_C_D(L"NewRtlAllocateHeap=%X", NewRtlAllocateHeap);
 	//::MessageBoxW(NULL, L"", L"", NULL);
@@ -818,4 +818,16 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 
 	dwBase = ScanBinary.FindBase("83????FF75??8B??????00008D", 0xA23158 - 0xA23181, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 周围对象遍历偏移2 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("0F??????????8D????83????00", 0x91BC15 - 0x91BC0A, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define Buff偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("B00189??24??E9", 0x791B74 - 0x791B53, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define EffectUI偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("83??0176??0F????????????8D", 0x68B8EE - 0x68B8D6, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define Effect数组偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("83??0176??0F????????????8D", 0x68B8EE - 0x68B918, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define EffectID数组偏移 0x%X", dwBase);
 }

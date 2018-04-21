@@ -43,7 +43,7 @@ private:
 
 	virtual VOID PrintItem(CONST std::vector<std::wstring>&);
 
-	
+	virtual VOID PrintBuff(CONST std::vector<std::wstring>&);
 
 	virtual VOID Test(CONST std::vector<std::wstring>&);
 };

@@ -47,6 +47,7 @@ BOOL CUiAttribute::FindUiObject(_In_ em_Ui_Type emUiType, _Out_ UiObjectAttribut
 	pRootNode->pPreviousNode = nullptr;
 	pRootNode->uIndex = 0;
 
+	// 深度优先…… 递归
 	auto pResultNode = FindUiNode_By_Text(pRootNode, VecText);
 	if (pRootNode != nullptr)
 	{

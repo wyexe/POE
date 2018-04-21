@@ -9,8 +9,13 @@
 BOOL CAttributeObject::FillAttributeTable(_In_ DWORD dwAttributeNodeBase, _In_ LPCSTR pwszAttributeName, _In_ std::function<VOID(DWORD)> Ptr)
 {
 	DWORD dwItemAttributeTableArray = ReadDWORD(ReadDWORD(dwAttributeNodeBase + 0x0) + 人物基址偏移6) + 人物基址偏移7 + 人物基址偏移8;
-
 	DWORD dwCount = (ReadDWORD(dwItemAttributeTableArray + 0x4) - ReadDWORD(dwItemAttributeTableArray)) / 4;
+	if (dwCount >= 1000)
+	{
+		LOG_C_E(L"CAttributeObject::FillAttributeTable.Count=%d, dwAttributeNodeBase=%X", dwCount, dwAttributeNodeBase);
+		return FALSE;
+	}
+
 	for (DWORD i = 0;i < dwCount; ++i)
 	{
 		DWORD dwItemObjectAttributeTableNode = ReadDWORD(ReadDWORD(dwItemAttributeTableArray) + i * 4);

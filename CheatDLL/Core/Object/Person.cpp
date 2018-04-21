@@ -18,7 +18,7 @@ CPerson& CPerson::GetInstance()
 
 VOID CPerson::RefreshObjectAttribute()
 {
-	SetNodeBase(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5));
+	SetNodeBase(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5);
 
 	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 	CAttributeObject::FillObjectAttribute_Base(this);
@@ -55,6 +55,11 @@ DWORD CPerson::GetLevel() CONST
 std::wstring CPerson::GetMapName()
 {
 	return CGameMemory::GetInstance().ReadProcTextWithLength(_dwAreaLoadingStateAddr + 当前地图偏移);
+}
+
+DWORD CPerson::GetLifeAttributeAddr() CONST
+{
+	return _dwLifeAttributeAddr;
 }
 
 DWORD CPerson::GetPercentValue(_In_ DWORD dwOffset) CONST

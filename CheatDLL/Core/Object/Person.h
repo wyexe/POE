@@ -29,6 +29,9 @@ public:
 
 	// Current Map
 	std::wstring GetMapName();
+
+	//
+	DWORD GetLifeAttributeAddr() CONST;
 private:
 	DWORD GetPercentValue(_In_ DWORD dwOffset) CONST;
 private:
