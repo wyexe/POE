@@ -83,6 +83,7 @@ UINT CObjectSearcher::GetVecNpc(_Out_ std::vector<CNpc>& Vec)
 {
 	return GetVecObject<CNpc>(Vec, [](DWORD dwNodeBase)
 	{
+		//LOG_C_D(L"dwNodeBase=%X", dwNodeBase);
 		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Npc;
 	});
 }

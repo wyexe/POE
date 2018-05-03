@@ -72,7 +72,8 @@ private:
 
 			if (ReadBYTE(dwNode + 0xD) != 0)
 				continue;
-
+			else if(ReadDWORD(dwNode + 0x14) == 0x0)
+				continue; 
 
 			if (Matcher(ReadDWORD(dwNode + 0x14)))
 			{

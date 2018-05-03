@@ -38,12 +38,12 @@ BOOL CGameMemory::InitializeReadMemory()
 		return FALSE;
 	}
 
-	/*_hWnd = ::FindWindowW(L"POEWindowClass", L"Path of Exile");
+	_hWnd = ::FindWindowW(L"POEWindowClass", L"Path of Exile");
 	if (_hWnd == NULL)
 	{
 		::MessageBoxW(NULL, L"FindWindowWÊ§°Ü!", L"", NULL);
 		return FALSE;
-	}*/
+	}
 
 	return TRUE;
 }
@@ -56,6 +56,12 @@ DWORD CGameMemory::ReadProcDWORD(_In_ DWORD dwAddr)
 DWORD CGameMemory::ReadProcBYTE(_In_ DWORD dwAddr)
 {
 	return ReadProcDWORD(dwAddr) & 0xFF;
+}
+
+
+float CGameMemory::ReadProcFloat(_In_ DWORD dwAddr)
+{
+	return ReadMemory<float>(dwAddr);
 }
 
 std::wstring CGameMemory::ReadProcTextWithLength(_In_ DWORD dwAddr)

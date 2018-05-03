@@ -1,6 +1,7 @@
 #include "CmdExpr.h"
 #include <stack>
 #include <queue>
+#include <xmmintrin.h>
 #include <LogLib\Log.h>
 #include <CharacterLib\Character.h>
 #include <Core\Feature\GameMemory\GameMemory.h>
@@ -12,6 +13,7 @@
 #include <Core\Feature\Attribute\Buff\BuffAttribute.h>
 #include <Core\Object\Person.h>
 #include <Core\Feature\Attribute\Effect\EffectAttribute.h>
+#include <Core\Feature\PointConvert\PointConverter.h>
 
 #define _SELF L"CmdExpr.cpp"
 CCmdExpr::CCmdExpr()
@@ -221,8 +223,9 @@ VOID CCmdExpr::PrintNpc(CONST std::vector<std::wstring>&)
 {
 	std::vector<CNpc> VecNpc; 
 	CObjectSearcher::GetVecNpc(VecNpc); 
+	LOG_C_D(L"VecNpc.size=%d", VecNpc.size());
 	for (auto& itm : VecNpc)
-	{ 
+	{
 		itm.RefreshObjectAttribute();
 		LOG_C_D(L"Npc.Name=[%s] NodeBase=[%X]", itm.GetName().c_str(), itm.GetNodeBase());
 		LOG_C_D(L"Pos=[%d,%d]", itm.GetPoint().X, itm.GetPoint().Y);
@@ -507,7 +510,29 @@ VOID CCmdExpr::PrintEffect(CONST std::vector<std::wstring>&)
 	}
 }
 
+
 VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 {
 	
+	libTools::CException::InvokeAction(__FUNCTIONW__, [] 
+	{
+		Point Pos;
+
+		Pos = CPointConverter::GetCursorClientPos();
+		LOG_C_D(L"当前鼠标的屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
+
+		Pos = CPointConverter::GetCursorGamePos();
+		LOG_C_D(L"当前鼠标的游戏坐标=[%d,%d]", Pos.X, Pos.Y);
+
+		Pos = CPointConverter::ConvertClientPosToGamePos(CPointConverter::GetCursorClientPos());
+		LOG_C_D(L"将当前鼠标的屏幕坐标转换成游戏坐标=[%d,%d]", Pos.X, Pos.Y);
+
+		if (!CPointConverter::ConvertGamePosToClientPos(CPointConverter::GetCursorGamePos(), Pos))
+		{
+			LOG_C_D(L"鼠标超出屏幕范围!");
+			return;
+		}
+
+		LOG_C_D(L"将当前鼠标的游戏坐标转换成屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
+	});
 }

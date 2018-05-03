@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 
-#define 人物基址 0x13F9760
+#define 人物基址 0x13F9780
 #define 人物基址偏移1 0x38
 #define 人物基址偏移2 0x14
 #define 人物基址偏移3 0x8
@@ -11,7 +11,7 @@
 #define 人物基址偏移5 0x1DC
 #define 人物基址偏移6 0x2C
 #define 人物基址偏移7 0x14
-#define 人物名字基址 0x153D430
+#define 人物名字基址 0x153D450
 #define 人物等级偏移 0x40
 #define 物品遍历偏移1 0x1C4
 #define 物品遍历偏移2 0x4D70
@@ -29,28 +29,38 @@
 #define 仓库页索引偏移2 0x8E4
 #define 当前仓库页偏移 0xB08
 #define 怪物名字偏移 0x58
-#define 周围对象遍历偏移1 0x4B18
-#define 周围对象遍历偏移2 0x234
-#define UI偏移1		0x1E4
-#define UI偏移2		0xAA4
+#define UI偏移1 0x1E4
+#define UI偏移2 0xAA4
 #define UI遍历偏移1 0x708
-#define Ui显示偏移	0x754
+#define Ui显示偏移 0x754
 #define 人物UI偏移 0x1978
+#define 背包UI偏移 0xA88
 #define 异界地图宝鉴偏移 0xB20
 #define Npc出售窗口偏移 0xB18
 #define Npc对话窗口偏移 0xB08
 #define 丢弃物品确认窗口偏移 0xAE0
-#define 背包UI偏移 0xA88
 #define 鼠标右键使用物品UI偏移 0x9C4
 #define 鼠标是否使用物品偏移 0x964
 #define State偏移1 0x24
 #define StateObject偏移 0x28
 #define 当前地图偏移 0xB6C
+#define 周围对象遍历偏移1 0x4B18
+#define 周围对象遍历偏移2 0x234
 #define Buff遍历偏移 0x98
 #define EffectUI偏移 0xB68
 #define Effect数组偏移 0x8E8
 #define EffectID数组偏移 0x8F4
-
+#define 游戏坐标比例基址 0x12F7C78
+#define 当前屏幕坐标Y偏移 0x1938
+#define 当前屏幕坐标X偏移 0x1934
+#define 游戏坐标转换偏移1 0x1644
+#define 坐标转换基址2 0x12F7DC8
+#define 游戏坐标X转换偏移 0x1944
+#define 游戏坐标Y转换偏移 0x1948
+#define 游戏坐标转换偏移2 0x1924
+#define 游戏坐标转换偏移3 0x1B4
+#define 游戏坐标转换偏移4 0x64
+#define 当前鼠标游戏坐标X 0x193C
 
 ////一些固定的偏移//////////////////////////////////////////////////////////////////////
 #define 人物基址偏移8		0xC
@@ -69,9 +79,12 @@
 #define 物品属性表偏移 0x0
 #define UI名字偏移	Ui显示偏移 - 0x20
 #define 周围对象遍历偏移3 0xC
+#define 游戏坐标转换偏移5 游戏坐标转换偏移4 - 0x14
+#define 当前鼠标游戏坐标Y 当前鼠标游戏坐标X + 0x4
 
 #define ReadDWORD(x) CGameMemory::GetInstance().ReadProcDWORD(x)
 #define ReadBYTE(x)  CGameMemory::GetInstance().ReadProcBYTE(x)
+#define ReadFloat(x) CGameMemory::GetInstance().ReadProcFloat(x)
 #define GameRun      TRUE
 #define StopGame	 ::Sleep(1)
 

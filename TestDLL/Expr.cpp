@@ -756,18 +756,6 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 	dwBase = ScanBinary.FindBase("E8????????83????8D??????????3B??????6A", 0x658849 - 0x65884E, 2, 0x0, L"PathOfExile.exe", 0xFF);
 	LOG_C_D(L"#define 怪物名字偏移 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("E8????????83C4??83????FCE9????????8B????33", 0x92717B - 0x9271A0, 2, 0x0, L"PathOfExile.exe", 0xFF);
-	LOG_C_D(L"#define 周围对象遍历偏移1 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("8D????C7????????????89????89????????8D", 0x68A9D1 - 0x68A9E3, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 周围对象遍历偏移2 0x%X", static_cast<DWORD>(abs(static_cast<int>(dwBase))));
-
-	dwBase = ScanBinary.FindBase("FF????8B??8D????????8D????????8D", 0x68ACD1 - 0x68ACB5, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 周围对象遍历偏移3 0x%X", dwBase);
-
-	dwBase = ScanBinary.FindBase("FF????8B??8D????????8D????????8D", 0x68ACD1 - 0x68ACBB, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define 周围对象遍历偏移4 0x%X", dwBase);
-
 	dwBase = ScanBinary.FindBase("74??83??????00000074??83??????000000740C", 0x7E1E27 - 0x7E1E3C, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define UI偏移1 0x%X", dwBase);
 
@@ -795,7 +783,7 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 	dwBase = ScanBinary.FindBase("8B??E8????????84??0F??????????8B????89", 0x7885A9 - 0x78859F, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define Npc对话窗口偏移 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("8B??????????6A006A00E8????????8B??????????85", 0x786109 - 0x786132, 00, 0x0, L"PathOfExile.exe");
+	dwBase = ScanBinary.FindBase("8B??????????6A006A00E8????????8B??????????85", 0x786109 - 0x786132, 02, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 丢弃物品确认窗口偏移 0x%X", dwBase);
 
 	dwBase = ScanBinary.FindBase("6A02E8????????C7????02000000", 0x671CDE - 0x671CBE, 2, 0x0, L"PathOfExile.exe");
@@ -819,8 +807,8 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 	dwBase = ScanBinary.FindBase("83????FF75??8B??????00008D", 0xA23158 - 0xA23181, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 周围对象遍历偏移2 0x%X", dwBase);
 
-	dwBase = ScanBinary.FindBase("0F??????????8D????83????00", 0x91BC15 - 0x91BC0A, 2, 0x0, L"PathOfExile.exe");
-	LOG_C_D(L"#define Buff偏移 0x%X", dwBase);
+	dwBase = ScanBinary.FindBase("0F??????????8D????83????00", 0x91BA93 - 0x91BA85, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define Buff遍历偏移 0x%X", dwBase);
 
 	dwBase = ScanBinary.FindBase("B00189??24??E9", 0x791B74 - 0x791B53, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define EffectUI偏移 0x%X", dwBase);
@@ -830,4 +818,37 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 
 	dwBase = ScanBinary.FindBase("83??0176??0F????????????8D", 0x68B8EE - 0x68B918, 2, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define EffectID数组偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("F30F1000F30F5905????????894C24", 0x92896F - 0x928973, 0x4, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 游戏坐标比例基址 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("85c00f84????????83B8????0000000F84????????FF", 0x7E6D73 - 0x7E6D88, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 当前屏幕坐标Y偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("85c00f84????????83B8????0000000F84????????FF", 0x7E6D73 - 0x7E6D9A, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 当前屏幕坐标X偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("85c00f84????????83B8????0000000F84????????FF", 0x7E6D73 - 0x7E6D94, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 游戏坐标转换偏移1 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("F30F5eD8F30F104424??F3", 0xB44A4F - 0xB44A59, 0x4, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 坐标转换基址2 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("8b??E8????????F30F104424??F30f114424", 0x7E6E1A - 0x7E6E6B, 0x4, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 游戏坐标X转换偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("8b??E8????????F30F104424??F30f114424", 0x7E6E1A - 0x7E6E73, 0x4, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 游戏坐标Y转换偏移 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("EB0EF30f106424", 0x7E069D - 0x7E0697, 2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 游戏坐标转换偏移2 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("85c074??F30F1080????0000F30f1098", 0x00B2F99A - 0xB2F9D2, 4, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 游戏坐标转换偏移3 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("F30F5eD8F30F104424??F3", 0xB44A4F - 0xB44A65, 4, 0x0, L"PathOfExile.exe", 0xFF);
+	LOG_C_D(L"#define 游戏坐标转换偏移4 0x%X", dwBase);
+
+	dwBase = ScanBinary.FindBase("8b??E8????????F30F104424??F30f114424", 0x7E6E1A - 0x7E6E8A, 4, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 当前鼠标游戏坐标X 0x%X", dwBase); 
 }

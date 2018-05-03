@@ -22,6 +22,9 @@ public:
 	DWORD ReadProcBYTE(_In_ DWORD dwAddr);
 
 	//
+	float ReadProcFloat(_In_ DWORD dwAddr);
+
+	//
 	std::wstring ReadProcTextWithLength(_In_ DWORD dwAddr);
 
 	//

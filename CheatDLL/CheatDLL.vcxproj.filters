@@ -87,6 +87,9 @@
     <ClCompile Include="Core\Feature\Attribute\Effect\EffectAttribute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Feature\PointConvert\PointConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Feature\Attribute\Bag\BagAttribute.h">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Feature\Attribute\Effect\EffectAttribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Feature\PointConvert\PointConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

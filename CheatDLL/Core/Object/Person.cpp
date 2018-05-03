@@ -20,6 +20,7 @@ VOID CPerson::RefreshObjectAttribute()
 {
 	SetNodeBase(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5);
 
+	// [[GetNodeBase()]+2C]+1c,20 = Current Point
 	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 	CAttributeObject::FillObjectAttribute_Base(this);
 	CAttributeObject::FillObject_By_AttributeName(this, "Life", _dwLifeAttributeAddr);
