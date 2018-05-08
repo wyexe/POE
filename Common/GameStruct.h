@@ -227,6 +227,7 @@ struct Point
 /// -------------------------------------------------------
 
 CONST static Point g_BagUi_Item_StartPos(819, 432);
+CONST static Point g_WarehouseUi_Item_StartPos(15, 130);
 
 #define ITEM_ATTRIBUTE_RES_INDEX_BASE 0
 

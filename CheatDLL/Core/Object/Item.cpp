@@ -181,6 +181,17 @@ VOID CItem::ItemSelect(_In_ em_ItemLocation_Type emLocType) CONST
 		Pos = CPointConverter::ConvertClientPosToMousePos(Pos);
 		CPersonAction::MouseMove(Pos);
 	}
+	else if (emLocType == em_ItemLocation_Type::Warehouse)
+	{
+		auto ItemPos = GetItemLocation();
+		Point Pos = g_WarehouseUi_Item_StartPos;
+
+
+		Pos.X += ItemPos.dwLeftTopIndex * BAG_ITEM_CELL_WIDTH + 20;
+		Pos.Y += ItemPos.dwRightTopIndex * BAG_ITEM_CELL_HEIGHT + 20;
+		Pos = CPointConverter::ConvertClientPosToMousePos(Pos);
+		CPersonAction::MouseMove(Pos);
+	}
 }
 
 VOID CItem::ItemClick(_In_ em_ItemLocation_Type emLocType) CONST
