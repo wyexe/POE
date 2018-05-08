@@ -521,47 +521,5 @@ VOID CCmdExpr::PrintEffect(CONST std::vector<std::wstring>&)
 
 VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 {
-	/*libTools::CException::InvokeAction(__FUNCTIONW__, [] 
-	{
-		Point Pos;
-
-		Pos = CPointConverter::GetCursorClientPos();
-		LOG_C_D(L"当前鼠标的屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
-
-		Pos = CPointConverter::GetCursorGamePos();
-		LOG_C_D(L"当前鼠标的游戏坐标=[%d,%d]", Pos.X, Pos.Y);
-
-		Pos = CPointConverter::ConvertClientPosToGamePos(CPointConverter::GetCursorClientPos());
-		LOG_C_D(L"将当前鼠标的屏幕坐标转换成游戏坐标=[%d,%d]", Pos.X, Pos.Y);
-
-		if (!CPointConverter::ConvertGamePosToClientPos(CPointConverter::GetCursorGamePos(), Pos))
-		{
-			LOG_C_D(L"鼠标超出屏幕范围!");
-			return;
-		}
-
-		LOG_C_D(L"将当前鼠标的游戏坐标转换成屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
-	});*/
-
-	 
-	std::vector<CItem> Vec;
-	CBagAttribute::GetVecBagItem(Vec);
-	LOG_C_D(L"Vec.size=%d",Vec.size());
-	for (auto& itm : Vec)
-	{
-		itm.RefreshObjectAttribute();
-		LOG_MSG_CF(L"itm.NodeBase=%X, Name=%s, Pos=[%d,%d]", itm.GetNodeBase(), itm.GetName().c_str(), itm.GetItemLocation().dwLeftTopIndex, itm.GetItemLocation().dwRightTopIndex);
-		itm.ItemSelect(CItem::em_ItemLocation_Type::Bag);
-	}
-	/*Point Pos(819, 431);
-	// 12 * 5的背包
-	int Index = Vec.empty() ? 0 : _wtoi(Vec.at(0).c_str());
-	int Column = Index % 12;
-	int Row = Index / 12;
-
-	Pos.X += Column * 37 + 20;
-	Pos.Y += Row * 38 + 20;
-
-	Pos = CPointConverter::ConvertClientPosToMousePos(Pos);
-	CPersonAction::MouseMove(Pos);*/
+	
 }

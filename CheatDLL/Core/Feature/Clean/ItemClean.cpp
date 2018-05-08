@@ -257,6 +257,7 @@ BOOL CItemClean::ClickWarehousePage(_In_ DWORD Index) CONST
 		}
 
 		CPersonAction::MouseMoveAndClick(Point(PageOffset.X + Index * dwPageIndexOffset, PageOffset.Y));
+		::Sleep(1000);
 	}
 
 	LOG_C_E(L"ClickWarehousePage Timeout");
@@ -386,6 +387,7 @@ BOOL CItemClean::TakeTheMap_For_Warehouse() CONST
 			}
 
 			ItemMap.ItemClick(CItem::em_ItemLocation_Type::Bag); // 检查地图变色了吗?
+			::Sleep(1000);
 			if (CBagAttribute::GetItemColor_By_Name(MapName) <= 1) // 大于白色
 			{
 				LOG_C_E(L"地图着色失败…… retry !");
@@ -412,6 +414,7 @@ BOOL CItemClean::TakeItem_For_Warehouse(_In_ CONST std::wstring& wsItemName) CON
 
 
 	Item.ItemCtrlClick(CItem::em_ItemLocation_Type::Warehouse);
+	::Sleep(1000);
 	return TRUE;
 }
 
@@ -432,7 +435,9 @@ BOOL CItemClean::RightClickItem_In_Warehouse(_In_ CONST std::wstring& wsItemName
 		{
 			return TRUE;
 		}
+
 		Item.ItemRightClick(CItem::em_ItemLocation_Type::Warehouse);
+		::Sleep(2000);
 	}
 
 

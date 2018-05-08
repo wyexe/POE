@@ -86,9 +86,9 @@ BOOL CBaseObject::MoveToPos(_In_ float fDis)
 	return TRUE;
 }
 
-BOOL CBaseObject::Click() CONST
+VOID CBaseObject::Click() CONST
 {
-	return TRUE;
+	CPersonAction::MouseMoveAndClick(CPointConverter::ConvertClientPosToMousePos(CPointConverter::ConvertGamePosToClientPos(GetPoint())));
 }
 
 float CBaseObject::GetDis() CONST

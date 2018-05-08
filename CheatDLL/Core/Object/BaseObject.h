@@ -35,7 +35,7 @@ public:
 	virtual BOOL MoveToPos(_In_ float fDis = MIN_OBJECT_CLIENT_DIS);
 
 	//
-	virtual BOOL Click() CONST;
+	virtual VOID Click() CONST;
 
 	//
 	virtual float GetDis() CONST;
