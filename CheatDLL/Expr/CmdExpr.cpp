@@ -94,7 +94,7 @@ VOID CCmdExpr::PrintBag(CONST std::vector<std::wstring>&)
 		for (auto& itm : VecBagItem)
 		{
 			itm.RefreshObjectAttribute();
-			LOG_C_D(L"Item.Name=[%s], Type=[%s]", itm.GetName().c_str(), CAttributeObject::GetObjectTypeText(itm.GetType()).c_str());
+			LOG_C_D(L"Item.Node=[%X] Name=[%s], Type=[%s]", itm.GetNodeBase(), itm.GetName().c_str(), CAttributeObject::GetObjectTypeText(itm.GetType()).c_str());
 
 			auto Loc = itm.GetItemLocation();
 			LOG_C_D(L"Location=[%d,%d,%d,%d]", Loc.dwLeftTopIndex, Loc.dwRightTopIndex, Loc.dwLeftBottomIndex, Loc.dwRightBottomIndex);
@@ -542,30 +542,26 @@ VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 
 		LOG_C_D(L"将当前鼠标的游戏坐标转换成屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
 	});*/
-	Point Pos = CPointConverter::ConvertGamePosToClientPos(Point(734, 1065));
+
+	 
+	std::vector<CItem> Vec;
+	CBagAttribute::GetVecBagItem(Vec);
+	LOG_C_D(L"Vec.size=%d",Vec.size());
+	for (auto& itm : Vec)
+	{
+		itm.RefreshObjectAttribute();
+		LOG_MSG_CF(L"itm.NodeBase=%X, Name=%s, Pos=[%d,%d]", itm.GetNodeBase(), itm.GetName().c_str(), itm.GetItemLocation().dwLeftTopIndex, itm.GetItemLocation().dwRightTopIndex);
+		itm.ItemSelect(CItem::em_ItemLocation_Type::Bag);
+	}
+	/*Point Pos(819, 431);
+	// 12 * 5的背包
+	int Index = Vec.empty() ? 0 : _wtoi(Vec.at(0).c_str());
+	int Column = Index % 12;
+	int Row = Index / 12;
+
+	Pos.X += Column * 37 + 20;
+	Pos.Y += Row * 38 + 20;
+
 	Pos = CPointConverter::ConvertClientPosToMousePos(Pos);
-	LOG_C_D(L"Warehouse.MousePos=[%d,%d]", Pos.X, Pos.Y);
-
-	CPerson::GetInstance().RefreshObjectAttribute();
-	Point PersonPos = CPointConverter::ConvertGamePosToClientPos(CPerson::GetInstance().GetPoint());
-	PersonPos = CPointConverter::ConvertClientPosToMousePos(PersonPos);
-	LOG_C_D(L"dis=%.2f,PersonPos=[%d,%d]",libTools::CDistanceCalc::GetDisBy2D(PersonPos, Pos), PersonPos.X, PersonPos.Y);
-	if (libTools::CDistanceCalc::GetDisBy2D(PersonPos, Pos) < MAX_OBJECT_MOUSE_DIS)
-	{
-		LOG_C_D(L"In Client Warehouse.MousePos=[%d,%d]", Pos.X, Pos.Y);
-		::Sleep(2 * 1000);
-		CPersonAction::MouseMoveAndClick(Pos);
-	}
-	else
-	{
-		// 相似三角形
-		Point C = PersonPos;
-		float K = static_cast<float>(MAX_OBJECT_MOUSE_DIS) / libTools::CDistanceCalc::GetDisBy2D(PersonPos, Pos);
-		C.X += static_cast<DWORD>(K * (Pos.GetFloatX() - PersonPos.GetFloatX()));
-		C.Y += static_cast<DWORD>(K * (Pos.GetFloatY() - PersonPos.GetFloatY()));
-
-		LOG_C_D(L"Out Client Next.MousePos=[%d,%d]", C.X, C.Y);
-		::Sleep(2 * 1000);
-		CPersonAction::MouseMoveAndClick(C);
-	}
+	CPersonAction::MouseMove(Pos);*/
 }

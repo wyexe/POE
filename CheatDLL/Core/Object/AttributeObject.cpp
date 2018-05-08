@@ -16,10 +16,10 @@ BOOL CAttributeObject::FillAttributeTable(_In_ DWORD dwAttributeNodeBase, _In_ L
 		return FALSE;
 	}
 
+
 	for (DWORD i = 0;i < dwCount; ++i)
 	{
-		DWORD dwItemObjectAttributeTableNode = ReadDWORD(ReadDWORD(dwItemAttributeTableArray) + i * 4);
-		DWORD dwItemAttributeTableObject = ReadDWORD(dwItemObjectAttributeTableNode);
+		DWORD dwItemAttributeTableObject = ReadDWORD(ReadDWORD(dwItemAttributeTableArray) + i * 4);
 		DWORD dwIndex = ReadDWORD(dwItemAttributeTableObject + 0xC);
 		if (dwIndex >= 0x10)
 			continue;

@@ -92,6 +92,12 @@
 #define MAX_OBJECT_CLIENT_DIS 70.0f
 #define MIN_OBJECT_CLIENT_DIS 7.0f
 #define MAX_OBJECT_MOUSE_DIS  300
+#define BAG_ITEM_CELL_WIDTH   37
+#define BAG_ITEM_CELL_HEIGHT  38
+
+
+
+
 
 enum em_Equi_Color
 {
@@ -218,9 +224,11 @@ struct Point
 
 
 
+/// -------------------------------------------------------
 
+CONST static Point g_BagUi_Item_StartPos(819, 432);
 
-
+#define ITEM_ATTRIBUTE_RES_INDEX_BASE 0
 
 
 #endif // !__LFZL_COMMON_GAMESTRUCT_H__

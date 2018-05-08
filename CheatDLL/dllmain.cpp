@@ -28,6 +28,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE, _In_ DWORD dwReason, _In_ LPVOID)
 			return FALSE;
 		}
 
+		libTools::CCmdLog::GetInstance().PrintHelp();
 		/*if (!CFileConfig::GetInstance().Initialize())
 		{
 			LOG_MSG_CF(L"CFileConfig.Initialize = FALSE");

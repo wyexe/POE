@@ -4,6 +4,7 @@
 #include <Core/Feature/EchoAction/PersonAction.h>
 #include <TimeLib/TimeTick.h>
 #include <Core/Feature/Attribute/Bag/BagAttribute.h>
+#include <Core/Feature/PointConvert/PointConverter.h>
 
 #define _SELF L"Item.cpp"
 CItem::CItem()
@@ -25,7 +26,10 @@ CItem::~CItem()
 VOID CItem::RefreshObjectAttribute()
 {
 	// Name
-	CAttributeObject::FillObjectAttribute_Base(this);
+	if (!CAttributeObject::FillObjectAttribute_Base(this))
+	{
+		LOG_MSG_CF(L"FillObjectAttribute_Base = FALSE");
+	}
 
 	// ÊýÁ¿
 	CAttributeObject::FillObject_By_AttributeName(this, "Stack", _dwStackObject);
@@ -164,33 +168,43 @@ CItem::em_EchoItem_Type CItem::GetEchoItemType() CONST
 	return em_EchoItem_Type::Keep;
 }
 
-VOID CItem::Select(_In_ em_ItemLocation_Type emLocType) CONST
+VOID CItem::ItemSelect(_In_ em_ItemLocation_Type emLocType) CONST
 {
+	if (emLocType == em_ItemLocation_Type::Bag)
+	{
+		auto ItemPos = GetItemLocation();
+		Point Pos = g_BagUi_Item_StartPos;
 
+
+		Pos.X += ItemPos.dwLeftTopIndex * BAG_ITEM_CELL_WIDTH + 20;
+		Pos.Y += ItemPos.dwRightTopIndex * BAG_ITEM_CELL_HEIGHT + 20;
+		Pos = CPointConverter::ConvertClientPosToMousePos(Pos);
+		CPersonAction::MouseMove(Pos);
+	}
 }
 
-VOID CItem::Click(_In_ em_ItemLocation_Type emLocType) CONST
+VOID CItem::ItemClick(_In_ em_ItemLocation_Type emLocType) CONST
 {
 	libTools::CTimeTick TimeTick;
 	while (!CBagAttribute::IsExistCursorItem(nullptr) && TimeTick.GetSpentTime(libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 30)
 	{
-		Select(emLocType);
+		ItemSelect(emLocType);
 		CPersonAction::MouseClick();
 		::Sleep(1000);
 	}
 	
 }
 
-VOID CItem::CtrlClick(_In_ em_ItemLocation_Type emLocType) CONST
+VOID CItem::ItemCtrlClick(_In_ em_ItemLocation_Type emLocType) CONST
 {
-	Select(emLocType);
+	ItemSelect(emLocType);
 	CPersonAction::MouseCtrlClick();
 	::Sleep(1000);
 }
 
-VOID CItem::RightClick(_In_ em_ItemLocation_Type emLocType) CONST
+VOID CItem::ItemRightClick(_In_ em_ItemLocation_Type emLocType) CONST
 {
-	Select(emLocType);
+	ItemSelect(emLocType);
 	CPersonAction::MouseRightClick();
 	::Sleep(1000);
 }

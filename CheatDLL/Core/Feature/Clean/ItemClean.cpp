@@ -90,7 +90,7 @@ VOID CItemClean::DropBagItem() CONST
 
 		for (auto& DropPoint : VecDropPoint)
 		{
-			itm.Click(CItem::em_ItemLocation_Type::Bag);
+			itm.ItemClick(CItem::em_ItemLocation_Type::Bag);
 			::Sleep(1000);
 
 
@@ -276,7 +276,7 @@ BOOL CItemClean::SaveItemToWarehouse(_In_ CONST CItem& itm)
 		}
 
 		// 移动鼠标到该物品上
-		itm.CtrlClick(CItem::em_ItemLocation_Type::Bag);
+		itm.ItemCtrlClick(CItem::em_ItemLocation_Type::Bag);
 		::Sleep(1000);
 
 		// 判断该物品还在不在
@@ -304,7 +304,7 @@ BOOL CItemClean::SaveEquiToWarehouse(_In_ CONST CItem& equi)
 		}
 
 		// 移动鼠标到该物品上
-		equi.CtrlClick(CItem::em_ItemLocation_Type::Bag);
+		equi.ItemCtrlClick(CItem::em_ItemLocation_Type::Bag);
 		::Sleep(1000);
 
 		// 判断该物品还在不在
@@ -385,7 +385,7 @@ BOOL CItemClean::TakeTheMap_For_Warehouse() CONST
 				continue;
 			}
 
-			ItemMap.Click(CItem::em_ItemLocation_Type::Bag); // 检查地图变色了吗?
+			ItemMap.ItemClick(CItem::em_ItemLocation_Type::Bag); // 检查地图变色了吗?
 			if (CBagAttribute::GetItemColor_By_Name(MapName) <= 1) // 大于白色
 			{
 				LOG_C_E(L"地图着色失败…… retry !");
@@ -411,7 +411,7 @@ BOOL CItemClean::TakeItem_For_Warehouse(_In_ CONST std::wstring& wsItemName) CON
 	}
 
 
-	Item.CtrlClick(CItem::em_ItemLocation_Type::Warehouse);
+	Item.ItemCtrlClick(CItem::em_ItemLocation_Type::Warehouse);
 	return TRUE;
 }
 
@@ -432,7 +432,7 @@ BOOL CItemClean::RightClickItem_In_Warehouse(_In_ CONST std::wstring& wsItemName
 		{
 			return TRUE;
 		}
-		Item.RightClick(CItem::em_ItemLocation_Type::Warehouse);
+		Item.ItemRightClick(CItem::em_ItemLocation_Type::Warehouse);
 	}
 
 

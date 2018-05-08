@@ -80,18 +80,17 @@ public:
 	em_EchoItem_Type GetEchoItemType() CONST;
 
 	//
-	VOID Select(_In_ em_ItemLocation_Type emLocType) CONST;
+	VOID ItemSelect(_In_ em_ItemLocation_Type emLocType) CONST;
 
 	//
-	VOID Click(_In_ em_ItemLocation_Type emLocType) CONST;
+	VOID ItemClick(_In_ em_ItemLocation_Type emLocType) CONST;
 
 	//
-	VOID CtrlClick(_In_ em_ItemLocation_Type emLocType) CONST;
+	VOID ItemCtrlClick(_In_ em_ItemLocation_Type emLocType) CONST;
 
 	//
-	VOID RightClick(_In_ em_ItemLocation_Type emLocType) CONST;
+	VOID ItemRightClick(_In_ em_ItemLocation_Type emLocType) CONST;
 protected:
-	ItemPoint	_ItemPos;
 	DWORD		_dwChargesObject = NULL;
 	DWORD		_dwStackObject   = NULL;
 	DWORD		_dwQualityObject = NULL;
