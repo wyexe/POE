@@ -57,7 +57,8 @@ VOID CGameMouse::MoveToPoint(_In_ CONST Point& Pos) CONST
 	tagMovePoint A(CursorPos.x, CursorPos.y);
 	tagMovePoint B(Pos.X, Pos.Y);
 
-	switch (libTools::CTimeRand::GetRand(1, 5))
+	LineMove(A, B);
+	/*switch (libTools::CTimeRand::GetRand(1, 5)) // 随机移动路线
 	{
 	case 2:
 		LineMove(A, B);
@@ -68,7 +69,7 @@ VOID CGameMouse::MoveToPoint(_In_ CONST Point& Pos) CONST
 	default:
 		LineMove(A, B);
 		break;
-	}
+	}*/
 }
 
 VOID CGameMouse::CircelMove(_In_ CONST tagMovePoint& A, _In_ CONST tagMovePoint& B) CONST
@@ -103,20 +104,21 @@ VOID CGameMouse::LineMove(_In_ CONST tagMovePoint& A, _In_ CONST tagMovePoint& B
 	// 求出2点间的距离
 	float L = sqrt(pow(static_cast<float>(abs(A.X - B.X)), 2) + pow(static_cast<float>(abs(A.Y - B.Y)), 2));
 
-	// 每次移动5 的距离
-	CONST static float nDis = 5;
+	// 每次移动3 的距离
+	CONST static float nDis = 3;
 
 	// 相似三角形
 	float fAngleX = (B.X - A.X) / L;
 	float fAngleY = (B.Y - A.Y) / L;
 
+	CONST static int dwArray[] = { -2 , -1, 0, 1, 2, 0 };
 	
 	for (float i = nDis; i < L; i += nDis)
 	{
 		int X = static_cast<int>(fAngleX * i);
 		int Y = static_cast<int>(fAngleY * i);
 
-		::SetCursorPos(A.X + X, A.Y + Y);
+		::SetCursorPos(A.X + X + dwArray[libTools::CTimeRand::GetRand(0, 5)] , A.Y + Y + dwArray[libTools::CTimeRand::GetRand(0, 5)]);
 		RandSleep();
 	}
 

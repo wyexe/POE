@@ -513,8 +513,7 @@ VOID CCmdExpr::PrintEffect(CONST std::vector<std::wstring>&)
 
 VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 {
-	
-	libTools::CException::InvokeAction(__FUNCTIONW__, [] 
+	/*libTools::CException::InvokeAction(__FUNCTIONW__, [] 
 	{
 		Point Pos;
 
@@ -534,5 +533,6 @@ VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 		}
 
 		LOG_C_D(L"将当前鼠标的游戏坐标转换成屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
-	});
+	});*/
+	CGameMouse::GetInstance().MoveTo(Point(800, 600));
 }

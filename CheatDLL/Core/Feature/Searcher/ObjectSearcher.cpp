@@ -83,7 +83,6 @@ UINT CObjectSearcher::GetVecNpc(_Out_ std::vector<CNpc>& Vec)
 {
 	return GetVecObject<CNpc>(Vec, [](DWORD dwNodeBase)
 	{
-		//LOG_C_D(L"dwNodeBase=%X", dwNodeBase);
 		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Npc;
 	});
 }
@@ -92,7 +91,7 @@ UINT CObjectSearcher::GetVecMonster(_Out_ std::vector<CMonster>& Vec)
 {
 	return GetVecObject<CMonster>(Vec, [](DWORD dwNodeBase)
 	{
-		return CAttributeObject::GetObjectType(ReadDWORD(dwNodeBase)) == em_Object_Type::Monster;
+		return CAttributeObject::GetObjectType(dwNodeBase) == em_Object_Type::Monster;
 	});
 }
 
