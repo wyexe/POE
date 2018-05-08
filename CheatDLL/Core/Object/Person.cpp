@@ -1,6 +1,7 @@
 #include "Person.h"
 #include "AttributeObject.h"
 #include <Core/Feature/Attribute/State/StateAttribute.h>
+#include <Core/Feature/Searcher/ObjectSearcher.h>
 #include <LogLib/Log.h>
 
 #define _SELF L"Person.cpp"
@@ -18,22 +19,19 @@ CPerson& CPerson::GetInstance()
 
 VOID CPerson::RefreshObjectAttribute()
 {
-	SetNodeBase(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(ReadDWORD(人物基址 + 人物基址偏移1) + 1 * 4) + 人物基址偏移2) - 人物基址偏移3) + 人物基址偏移4) + 人物基址偏移5);
+	SetNodeBase(ReadDWORD(CObjectSearcher::GetGameEnv() + 人物基址偏移4) + 人物基址偏移5);
 
 	// [[GetNodeBase()]+2C]+1c,20 = Current Point
 	CAttributeObject::FillObject_By_AttributeName(this, "Positioned", _dwPositionedObject);
 	CAttributeObject::FillObject_By_AttributeName(this, "Life", _dwLifeAttributeAddr);
 	CAttributeObject::FillObject_By_AttributeName(this, "Player", _dwPlayerAttributeAddr);
+	CAttributeObject::FillObject_By_AttributeName(this, "Pathfinding", _dwPathfindingAddr);
 	CAttributeObject::FillObjectAttribute_Player(this);
 	_dwAreaLoadingStateAddr = CStateAttribute::FindState(CStateAttribute::em_State_Type::AreaLoadingState);
 	if (_dwAreaLoadingStateAddr == NULL)
 	{
 		LOG_MSG_CF(L"FindState AreaLoadingState = NULL!");
 	}
-
-	DWORD dwPathfinding = 0;
-	CAttributeObject::FillObject_By_AttributeName(this, "Pathfinding", dwPathfinding);
-	LOG_C_D(L"Person._dwPositionedObject=[%X],dwPathfinding=%X", dwPathfinding);
 }
 
 DWORD CPerson::GetPercentHP() CONST
@@ -69,7 +67,7 @@ DWORD CPerson::GetLifeAttributeAddr() CONST
 
 BOOL CPerson::IsMoving() CONST
 {
-	return TRUE;
+	return ReadBYTE(_dwPathfindingAddr + 是否走路中偏移) == 1 ? TRUE : FALSE;
 }
 
 DWORD CPerson::GetPercentValue(_In_ DWORD dwOffset) CONST

@@ -41,6 +41,7 @@ private:
 	DWORD _dwLifeAttributeAddr = NULL;
 	DWORD _dwPlayerAttributeAddr = NULL;
 	DWORD _dwAreaLoadingStateAddr = NULL;
+	DWORD _dwPathfindingAddr = NULL;
 };
 
 

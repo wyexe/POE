@@ -851,4 +851,7 @@ VOID CExpr::ScanBase(CONST std::vector<std::wstring>&)
 
 	dwBase = ScanBinary.FindBase("8b??E8????????F30F104424??F30f114424", 0x7E6E1A - 0x7E6E8A, 4, 0x0, L"PathOfExile.exe");
 	LOG_C_D(L"#define 当前鼠标游戏坐标X 0x%X", dwBase); 
+
+	dwBase = ScanBinary.FindBase("8b??80??????????00F3", 0x95071F - 0x95071F, 0x2, 0x0, L"PathOfExile.exe");
+	LOG_C_D(L"#define 是否走路中偏移 0x%X", dwBase);
 }
