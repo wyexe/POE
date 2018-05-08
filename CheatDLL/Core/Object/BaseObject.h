@@ -30,6 +30,17 @@ public:
 
 	//
 	DWORD GetAttributeTablePtr() CONST;
+
+	//
+	virtual BOOL MoveToPos(_In_ float fDis = MIN_OBJECT_CLIENT_DIS);
+
+	//
+	virtual BOOL Click() CONST;
+
+	//
+	virtual float GetDis() CONST;
+public:
+	bool operator < (CONST CBaseObject& Rparam);
 protected:
 	DWORD			_dwNodeBase		= NULL;
 	DWORD			_dwPositionedObject = NULL;

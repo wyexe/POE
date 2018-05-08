@@ -108,8 +108,8 @@ Point CPointConverter::ConvertClientPosToGamePos(_In_ CONST Point& ClientPos)
 	*/
 
 
-	// ¾ØÕó
-	float CalcBuffer[16] = 
+	// Í¶Ó°¾ØÕó P
+	float P[16] = 
 	{
 		ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x0), ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x10), 0.0f, 0.0f,
 		ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x4), ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x14),ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x24), 0.0f,
@@ -134,10 +134,10 @@ Point CPointConverter::ConvertClientPosToGamePos(_In_ CONST Point& ClientPos)
 
 
 
-	float fxmm2 = fxmm3 * CalcBuffer[4] + fxmm5 * CalcBuffer[0] + CalcBuffer[8];
-	float fxmm4 = fxmm3 * CalcBuffer[4] + fxmm5 * CalcBuffer[1] + CalcBuffer[9];
-	float fxmm1 = fxmm3 * CalcBuffer[6] + CalcBuffer[10];
-	float fxmm0 = fabs(CalcBuffer[14]) - fabs(ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ2));
+	float fxmm2 = fxmm3 * P[4] + fxmm5 * P[0] + P[8];
+	float fxmm4 = fxmm3 * P[4] + fxmm5 * P[1] + P[9];
+	float fxmm1 = fxmm3 * P[6] + P[10];
+	float fxmm0 = fabs(P[14]) - fabs(ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ2));
 	
 
 	fxmm0 /= fxmm1;
@@ -187,7 +187,7 @@ Point CPointConverter::ConvertClientPosToGamePos(_In_ CONST Point& ClientPos)
 	return Point(static_cast<DWORD>(fxmm2), static_cast<DWORD>(fxmm4));
 }
 
-BOOL CPointConverter::ConvertGamePosToClientPos(_In_ CONST Point& GamePos, _Out_ Point& ClientPos)
+Point CPointConverter::ConvertGamePosToClientPos(_In_ CONST Point& GamePos)
 {
 	DWORD dwInGameState = CObjectSearcher::GetGameEnv();
 
@@ -203,15 +203,15 @@ BOOL CPointConverter::ConvertGamePosToClientPos(_In_ CONST Point& GamePos, _Out_
 
 
 	// ½â¶þÔªÒ»´Î·½³Ì¡­¡­
-	// fxmm5 = (Pos.X - Pos.Y) * (fxmm3 * CalcBuffer[6] + CalcBuffer[10]) / (CalcBuffer[0] - CalcBuffer[1]) 
-	// (Pos.X - Pos.Y) / (CalcBuffer[0] - CalcBuffer[1])  => A
+	// fxmm5 = (Pos.X - Pos.Y) * (fxmm3 * P[6] + P[10]) / (P[0] - P[1]) 
+	// (Pos.X - Pos.Y) / (P[0] - P[1])  => A
 	float A = (fPosX - fPosY) / (ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x0) - ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x10));
 
-	// fxmm5 = A * (fxmm3 * CalcBuffer[6] + CalcBuffer[10])
-	// fxmm5 = A * fxmm3 * CalcBuffer[6] + A * CalcBuffer[10]
+	// fxmm5 = A * (fxmm3 * P[6] + P[10])
+	// fxmm5 = A * fxmm3 * P[6] + A * P[10]
 
-	//A * CalcBuffer[6] => B
-	//A * CalcBuffer[10] = > C
+	//A * P[6] => B
+	//A * P[10] = > C
 
 	float B = A * ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x24);
 	float C = A * ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x28);
@@ -219,32 +219,32 @@ BOOL CPointConverter::ConvertGamePosToClientPos(_In_ CONST Point& GamePos, _Out_
 	// fxmm5 = B * fxmm3 + C
 
 	/*
-		fxmm2 = fxmm5 * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-		fxmm4 = fxmm3 * CalcBuffer[4] + fxmm5 * CalcBuffer[1] + CalcBuffer[9]
-		fxmm1 = fxmm3 * CalcBuffer[6] + CalcBuffer[10]
+		fxmm2 = fxmm5 * P[0] + fxmm3 * P[4] + P[8]
+		fxmm4 = fxmm3 * P[4] + fxmm5 * P[1] + P[9]
+		fxmm1 = fxmm3 * P[6] + P[10]
 
-		Pos.X * xmm1 = fxmm5 * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-		Pos.Y * xmm1 = fxmm5 * CalcBuffer[1] + fxmm3 + CalcBuffer[4] + CalcBuffer[9]
+		Pos.X * xmm1 = fxmm5 * P[0] + fxmm3 * P[4] + P[8]
+		Pos.Y * xmm1 = fxmm5 * P[1] + fxmm3 + P[4] + P[9]
 
-		Pos.X * xmm1 = (B * fxmm3 + C) * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-		Pos.X * xmm1 = B * fxmm3 * CalcBuffer[0] + C * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
+		Pos.X * xmm1 = (B * fxmm3 + C) * P[0] + fxmm3 * P[4] + P[8]
+		Pos.X * xmm1 = B * fxmm3 * P[0] + C * P[0] + fxmm3 * P[4] + P[8]
 
-		B * CalcBuffer[0] => D
-		C * CalcBuffer[0] => E
+		B * P[0] => D
+		C * P[0] => E
 
-		Pos.X * xmm1 = D * xmm3 + E + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-		Pos.X * xmm1 = xmm3 * (D + CalcBuffer[4]) + E + CalcBuffer[8]
+		Pos.X * xmm1 = D * xmm3 + E + fxmm3 * P[4] + P[8]
+		Pos.X * xmm1 = xmm3 * (D + P[4]) + E + P[8]
 
-		D + CalcBuffer[4] => F
-		E + CalcBuffer[8] => G
+		D + P[4] => F
+		E + P[8] => G
 
 		Pos.X * xmm1 = xmm3 * F + G
 
-		Pos.X * (fxmm3 * CalcBuffer[6] + CalcBuffer[10]) = xmm3 * F + G
-		Pos.X * CalcBuffer[6] * xmm3  + Pos.X * CalcBuffer[10] = xmm3 * F + G
+		Pos.X * (fxmm3 * P[6] + P[10]) = xmm3 * F + G
+		Pos.X * P[6] * xmm3  + Pos.X * P[10] = xmm3 * F + G
 
-		Pos.X * CalcBuffer[6] => H
-		Pos.X * CalcBuffer[10] => I
+		Pos.X * P[6] => H
+		Pos.X * P[10] => I
 
 		H * xmm3 + I = xmm3 * F + G
 		I - G = xmm3 * F - H * xmm3
@@ -266,11 +266,11 @@ BOOL CPointConverter::ConvertGamePosToClientPos(_In_ CONST Point& GamePos, _Out_
 	fScreenY += ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fScreenY *= static_cast<float>(ReadDWORD(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x8));
 	fScreenY /= 2;
-	if (fScreenY >= ReadDWORD(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x8))
+	/*if (fScreenY >= ReadDWORD(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x8))
 	{
 		// LOG_C_D(L"YÖáÒÑ¾­³¬³öÆÁÄ»×ø±êÁË!");
 		return FALSE;
-	}
+	}*/
 
 	// fxmm5 = B * fxmm3 + C
 	float fxmm5 = B * fxmm3 + C;
@@ -278,16 +278,29 @@ BOOL CPointConverter::ConvertGamePosToClientPos(_In_ CONST Point& GamePos, _Out_
 	fScreenX += ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fScreenX *= static_cast<float>(ReadDWORD(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x4));
 	fScreenX /= 2;
-	if (fScreenX >= static_cast<float>(ReadDWORD(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x4)))
+	/*if (fScreenX >= static_cast<float>(ReadDWORD(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x4)))
 	{
 		//LOG_C_D(L"XÖáÒÑ¾­³¬³öÆÁÄ»×ø±êÁË!");
 		return FALSE;
-	}
+	}*/
 
 	
-	ClientPos.X = static_cast<DWORD>(fScreenX);
-	ClientPos.Y = static_cast<DWORD>(fScreenY);
-	return TRUE;
+	return Point(static_cast<DWORD>(fScreenX), static_cast<DWORD>(fScreenY));
+}
+
+
+Point CPointConverter::ConvertClientPosToMousePos(_In_ CONST Point& ClientPos)
+{
+	RECT GameRect;
+	if (!::GetWindowRect(CGameMemory::GetInstance().GetGameWnd(), &GameRect))
+	{
+		LOG_MSG_CF(L"GetWindowRect Faild!");
+		StopGame;
+		return Point();
+	}
+
+
+	return Point(ClientPos.X + GameRect.left + 8, ClientPos.Y + GameRect.top + 31/*frame*/ - 15/*cursor move top a little*/);
 }
 
 /*
@@ -718,7 +731,7 @@ float Buffer[] =
 	2863.113f  ,-11513.11f , -6445.292f, 1.000000f
 };
 
-float CalcBuffer[16] = { 0 };
+float P[16] = { 0 };
 
 float f12FECF0[] =
 {
@@ -769,7 +782,7 @@ __declspec(naked) void GetScreenToClientBuffer()
 		LEA ECX, Buffer;
 
 		PUSH 16 * 4;
-		LEA EAX, CalcBuffer;
+		LEA EAX, P;
 		PUSH EAX;
 		LEA EAX, [ESP + 0x20];
 		PUSH EAX;
@@ -884,26 +897,26 @@ __declspec(naked) void GetScreenToClientBuffer()
 		Buffer[i] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + i * 4);
 	}
 	
-	CalcBuffer[0] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x0);
-	CalcBuffer[1] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x10);
-	CalcBuffer[2] = 0.0f;
-	CalcBuffer[3] = 0.0f;
-	CalcBuffer[4] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x4);
-	CalcBuffer[5] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x14);
-	CalcBuffer[6] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x24);
-	CalcBuffer[7] = 0.0f;
-	CalcBuffer[8] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x8);
-	CalcBuffer[9] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x18);
-	CalcBuffer[10] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x28);
-	CalcBuffer[11] = -0.0f; // => 0x80000000
-	CalcBuffer[12] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ3 + 0x0);
-	CalcBuffer[13] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ3 + 0x4);
-	CalcBuffer[14] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ3 + 0x8);
-	CalcBuffer[15] = 1.0f;
+	P[0] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x0);
+	P[1] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x10);
+	P[2] = 0.0f;
+	P[3] = 0.0f;
+	P[4] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x4);
+	P[5] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x14);
+	P[6] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x24);
+	P[7] = 0.0f;
+	P[8] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x8);
+	P[9] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x18);
+	P[10] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x28);
+	P[11] = -0.0f; // => 0x80000000
+	P[12] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ3 + 0x0);
+	P[13] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ3 + 0x4);
+	P[14] = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ3 + 0x8);
+	P[15] = 1.0f;
 
-	Result[0] = CalcBuffer[12];
-	Result[1] = CalcBuffer[13];
-	Result[2] = CalcBuffer[14];
+	Result[0] = P[12];
+	Result[1] = P[13];
+	Result[2] = P[14];
 
 	// ÓÎÏ··Ö±æÂÊ
 	float ResolutionX = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x4), ResolutionY = ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x8);
@@ -912,37 +925,37 @@ __declspec(naked) void GetScreenToClientBuffer()
 	float fxmm5 = static_cast<float>(ScreenX * 2) / ResolutionX;
 	fxmm5 -= ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fxmm5 /= ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ5);
-	fxmm5 *= CalcBuffer[0]; // 0.157125
+	fxmm5 *= P[0]; // 0.157125
 
 
 	float fxmm3 = static_cast<float>(ScreenY * 2) / ResolutionY;
 	fxmm3 -= ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fxmm3 /= ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ4);
 	fxmm3 = fabs(fxmm3); // xmm3(xmm3 < 0) xor -0.0f =>  fabs(xmm3)
-	fxmm3 *= CalcBuffer[4];
-	Result[3] = fxmm3 + fxmm5 + CalcBuffer[8];
+	fxmm3 *= P[4];
+	Result[3] = fxmm3 + fxmm5 + P[8];
 
 	//--------------------------------------------
 	fxmm5 = static_cast<float>(ScreenX * 2) / ResolutionX;
 	fxmm5 -= ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fxmm5 /= ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ5); //
-	fxmm5 *= CalcBuffer[1];
+	fxmm5 *= P[1];
 
 
 	fxmm3 = static_cast<float>(ScreenY * 2) / ResolutionX;
 	fxmm3 -= ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fxmm3 /= ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ4);
 	fxmm3 = fabs(fxmm3); // xmm3(xmm3 < 0) xor -0.0f =>  fabs(xmm3)
-	fxmm3 *= CalcBuffer[4];
-	Result[4] = fxmm3 + fxmm5 + CalcBuffer[9];
+	fxmm3 *= P[4];
+	Result[4] = fxmm3 + fxmm5 + P[9];
 
 	//-------------------------------------------------
 	fxmm3 = static_cast<float>(ScreenY * 2) / ResolutionY;
 	fxmm3 -= ReadFloat(×ø±ê×ª»»»ùÖ·2);
 	fxmm3 /= ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ4);
 	fxmm3 = fabs(fxmm3); // xmm3(xmm3 < 0) xor -0.0f =>  fabs(xmm3)
-	fxmm3 *= CalcBuffer[6];
-	fxmm3 += CalcBuffer[10];
+	fxmm3 *= P[6];
+	fxmm3 += P[10];
 	Result[5] = fxmm3;
 
 
@@ -982,15 +995,15 @@ float fxmm0 = fabs(ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + ÓÎÏ·×ø±ê×ª»»Æ«Ò
 fPosX /= fxmm0;
 fPosY /= fxmm0;
 
-// fxmm5 = (Pos.X - Pos.Y) * (fxmm3 * CalcBuffer[6] + CalcBuffer[10]) / (CalcBuffer[0] - CalcBuffer[1])
-// (Pos.X - Pos.Y) / (CalcBuffer[0] - CalcBuffer[1])  => A
+// fxmm5 = (Pos.X - Pos.Y) * (fxmm3 * P[6] + P[10]) / (P[0] - P[1])
+// (Pos.X - Pos.Y) / (P[0] - P[1])  => A
 float A = (fPosX - fPosY) / (ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x0) - ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x10));
 
-// fxmm5 = A * (fxmm3 * CalcBuffer[6] + CalcBuffer[10])
-// fxmm5 = A * fxmm3 * CalcBuffer[6] + A * CalcBuffer[10]
+// fxmm5 = A * (fxmm3 * P[6] + P[10])
+// fxmm5 = A * fxmm3 * P[6] + A * P[10]
 
-//A * CalcBuffer[6] => B
-//A * CalcBuffer[10] = > C
+//A * P[6] => B
+//A * P[10] = > C
 
 float B = A * ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x24);
 float C = A * ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x28);
@@ -999,32 +1012,32 @@ float C = A * ReadFloat(dwInGameState + ÓÎÏ·×ø±ê×ª»»Æ«ÒÆ1 + 0x10 + 0x28);
 
 
 //// 
-fxmm2 = fxmm5 * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-fxmm4 = fxmm3 * CalcBuffer[4] + fxmm5 * CalcBuffer[1] + CalcBuffer[9]
-fxmm1 = fxmm3 * CalcBuffer[6] + CalcBuffer[10]
+fxmm2 = fxmm5 * P[0] + fxmm3 * P[4] + P[8]
+fxmm4 = fxmm3 * P[4] + fxmm5 * P[1] + P[9]
+fxmm1 = fxmm3 * P[6] + P[10]
 
-Pos.X * xmm1 = fxmm5 * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-Pos.Y * xmm1 = fxmm5 * CalcBuffer[1] + fxmm3 + CalcBuffer[4] + CalcBuffer[9]
+Pos.X * xmm1 = fxmm5 * P[0] + fxmm3 * P[4] + P[8]
+Pos.Y * xmm1 = fxmm5 * P[1] + fxmm3 + P[4] + P[9]
 
-Pos.X * xmm1 = (B * fxmm3 + C) * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-Pos.X * xmm1 = B * fxmm3 * CalcBuffer[0] + C * CalcBuffer[0] + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
+Pos.X * xmm1 = (B * fxmm3 + C) * P[0] + fxmm3 * P[4] + P[8]
+Pos.X * xmm1 = B * fxmm3 * P[0] + C * P[0] + fxmm3 * P[4] + P[8]
 
-B * CalcBuffer[0] => D
-C * CalcBuffer[0] => E
+B * P[0] => D
+C * P[0] => E
 
-Pos.X * xmm1 = D * xmm3 + E + fxmm3 * CalcBuffer[4] + CalcBuffer[8]
-Pos.X * xmm1 = xmm3 * (D + CalcBuffer[4]) + E + CalcBuffer[8]
+Pos.X * xmm1 = D * xmm3 + E + fxmm3 * P[4] + P[8]
+Pos.X * xmm1 = xmm3 * (D + P[4]) + E + P[8]
 
-D + CalcBuffer[4] => F
-E + CalcBuffer[8] => G
+D + P[4] => F
+E + P[8] => G
 
 Pos.X * xmm1 = xmm3 * F + G
 
-Pos.X * (fxmm3 * CalcBuffer[6] + CalcBuffer[10]) = xmm3 * F + G
-Pos.X * CalcBuffer[6] * xmm3  + Pos.X * CalcBuffer[10] = xmm3 * F + G
+Pos.X * (fxmm3 * P[6] + P[10]) = xmm3 * F + G
+Pos.X * P[6] * xmm3  + Pos.X * P[10] = xmm3 * F + G
 
-Pos.X * CalcBuffer[6] => H
-Pos.X * CalcBuffer[10] => I
+Pos.X * P[6] => H
+Pos.X * P[10] => I
 
 H * xmm3 + I = xmm3 * F + G
 I - G = xmm3 * F - H * xmm3

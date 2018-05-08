@@ -88,6 +88,9 @@
 #define GameRun      TRUE
 #define StopGame	 ::Sleep(1)
 
+#define MAX_OBJECT_CLIENT_DIS 70.0f
+#define MIN_OBJECT_CLIENT_DIS 7.0f
+#define MAX_OBJECT_MOUSE_DIS  300
 
 enum em_Equi_Color
 {
@@ -175,14 +178,14 @@ enum em_ItemPtrArrayIndex : DWORD
 
 struct Point
 {
-	DWORD X, Y;
+	int X, Y;
 
 	Point()
 	{
 		X = Y = NULL;
 	}
 
-	Point(_In_ DWORD dwX, _In_ DWORD dwY) : X(dwX), Y(dwY)
+	Point(_In_ int dwX, _In_ int dwY) : X(dwX), Y(dwY)
 	{
 
 	}
@@ -197,22 +200,18 @@ struct Point
 		return this->X != Point_.X || this->Y != Point_.Y;
 	}
 
-	DWORD Encode()
-	{
-		return X << 16 | Y;
-	}
-
-	static Point Decode(_In_ DWORD dwValue)
-	{
-		Point Pt;
-		Pt.Y = dwValue & 0xFFFF;
-		Pt.X = dwValue >> 16;
-		return Pt;
-	}
-
 	BOOL IsZero() CONST
 	{
 		return X == 0 || Y == 0;
+	}
+
+	float GetFloatX() CONST
+	{
+		return static_cast<float>(X);
+	}
+	float GetFloatY() CONST
+	{
+		return static_cast<float>(Y);
 	}
 };
 

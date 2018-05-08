@@ -20,7 +20,10 @@ public:
 	static Point ConvertClientPosToGamePos(_In_ CONST Point& ClientPos);
 
 	// 将游戏坐标转换成屏幕坐标
-	static BOOL ConvertGamePosToClientPos(_In_ CONST Point& ClientPos, _Out_ Point& GamePos);
+	static Point ConvertGamePosToClientPos(_In_ CONST Point& GamePos);
+
+	// 将屏幕坐标转换成鼠标坐标
+	static Point ConvertClientPosToMousePos(_In_ CONST Point& ClientPos);
 private:
 
 };

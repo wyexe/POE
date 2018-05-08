@@ -14,6 +14,8 @@
 #include <Core\Object\Person.h>
 #include <Core\Feature\Attribute\Effect\EffectAttribute.h>
 #include <Core\Feature\PointConvert\PointConverter.h>
+#include <Core\Feature\EchoAction\PersonAction.h>
+#include <MathLib\DistanceCalc.h>
 
 #define _SELF L"CmdExpr.cpp"
 CCmdExpr::CCmdExpr()
@@ -50,6 +52,7 @@ std::vector<libTools::ExpressionFunPtr>& CCmdExpr::GetVec()
 		{ std::bind(&CCmdExpr::PrintAroundObject, this, std::placeholders::_1), L"PrintAroundObject" },
 		{ std::bind(&CCmdExpr::PrintBuff, this, std::placeholders::_1), L"PrintBuff" },
 		{ std::bind(&CCmdExpr::PrintEffect, this, std::placeholders::_1), L"PrintEffect" },
+		{ std::bind(&CCmdExpr::PrintPerson, this, std::placeholders::_1), L"PrintPerson" },
 	};
 
 	return Vec;
@@ -68,6 +71,17 @@ VOID CCmdExpr::Help(CONST std::vector<std::wstring>&)
 		//MessageBoxW(NULL, itm.wsFunName.c_str(), L"", NULL);
 		LOG_C_D(L"[%s]", itm.wsFunName.c_str());
 	}
+}
+
+VOID CCmdExpr::PrintPerson(CONST std::vector<std::wstring>&)
+{
+	libTools::CException::InvokeAction(__FUNCTIONW__, []
+	{
+		CPerson::GetInstance().RefreshObjectAttribute();
+		LOG_C_D(L"Name=[%s], Level=[%d], MapName=[%s]", CPerson::GetInstance().GetName().c_str(), CPerson::GetInstance().GetLevel(), CPerson::GetInstance().GetMapName().c_str());
+		LOG_C_D(L"PercentHP=[%d], PercentMP=[%d], PercentShield=[%d]", CPerson::GetInstance().GetPercentHP(), CPerson::GetInstance().GetPercentMP(), CPerson::GetInstance().GetPercentShield());
+		LOG_C_D(L"Pos=[%d,%d]", CPerson::GetInstance().GetPoint().X, CPerson::GetInstance().GetPoint().Y);
+	});
 }
 
 VOID CCmdExpr::PrintBag(CONST std::vector<std::wstring>&)
@@ -224,17 +238,12 @@ VOID CCmdExpr::PrintNpc(CONST std::vector<std::wstring>&)
 	std::vector<CNpc> VecNpc; 
 	CObjectSearcher::GetVecNpc(VecNpc); 
 	LOG_C_D(L"VecNpc.size=%d", VecNpc.size());
+	CPerson::GetInstance().RefreshObjectAttribute();
 	for (auto& itm : VecNpc)
 	{
 		itm.RefreshObjectAttribute();
 		LOG_C_D(L"Npc.Name=[%s] NodeBase=[%X]", itm.GetName().c_str(), itm.GetNodeBase());
-		LOG_C_D(L"Pos=[%d,%d]", itm.GetPoint().X, itm.GetPoint().Y);
-
-		/*POINT Pos = { itm.GetPoint().X, itm.GetPoint().Y };
-		if (::ClientToScreen(CGameMemory::GetInstance().GetGameWnd(), &Pos))
-		{ 
-			LOG_C_D(L"Pos[%d,%d]", Pos.x, Pos.y);
-		}*/
+		LOG_C_D(L"Pos=[%d,%d], dis=[%.2f]", itm.GetPoint().X, itm.GetPoint().Y, itm.GetDis());
 	}
 }
 
@@ -510,7 +519,6 @@ VOID CCmdExpr::PrintEffect(CONST std::vector<std::wstring>&)
 	}
 }
 
-
 VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 {
 	/*libTools::CException::InvokeAction(__FUNCTIONW__, [] 
@@ -534,5 +542,30 @@ VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 
 		LOG_C_D(L"将当前鼠标的游戏坐标转换成屏幕坐标=[%d,%d]", Pos.X, Pos.Y);
 	});*/
-	CGameMouse::GetInstance().MoveTo(Point(800, 600));
+	Point Pos = CPointConverter::ConvertGamePosToClientPos(Point(734, 1065));
+	Pos = CPointConverter::ConvertClientPosToMousePos(Pos);
+	LOG_C_D(L"Warehouse.MousePos=[%d,%d]", Pos.X, Pos.Y);
+
+	CPerson::GetInstance().RefreshObjectAttribute();
+	Point PersonPos = CPointConverter::ConvertGamePosToClientPos(CPerson::GetInstance().GetPoint());
+	PersonPos = CPointConverter::ConvertClientPosToMousePos(PersonPos);
+	LOG_C_D(L"dis=%.2f,PersonPos=[%d,%d]",libTools::CDistanceCalc::GetDisBy2D(PersonPos, Pos), PersonPos.X, PersonPos.Y);
+	if (libTools::CDistanceCalc::GetDisBy2D(PersonPos, Pos) < MAX_OBJECT_MOUSE_DIS)
+	{
+		LOG_C_D(L"In Client Warehouse.MousePos=[%d,%d]", Pos.X, Pos.Y);
+		::Sleep(2 * 1000);
+		CPersonAction::MouseMoveAndClick(Pos);
+	}
+	else
+	{
+		// 相似三角形
+		Point C = PersonPos;
+		float K = static_cast<float>(MAX_OBJECT_MOUSE_DIS) / libTools::CDistanceCalc::GetDisBy2D(PersonPos, Pos);
+		C.X += static_cast<DWORD>(K * (Pos.GetFloatX() - PersonPos.GetFloatX()));
+		C.Y += static_cast<DWORD>(K * (Pos.GetFloatY() - PersonPos.GetFloatY()));
+
+		LOG_C_D(L"Out Client Next.MousePos=[%d,%d]", C.X, C.Y);
+		::Sleep(2 * 1000);
+		CPersonAction::MouseMoveAndClick(C);
+	}
 }

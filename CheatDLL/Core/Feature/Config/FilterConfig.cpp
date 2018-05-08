@@ -1,4 +1,7 @@
 #include "FilterConfig.h"
+#include <Core/Object/WorldItem.h>
+#include <Core/Object/Item.h>
+#include <Core/Object/Monster.h>
 
 CFilterConfig& CFilterConfig::GetInstance()
 {

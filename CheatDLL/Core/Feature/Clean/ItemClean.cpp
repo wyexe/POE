@@ -3,6 +3,9 @@
 #include <Core/Feature/Attribute/Bag/BagAttribute.h>
 #include <Core/Feature/EchoAction/PersonAction.h>
 #include <Core/Feature/Config/FileConfig.h>
+#include <Core/Feature/Searcher/ObjectFilter.h>
+#include <Core/Object/Npc.h>
+#include <Core/Object/Person.h>
 #include <TimeLib/TimeTick.h>
 #include <LogLib/Log.h>
 
@@ -104,10 +107,28 @@ VOID CItemClean::DropBagItem() CONST
 
 BOOL CItemClean::MoveToWarehouse() CONST
 {
-	// #
 	// 判断自己在哪
+	if (CPerson::GetInstance().GetMapName() != L"奥瑞亚")
+	{
+		LOG_C_D(L"人在外地[%s], 需要传送过来!", CPerson::GetInstance().GetMapName().c_str());
+		// #
 		// 如果在外地, 就要调用传送过来了 
-	return FALSE;
+	}
+
+	CNpc Npc;
+	if (!CObjectFilter::FindNpc_By_Name(L"仓库", Npc))
+	{
+		LOG_C_E(L"周围没找到仓库!");
+		return FALSE;
+	}
+	else if (!Npc.MoveToPos())
+	{
+		LOG_C_E(L"走到NPC[%s] 失败!", Npc.GetName().c_str());
+		return FALSE;
+	}
+
+
+	return TRUE;
 }
 
 BOOL CItemClean::OpenWarehouse() CONST
@@ -121,11 +142,17 @@ BOOL CItemClean::OpenWarehouse() CONST
 	libTools::CTimeTick TimeTick;
 	while (GameRun && TimeTick.GetSpentTime(libTools::CTimeTick::em_TimeTick::em_TimeTick_Second) < 60)
 	{
-		// #
 		// 搜索仓库Npc
+		CNpc Npc;
+		if (!CObjectFilter::FindNpc_By_Name(L"仓库", Npc))
+		{
+			LOG_C_E(L"周围没找到仓库!");
+			break;
+		}
 
 		// 鼠标移动到仓库 点击
-
+		Npc.Click();
+		::Sleep(1000);
 		if (CWarehouseAttribute::IsOpenedWarehouse())
 		{
 			LOG_C_D(L"打开仓库完毕!");
@@ -134,6 +161,7 @@ BOOL CItemClean::OpenWarehouse() CONST
 	}
 
 
+	LOG_C_E(L"打开仓库超时!");
 	return FALSE;
 }
 

@@ -19,6 +19,8 @@ public:
 private:
 	virtual VOID Help(CONST std::vector<std::wstring>&) override;
 
+	virtual VOID PrintPerson(CONST std::vector<std::wstring>&);
+
 	virtual VOID PrintBag(CONST std::vector<std::wstring>&);
 
 	virtual VOID PrintWarehouse(CONST std::vector<std::wstring>&);

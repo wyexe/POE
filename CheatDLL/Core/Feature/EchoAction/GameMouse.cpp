@@ -16,33 +16,12 @@ CGameMouse& CGameMouse::GetInstance()
 
 VOID CGameMouse::MoveTo(_In_ CONST Point& Pos)
 {
-	MoveToPoint(AddGameClientPos(Pos));
+	MoveToPoint(Pos);
 }
 
 VOID CGameMouse::MoveToClient(_In_ CONST Point& Pos)
 {
 	MoveToPoint(Pos);
-}
-
-Point CGameMouse::AddGameClientPos(_In_ CONST Point& Pos) CONST
-{
-	HWND hGameWnd = ::FindWindowW(L"POEWindowClass", L"Path of Exile");
-	if (hGameWnd == NULL)
-	{
-		LOG_MSG_CF(L"Find Game Wnd = NULL");
-		return Pos;
-	}
-
-
-	RECT GameClientRect;
-	if (!::GetWindowRect(hGameWnd, &GameClientRect))
-	{
-		LOG_MSG_CF(L"GetWindowRect = NULL");
-		return Pos;
-	}
-
-
-	return Point(Pos.X + GameClientRect.left, Pos.Y + GameClientRect.top);
 }
 
 VOID CGameMouse::MoveToPoint(_In_ CONST Point& Pos) CONST

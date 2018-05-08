@@ -24,8 +24,6 @@ public:
 	// in Screen
 	VOID MoveToClient(_In_ CONST Point& Pos);
 private:
-	Point AddGameClientPos(_In_ CONST Point& Pos) CONST;
-
 	VOID MoveToPoint(_In_ CONST Point& Pos) CONST;
 
 	// 

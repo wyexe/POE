@@ -32,6 +32,9 @@ public:
 
 	//
 	DWORD GetLifeAttributeAddr() CONST;
+
+	//
+	BOOL IsMoving() CONST;
 private:
 	DWORD GetPercentValue(_In_ DWORD dwOffset) CONST;
 private:
