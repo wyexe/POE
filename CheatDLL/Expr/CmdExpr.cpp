@@ -521,12 +521,5 @@ VOID CCmdExpr::PrintEffect(CONST std::vector<std::wstring>&)
 
 VOID CCmdExpr::Test(CONST std::vector<std::wstring>&)
 {
-	std::vector<CItem> VecItem;
-	CWarehouseAttribute::GetCurrentPageItem(VecItem);
-	for (auto& itm : VecItem)
-	{
-		itm.RefreshObjectAttribute();
-		itm.ItemSelect(CItem::em_ItemLocation_Type::Warehouse);
-		break;
-	}
+	
 }
