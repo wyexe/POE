@@ -109,6 +109,29 @@ std::wstring CSocketServer::GetOnLineClientArrayText()
 	return wsText;
 }
 
+
+BOOL CSocketServer::DoAction_By_ClientName(_In_ CONST std::wstring& wsClientName, _In_ std::function<VOID(CRemoteClient *, libTools::CSocketBuffer & )> Ptr)
+{
+	BOOL bExist = FALSE;
+	::EnterCriticalSection(&_LockVecClient);
+	auto itr = std::find_if(_VecClient.begin(), _VecClient.end(), [wsClientName](CRemoteClient* pRemoteClient)
+	{
+		return pRemoteClient->GetClientName() == wsClientName;
+	});
+
+
+	if (itr != _VecClient.end())
+	{
+		libTools::CSocketBuffer SocketBuffer;
+		Ptr(*itr, SocketBuffer);
+		PostSend(*itr, &SocketBuffer);
+		bExist = TRUE;
+	}
+
+	::LeaveCriticalSection(&_LockVecClient);
+	return bExist;
+}
+
 DWORD WINAPI CSocketServer::_WorkThread(LPVOID lpParam)
 {
 	CSocketServer* pSocketServer = reinterpret_cast<CSocketServer *>(lpParam);

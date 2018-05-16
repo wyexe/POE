@@ -3,6 +3,8 @@
 #include <CharacterLib/Character.h>
 #include <Feature/EchoLog/EchoLog.h>
 #include <TimeLib/TimeCharacter.h>
+#include <SocketCommon/SocketBuffer.h>
+#include <Common/Common.h>
 
 #pragma comment(lib,"TimeLib.lib")
 
@@ -22,7 +24,7 @@ extern "C" __declspec(dllexport) void WINAPIV GetConnectedClient(_Out_ LPWSTR pw
 	libTools::CCharacter::strcpy_my(pwszClientArrayText, wsText.c_str(), wsText.length());
 }
 
-extern "C" __declspec(dllexport) int WINAPIV GetClientLog(_Out_ LPWSTR pwszClientName, _Out_ LPWSTR pwszLogText, _Out_ LPWSTR pwszTick)
+extern "C" __declspec(dllexport) int WINAPIV GetClientLog(_Out_ LPWSTR pwszClientName, _Out_ LPWSTR pwszLogText)
 {
 	CEchoLog::LogContent Content;
 	if (!CEchoLog::GetInstance().Front(Content))
@@ -31,14 +33,16 @@ extern "C" __declspec(dllexport) int WINAPIV GetClientLog(_Out_ LPWSTR pwszClien
 	}
 
 
-	std::wstring wsTick = libTools::CCharacter::MakeFormatText(L"%d:%d:%d", Content.Tick.wHour, Content.Tick.wMinute, Content.Tick.wSecond);
-	libTools::CCharacter::strcpy_my(pwszTick, wsTick.c_str(), wsTick.length());
 	libTools::CCharacter::strcpy_my(pwszClientName, Content.wsClientName.c_str(), Content.wsClientName.length());
 	libTools::CCharacter::strcpy_my(pwszLogText, Content.wsLogText.c_str(), Content.wsLogText.length());
 	return TRUE;
 }
 
-extern "C" __declspec(dllexport) void WINAPIV SendCmdToClient(_In_ LPCWSTR pwszClientName, _In_ LPCWSTR pwszCmdText)
+extern "C" __declspec(dllexport) int WINAPIV SendCmdToClient(_In_ LPCWSTR pwszClientName, _In_ LPCWSTR pwszCmdText)
 {
-
+	return CSocketServer::GetInstance().DoAction_By_ClientName(pwszClientName, [pwszCmdText](CRemoteClient* pRemoteClient, libTools::CSocketBuffer& SocketBuffer)
+	{
+		SocketBuffer.InitializeHead(em_Sock_Msg_ServerCmd);
+		SocketBuffer << std::wstring(pwszCmdText);
+	});
 }

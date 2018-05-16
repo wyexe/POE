@@ -4,7 +4,6 @@
 #include <vector>
 #include <SocketServerLib/SocketBaseServerService.h>
 
-
 class CRemoteClient;
 class CSocketServer : public libTools::CSocketBaseServerService
 {
@@ -24,6 +23,8 @@ public:
 
 
 	std::wstring GetOnLineClientArrayText();
+
+	BOOL DoAction_By_ClientName(_In_ CONST std::wstring& wsClientName, _In_ std::function<VOID(CRemoteClient*,libTools::CSocketBuffer&)> Ptr);
 private:
 	static DWORD WINAPI _WorkThread(LPVOID lpParam);
 private:
