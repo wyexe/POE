@@ -13,8 +13,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE , _In_ DWORD fdwReason, _In_ LPVOID )
 			return FALSE;
 		}
 
-
-
+		CCmdWatcher::GetInstance().InitializeClientToServer(L"TransferClient");
 	}
 	else if (fdwReason == DLL_PROCESS_DETACH)
 	{
