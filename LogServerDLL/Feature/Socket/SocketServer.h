@@ -19,7 +19,9 @@ public:
 
 	virtual BOOL EchoRecive(_In_ libTools::CSocketRemoteClient* pSocketClient, _In_ libTools::CSocketBuffer* pSocketBuffer) override;
 
-	BOOL RunServer();
+	virtual BOOL Run(_In_ SHORT shPort, _In_ UINT uMaxAccept) override;
+
+	virtual void Stop() override;
 
 
 	std::wstring GetOnLineClientArrayText();

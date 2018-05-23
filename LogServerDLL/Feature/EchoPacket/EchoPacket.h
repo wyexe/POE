@@ -15,6 +15,10 @@ public:
 	static VOID DownloadFile(_In_ CRemoteClient* pRemoteClient, _In_ libTools::CSocketBuffer* pSocketBuffer);
 
 	static VOID SendLog(_In_ CRemoteClient* pRemoteClient, _In_ libTools::CSocketBuffer* pSocketBuffer);
+
+	static VOID IsExistCmd(_In_ CRemoteClient* pRemoteClient, _In_ libTools::CSocketBuffer* pSocketBuffer);
+
+	static VOID ClientInitialize(_In_ CRemoteClient* pRemoteClient, _In_ libTools::CSocketBuffer* pSocketBuffer);
 private:
 
 };

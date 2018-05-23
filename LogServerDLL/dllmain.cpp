@@ -5,17 +5,36 @@
 #include <TimeLib/TimeCharacter.h>
 #include <SocketCommon/SocketBuffer.h>
 #include <Common/Common.h>
+#include <Feature/EchoLog/EchoCmd.h>
 
+#ifdef _DEBUG
+#pragma comment(lib,"TimeLib_Debug.lib")
+#pragma comment(lib,"CharacterLib_Debug.lib")
+#pragma comment(lib,"FileLib_Debug.lib")
+#pragma comment(lib,"AlgroithmLib_Debug.lib")
+#pragma comment(lib,"SocketCommonLib_Debug.lib")
+#pragma comment(lib, "SocketServerLib_Debug.lib")
+#else
 #pragma comment(lib,"TimeLib.lib")
+#pragma comment(lib,"CharacterLib.lib")
+#pragma comment(lib,"FileLib.lib")
+#pragma comment(lib,"AlgroithmLib.lib")
+#pragma comment(lib,"SocketCommonLib.lib")
+#pragma comment(lib,"SocketServerLib.lib")
+#endif // _DEBUG
 
-BOOL WINAPI DllMain(_In_ HINSTANCE hInstance, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved)
+BOOL WINAPI DllMain(_In_ HINSTANCE , _In_ DWORD fdwReason, _In_ LPVOID )
 {
+	if (fdwReason == DLL_PROCESS_DETACH)
+	{
+		CSocketServer::GetInstance().Stop();
+	}
 	return TRUE;
 }
 
 extern "C" __declspec(dllexport) int WINAPIV Initialize()
 {
-	return CSocketServer::GetInstance().RunServer();
+	return CSocketServer::GetInstance().Run(LFZL_LOG_SOCKET_PORT, 100);
 }
 
 extern "C" __declspec(dllexport) void WINAPIV GetConnectedClient(_Out_ LPWSTR pwszClientArrayText)
@@ -38,11 +57,7 @@ extern "C" __declspec(dllexport) int WINAPIV GetClientLog(_Out_ LPWSTR pwszClien
 	return TRUE;
 }
 
-extern "C" __declspec(dllexport) int WINAPIV SendCmdToClient(_In_ LPCWSTR pwszClientName, _In_ LPCWSTR pwszCmdText)
+extern "C" __declspec(dllexport) void WINAPIV SendCmdToClient(_In_ LPCWSTR pwszClientName, _In_ LPCWSTR pwszCmdText)
 {
-	return CSocketServer::GetInstance().DoAction_By_ClientName(pwszClientName, [pwszCmdText](CRemoteClient* pRemoteClient, libTools::CSocketBuffer& SocketBuffer)
-	{
-		SocketBuffer.InitializeHead(em_Sock_Msg_ServerCmd);
-		SocketBuffer << std::wstring(pwszCmdText);
-	});
+	CEchoCmd::GetInstance().Add(pwszClientName, pwszCmdText);
 }

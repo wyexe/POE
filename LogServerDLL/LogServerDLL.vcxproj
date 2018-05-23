@@ -26,10 +26,10 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -71,16 +71,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\Visual Studio 2010\Projects\libTools\include;$(IncludePath);$(ProjectDir)</IncludePath>
-    <LibraryPath>D:\Visual Studio 2010\Projects\libTools\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\libTools\include;$(IncludePath);$(ProjectDir)</IncludePath>
+    <LibraryPath>..\..\libTools\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\..\libTools\include;$(IncludePath);$(ProjectDir)</IncludePath>
+    <LibraryPath>..\..\libTools\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Feature\EchoFile\EchoFile.cpp" />
+    <ClCompile Include="Feature\EchoLog\EchoCmd.cpp" />
     <ClCompile Include="Feature\EchoLog\EchoLog.cpp" />
     <ClCompile Include="Feature\EchoPacket\EchoPacket.cpp" />
     <ClCompile Include="Feature\Socket\Client\RemoteClient.cpp" />
@@ -129,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="Common\Common.h" />
     <ClInclude Include="Feature\EchoFile\EchoFile.h" />
+    <ClInclude Include="Feature\EchoLog\EchoCmd.h" />
     <ClInclude Include="Feature\EchoLog\EchoLog.h" />
     <ClInclude Include="Feature\EchoPacket\EchoPacket.h" />
     <ClInclude Include="Feature\Socket\Client\RemoteClient.h" />

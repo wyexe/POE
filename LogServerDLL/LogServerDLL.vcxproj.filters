@@ -33,6 +33,9 @@
     <ClCompile Include="Feature\EchoFile\EchoFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Feature\EchoLog\EchoCmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Feature\Socket\SocketServer.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Feature\EchoFile\EchoFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Feature\EchoLog\EchoCmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

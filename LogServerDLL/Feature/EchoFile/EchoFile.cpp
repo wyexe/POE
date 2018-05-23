@@ -3,10 +3,7 @@
 #include <FileLib/File.h>
 #include <AlgroithmLib/Encrypt/CRC32.h>
 
-#pragma comment(lib,"CharacterLib.lib")
-#pragma comment(lib,"FileLib.lib")
-#pragma comment(lib,"AlgroithmLib.lib")
-#pragma comment(lib,"SocketCommonLib.lib")
+
 
 BOOL CEchoFile::ReadFileContent(_In_ CONST std::wstring& wsFileName, _Out_ libTools::CSocketBuffer& SocketBuffer)
 {

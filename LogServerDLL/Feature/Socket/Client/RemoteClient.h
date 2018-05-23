@@ -9,13 +9,11 @@ public:
 	CRemoteClient(_In_ UINT_PTR Sock);
 	~CRemoteClient() = default;
 
-	virtual VOID Remove() override;
-
-	virtual VOID Add() override;
-
-	virtual BOOL IsOnLine() CONST override;
-
 	CONST std::wstring& GetClientName() CONST;
+
+	VOID SetClientName(_In_ CONST std::wstring& wsClientName);
+
+	virtual BOOL IsOnLine() CONST;
 private:
 	std::wstring _wsClientName;
 };

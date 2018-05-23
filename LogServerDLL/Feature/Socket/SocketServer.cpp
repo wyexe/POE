@@ -65,12 +65,22 @@ BOOL CSocketServer::EchoRecive(_In_ libTools::CSocketRemoteClient* pSocketClient
 	{
 	case em_Sock_Msg_KeepLive:
 		CEchoPacket::KeepALive(pRemoteClient, pSocketBuffer);
+		PostSend(pSocketClient, pSocketBuffer);
 		break;
 	case em_Sock_Msg_Log:
 		CEchoPacket::SendLog(pRemoteClient, pSocketBuffer);
+		PostSend(pSocketClient, pSocketBuffer);
 		break;
 	case em_Sock_Msg_DownLoad_File:
-		CEchoPacket::KeepALive(pRemoteClient, pSocketBuffer);
+		CEchoPacket::DownloadFile(pRemoteClient, pSocketBuffer);
+		PostSend(pSocketClient, pSocketBuffer);
+		break;
+	case em_Sock_Msg_IsExistCmd:
+		CEchoPacket::IsExistCmd(pRemoteClient, pSocketBuffer);
+		PostSend(pSocketClient, pSocketBuffer);
+		break;
+	case em_Sock_Msg_Initialize:
+		CEchoPacket::ClientInitialize(pRemoteClient, pSocketBuffer);
 		PostSend(pSocketClient, pSocketBuffer);
 		break;
 	default:
@@ -80,18 +90,16 @@ BOOL CSocketServer::EchoRecive(_In_ libTools::CSocketRemoteClient* pSocketClient
 	return TRUE;
 }
 
-BOOL CSocketServer::RunServer()
+BOOL CSocketServer::Run(_In_ SHORT shPort, _In_ UINT uMaxAccept)
 {
-	if (!Run(12345, 1000))
-	{
-		return FALSE;
-	}
-
-
-	_hWorkThread = ::CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)_WorkThread, this, NULL, NULL);
-	return TRUE;
+	return RunServer(shPort, uMaxAccept);
 }
 
+
+void CSocketServer::Stop()
+{
+	StopServer();
+}
 
 std::wstring CSocketServer::GetOnLineClientArrayText()
 {
@@ -130,24 +138,4 @@ BOOL CSocketServer::DoAction_By_ClientName(_In_ CONST std::wstring& wsClientName
 
 	::LeaveCriticalSection(&_LockVecClient);
 	return bExist;
-}
-
-DWORD WINAPI CSocketServer::_WorkThread(LPVOID lpParam)
-{
-	CSocketServer* pSocketServer = reinterpret_cast<CSocketServer *>(lpParam);
-	while (pSocketServer->_bRun)
-	{
-		::EnterCriticalSection(&pSocketServer->_LockVecClient);
-		for (CONST auto& itm : pSocketServer->_VecClient)
-		{
-			if (itm->InExist() && itm->IsKeepALiveTimeout())
-			{
-				itm->DisConnect();
-			}
-		}
-
-		::LeaveCriticalSection(&pSocketServer->_LockVecClient);
-		::Sleep(10 * 1000);
-	}
-	return 0;
 }

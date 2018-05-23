@@ -16,7 +16,7 @@ namespace LogServer.Code
         public static extern int Initialize();
 
         [DllImport("LogServerDLL.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SendCmdToClient(String ClientName, String CommandText);
+        public static extern void SendCmdToClient(String ClientName, String CommandText);
 
         [DllImport("LogServerDLL.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetClientLog(StringBuilder ClientName, StringBuilder LogText);
