@@ -99,9 +99,9 @@ VOID CCmdWatcher::ExcuteCmd(_In_ CONST std::wstring& wsCmd)
 	{
 		// 关闭作弊进程
 	}
-	else if (wsCmd == L"")
+	else
 	{
-		// 
+		LOG_MSG_CF(L"Invalid Command: [%s]", wsCmd.c_str());
 	}
 }
 
