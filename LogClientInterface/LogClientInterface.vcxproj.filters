@@ -24,12 +24,18 @@
     <ClCompile Include="Feature\Watcher\Watcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Feature\FileExecutor\FileExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Feature\Socket\Client\IocpClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Feature\Watcher\Watcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Feature\FileExecutor\FileExecutor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

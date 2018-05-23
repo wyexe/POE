@@ -2,6 +2,7 @@
 #include <Feature/Socket/Client/IocpClient.h>
 #include <LogLib/Log.h>
 #include <CharacterLib/Character.h>
+#include <Feature/FileExecutor/FileExecutor.h>
 
 #define _SELF L"Watcher.cpp"
 CCmdWatcher::~CCmdWatcher()
@@ -91,13 +92,15 @@ VOID CCmdWatcher::CheckExcuteCmd()
 
 VOID CCmdWatcher::ExcuteCmd(_In_ CONST std::wstring& wsCmd)
 {
-	if (wsCmd == L"runcheat")
+	if (wsCmd == L"runcheatproc")
 	{
-		// 下载并加载作弊文件
+		// 创建测试进程
+		CFileExecutor::GetInstance().RunProc(L"LoadDLL.exe");
 	}
 	else if (wsCmd == L"kill")
 	{
 		// 关闭作弊进程
+		CFileExecutor::GetInstance().Kill(L"LoadDLL.exe");
 	}
 	else
 	{
