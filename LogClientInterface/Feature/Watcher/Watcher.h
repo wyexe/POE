@@ -18,8 +18,6 @@ public:
 	VOID Stop();
 
 	VOID InitializeClientToServer(_In_ CONST std::wstring& wsClientName);
-
-	VOID DownloadCheatFile();
 private:
 	VOID Release();
 

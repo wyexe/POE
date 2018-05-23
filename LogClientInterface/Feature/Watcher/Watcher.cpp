@@ -42,11 +42,6 @@ VOID CCmdWatcher::InitializeClientToServer(_In_ CONST std::wstring& wsClientName
 	});
 }
 
-VOID CCmdWatcher::DownloadCheatFile()
-{
-
-}
-
 VOID CCmdWatcher::Release()
 {
 	_IsRun = FALSE;
@@ -118,6 +113,8 @@ DWORD WINAPI CCmdWatcher::_WatchThread(LPVOID lpParam)
 			LOG_MSG_CF(L"·¢ËÍÐÄÌøÊ§°Ü!");
 			break;
 		}
+
+		pWatcher->CheckExcuteCmd();
 		::Sleep(1000);
 	}
 	return 0;
